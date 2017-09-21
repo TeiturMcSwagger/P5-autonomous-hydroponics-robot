@@ -34,7 +34,7 @@ public class NXTTest {
      * Prints status messages while connecting RConsole to bluetooth
      */
     public static void connectBluetooth() {
-        RConsole.println("Connecting to bluetooth");
+//        RConsole.println("Connecting to bluetooth");
         RConsole.openBluetooth(20000);
         RConsole.println("Connected to bluetooth");
     }
