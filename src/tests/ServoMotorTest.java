@@ -28,6 +28,7 @@ public class ServoMotorTest {
 
     private static void sleep_Test() {
         int i = 0;
+        RConsole.println("Testing Thread.sleep");
         while(Button.readButtons() != Button.ID_ESCAPE) {
 
             RConsole.println(Double.toString(i));
