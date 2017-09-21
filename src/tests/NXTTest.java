@@ -40,4 +40,13 @@ public class NXTTest {
         RConsole.openBluetooth(20000);
         RConsole.println("Connected to bluetooth");
     }
+
+    /**
+     * Prints status messages while connecting RConsole to USB
+     */
+    public static void connectUSB() {
+        RConsole.println("Connecting to USB");
+        RConsole.openUSB(20000);
+        RConsole.println("Connected to USB");
+    }
 }
