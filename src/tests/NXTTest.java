@@ -13,7 +13,7 @@ public class NXTTest {
     private static void sleep_Test() {
         int i = 0;
         RConsole.println("Testing Thread.sleep");
-        while(Button.readButtons() != Button.ID_ESCAPE || i != 5) {
+        while(Button.readButtons() != Button.ID_ESCAPE || i < 5) {
 
             RConsole.println(Double.toString(i));
 
@@ -32,7 +32,7 @@ public class NXTTest {
      * Prints status messages while connecting RConsole to bluetooth
      */
     public static void connectBluetooth() {
-//        RConsole.println("Connecting to bluetooth");
+        RConsole.println("Connecting to bluetooth");
         RConsole.openBluetooth(20000);
         RConsole.println("Connected to bluetooth");
     }
