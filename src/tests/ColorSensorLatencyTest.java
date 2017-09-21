@@ -1,8 +1,10 @@
+package tests;
+
 import lejos.nxt.*;
 import lejos.nxt.Button;
 import lejos.nxt.comm.RConsole;
 
-public class LatencyTest {
+public class ColorSensorLatencyTest {
     public static void main(String[] args) {
         ColorSensor colorSensor = new ColorSensor(SensorPort.S1);
         RConsole.openBluetooth(20000);

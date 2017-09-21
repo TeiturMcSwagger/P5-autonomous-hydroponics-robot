@@ -3,6 +3,8 @@ package tests;
 import lejos.nxt.*;
 import lejos.nxt.comm.RConsole;
 
+import static tests.ServoMotorTest.connectBluetooth;
+
 /**
  * Tests the consistency and latency of ultrasonic sensors
  */
@@ -11,9 +13,7 @@ public class UltrasonicTest {
 
     public static void main(String[] args) {
         ultrasonicSensor = new UltrasonicSensor(SensorPort.S1);
-        RConsole.println("Connecting to USB");
-        RConsole.openBluetooth(20000);
-        RConsole.println("Connected to USB");
+        connectBluetooth();
 
         int i = 0;
         while(Button.readButtons() != Button.ID_ESCAPE || i == 1000) {
