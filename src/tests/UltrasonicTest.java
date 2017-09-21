@@ -12,7 +12,7 @@ public class UltrasonicTest {
     public static void main(String[] args) {
         ultrasonicSensor = new UltrasonicSensor(SensorPort.S1);
         RConsole.println("Connecting to USB");
-        RConsole.openUSB(20000);
+        RConsole.openBluetooth(20000);
         RConsole.println("Connected to USB");
 
         int i = 0;
