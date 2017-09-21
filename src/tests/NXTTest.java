@@ -3,9 +3,6 @@ package tests;
 import lejos.nxt.Button;
 import lejos.nxt.comm.RConsole;
 
-/**
- * Created by Lau on 21/09/2017.
- */
 public class NXTTest {
     public static void main(String[] args) {
         connectBluetooth();
@@ -24,7 +21,8 @@ public class NXTTest {
 
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
+                RConsole.println(e.toString());
                 e.printStackTrace();
             }
 
