@@ -1,24 +1,25 @@
-package tests;
-
 import lejos.nxt.*;
 import lejos.nxt.comm.RConsole;
-
-import static tests.ServoMotorTest.connectBluetooth;
 
 /**
  * Tests the consistency and latency of ultrasonic sensors
  */
 public class UltrasonicTest {
-    private static UltrasonicSensor ultrasonicSensor;
 
     public static void main(String[] args) {
-        ultrasonicSensor = new UltrasonicSensor(SensorPort.S1);
-        connectBluetooth();
+        UltrasonicSensor IJOUltrasonicSensor = new UltrasonicSensor(SensorPort.S1);
+        UltrasonicSensor blankUltrasonicSensor = new UltrasonicSensor(SensorPort.S2);
+        RConsole.openBluetooth(20000);
 
         int i = 0;
-        while(Button.readButtons() != Button.ID_ESCAPE || i == 1000) {
-            getDistance_Test();
-//        latency_Test();
+        while(Button.readButtons() != Button.ID_ESCAPE && i < 1000) {
+            latency_Test("Blank ", blankUltrasonicSensor);
+            i++;
+        }
+
+        i = 0;
+        while(Button.readButtons() != Button.ID_ESCAPE && i < 1000) {
+            latency_Test("IJO ", IJOUltrasonicSensor);
             i++;
         }
     }
@@ -26,20 +27,18 @@ public class UltrasonicTest {
     /**
      * Tests how consistent the distance measurements are
      */
-    private static void getDistance_Test() {
-        RConsole.println("Testing distance consistency");
-        RConsole.println(Double.toString(ultrasonicSensor.getDistance()));
+    private static void getDistance_Test(String s, UltrasonicSensor sensor) {
+        RConsole.println(s + Double.toString(sensor.getDistance()));
     }
 
     /**
      * Tests how often the Ultrasonic Sensor can be pinged
      */
-    private static void latency_Test() {
-        RConsole.println("Testing distance latency");
-        double startTime = System.nanoTime();
-        ultrasonicSensor.getDistance();
-        double endTime = System.nanoTime();
-        double latency = endTime - startTime;
-        RConsole.println(Double.toString(latency));
+    private static void latency_Test(String s, UltrasonicSensor sensor) {
+        long startTime = System.nanoTime();
+        sensor.getDistance();
+        long endTime = System.nanoTime();
+        long latency = endTime - startTime;
+        RConsole.println(s + latency);
     }
 }

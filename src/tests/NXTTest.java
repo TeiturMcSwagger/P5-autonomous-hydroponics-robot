@@ -1,4 +1,3 @@
-package tests;
 
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
@@ -6,8 +5,8 @@ import lejos.nxt.comm.RConsole;
 
 public class NXTTest {
     public static void main(String[] args) {
-        connectBluetooth();
-//        sleep_Test();
+        //       connectBluetooth();
+        //        sleep_Test();
         forwardTest();
     }
 
