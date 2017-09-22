@@ -1,10 +1,24 @@
+package tests;
+
 import lejos.nxt.Button;
+import lejos.nxt.Motor;
 import lejos.nxt.comm.RConsole;
 
 public class NXTTest {
     public static void main(String[] args) {
         connectBluetooth();
-        sleep_Test();
+//        sleep_Test();
+        forwardTest();
+    }
+
+    private static void forwardTest() {
+        int i = 0;
+        while(Button.readButtons() != Button.ID_ESCAPE) {
+            Motor.A.forward();
+            System.out.println(i);
+            i++;
+        }
+
     }
 
     /**

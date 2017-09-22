@@ -3,6 +3,7 @@ import lejos.nxt.comm.RConsole;
 
 import static tests.NXTTest.connectBluetooth;
 
+
 public class WaterThePlants {
     private static NXTRegulatedMotor motor;
     private static NXTRegulatedMotor motorArm;
