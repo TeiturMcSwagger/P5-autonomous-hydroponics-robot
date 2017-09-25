@@ -3,6 +3,7 @@ import lejos.nxt.comm.RConsole;
 
 /**
  * Tests the consistency and latency of ultrasonic sensors
+ * 0016530A7CD6
  */
 public class UltrasonicTest {
 
@@ -13,13 +14,13 @@ public class UltrasonicTest {
 
         int i = 0;
         while(Button.readButtons() != Button.ID_ESCAPE && i < 1000) {
-            latency_Test("Blank ", blankUltrasonicSensor);
+            getDistance_Test("Blank ", blankUltrasonicSensor);
             i++;
         }
 
         i = 0;
         while(Button.readButtons() != Button.ID_ESCAPE && i < 1000) {
-            latency_Test("IJO ", IJOUltrasonicSensor);
+            getDistance_Test("IJO ", IJOUltrasonicSensor);
             i++;
         }
     }
@@ -28,6 +29,11 @@ public class UltrasonicTest {
      * Tests how consistent the distance measurements are
      */
     private static void getDistance_Test(String s, UltrasonicSensor sensor) {
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+            
+        }
         RConsole.println(s + Double.toString(sensor.getDistance()));
     }
 
