@@ -1,4 +1,3 @@
-package test;
 
 import lejos.nxt.Battery;
 import lejos.nxt.Button;
@@ -14,18 +13,18 @@ public class HelloWorld {
     
   public static void main (String[] args) {
       
+          RConsole.openBluetooth(20000);
           test();
           
   }
   
   public static void test() {
       
-      int counter = 2;
+      int counter = 1800;
       
       while(counter-- >= 0) {
           
           RConsole.println(""+getBatteryDrain(1));
-          RConsole.println("lol");
           
       }
       
