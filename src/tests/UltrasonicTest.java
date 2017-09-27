@@ -8,15 +8,15 @@ import lejos.nxt.comm.RConsole;
 public class UltrasonicTest {
 
     public static void main(String[] args) {
-        UltrasonicSensor IJOUltrasonicSensor = new UltrasonicSensor(SensorPort.S1);
-        UltrasonicSensor blankUltrasonicSensor = new UltrasonicSensor(SensorPort.S2);
-        RConsole.openBluetooth(20000);
+        UltrasonicSensor IJOUltrasonicSensor = new UltrasonicSensor(SensorPort.S2);
+       UltrasonicSensor blankUltrasonicSensor = new UltrasonicSensor(SensorPort.S1);
+        RConsole.openUSB(20000);
 
         int i = 0;
-        while(Button.readButtons() != Button.ID_ESCAPE && i < 1000) {
-            getDistance_Test("Blank ", blankUltrasonicSensor);
-            i++;
-        }
+       while(Button.readButtons() != Button.ID_ESCAPE && i < 1000) {
+           getDistance_Test("Blank ", blankUltrasonicSensor);
+           i++;
+       }
 
         i = 0;
         while(Button.readButtons() != Button.ID_ESCAPE && i < 1000) {
