@@ -13,7 +13,7 @@ public class UltrasonicTest {
         RConsole.openUSB(20000);
 
         int i = 0;
-       while(Button.readButtons() != Button.ID_ESCAPE && i < 1000) {
+       while(Button.readButtons() != Button.ID_ESCAPE && i < 200) {
            getDistance_Test("Blank ", blankUltrasonicSensor);
            i++;
        }
