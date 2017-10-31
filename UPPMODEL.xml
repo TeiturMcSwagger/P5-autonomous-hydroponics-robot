@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+clock t;</declaration>
+	<template>
+		<name x="5" y="5">Template</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="17" y="-289">
+			<name x="-8" y="-323">FeedingThreePills</name>
+		</location>
+		<location id="id1" x="17" y="-187">
+			<name x="7" y="-221">FeedingTwoPills</name>
+		</location>
+		<location id="id2" x="17" y="-93">
+			<name x="7" y="-127">FeedingOnePill</name>
+		</location>
+		<location id="id3" x="-297" y="-187">
+			<name x="-356" y="-221">DrivingOnTrack</name>
+		</location>
+		<location id="id4" x="-561" y="-187">
+			<name x="-595" y="-221">Calibrating</name>
+		</location>
+		<location id="id5" x="-705" y="-187">
+			<name x="-715" y="-221">Idle</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<nail x="-297" y="-93"/>
+			<nail x="-297" y="-93"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<nail x="170" y="-187"/>
+			<nail x="161" y="-433"/>
+			<nail x="-297" y="-433"/>
+			<nail x="-297" y="-433"/>
+			<nail x="-297" y="-433"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<nail x="-272" y="-289"/>
+			<nail x="-272" y="-289"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-229" y="-136">plantColour == blue</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-178" y="-212">plantColour == green</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-246" y="-263">plantColour == red</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-663" y="-212">button?</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="select" x="-459" y="-111">OffTrack?</label>
+			<nail x="-416" y="-119"/>
+			<nail x="-476" y="-119"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="select" x="-476" y="-212">OnTrack?</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Template();
+// List one or more processes to be composed into a system.
+system Process;
+    </system>
+	<queries>
+	</queries>
+</nta>
