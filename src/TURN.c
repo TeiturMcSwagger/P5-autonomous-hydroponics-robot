@@ -8,13 +8,17 @@ public void turn() {
 
 	int targetLightLevel = 200;
 
-	if (lightValue < rightMargin)
+	if (lightValue < optimalLightValue)
 	{
 		/*Turn right*/
 
 	}
-	else if (lightValue > rightMargin)
+	else if (lightValue > optimalLightValue)
 	{
 		/*Turn left*/
+	}
+	else if (lightValue == optimalLightValue)
+	{
+		/*This is an unncesesary call of the TURN task*/
 	}
 }
