@@ -1,5 +1,6 @@
 # Ignore nxtOSEK files
 build/
+nxtOSEK/
 implementation.oil
 kernel_cfg.c
 kernel_id.h

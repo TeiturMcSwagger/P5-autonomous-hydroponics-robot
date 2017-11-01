@@ -1,3 +1,7 @@
+#include "kernel.h"
+#include "kernel_id.h"
+#include "ecrobot_interface.h"
+
 int lightValue;
 
 void scanPath() {
@@ -5,4 +9,5 @@ void scanPath() {
     // display_goto_xy(0, 1);
     // display_string("LIGHT:");
     // display_int(lightValue);
+    display_string("Hello from PATH");
 }
