@@ -2,6 +2,7 @@
 #include "kernel.h"
 #include "kernel_id.h"
 #include "ecrobot_interface.h"
+#include "path.h"
 
 #define PATH_SENSOR_PORT NXT_PORT_S2
 
@@ -33,12 +34,10 @@ TASK(CalibrateTask){
 }
 TASK(ScanPlantTask){
 }
+
 TASK(ScanPathTask)
 {
-    lightValue = ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
-    display_goto_xy(0, 1);
-    display_string("LIGHT:");
-    display_int(lightValue);
+    scanPath();
 }
 
 TASK(MotorTask){
