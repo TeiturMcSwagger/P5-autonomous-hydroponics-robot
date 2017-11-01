@@ -1,4 +1,4 @@
-#include LAU.h
+#include globalConstants.h
 
 public void turn() {
 	typedef char bool;
@@ -6,11 +6,15 @@ public void turn() {
 	#define right 'r'
 	bool locationFromTape = left;
 
-	int leftMargin = 0;
-	int rightMargin = 200;
-		int centerMargin = rightMargin / 2;
+	int targetLightLevel = 200;
 
-	if (lightValue )
+	if (lightValue < rightMargin)
+	{
+		/*Turn right*/
 
-
+	}
+	else if (lightValue > rightMargin)
+	{
+		/*Turn left*/
+	}
 }
