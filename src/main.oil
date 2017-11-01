@@ -35,29 +35,29 @@ CPU ATMEL_AT91SAM7S256
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512; 
-    }
+    };
     TASK ScanPlantTask {
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512; 
-    }
+    };
     TASK ScanPathTask {
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512; 
-    }
+    };
     TASK MotorTask {
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512; 
-    }
+    };
     TASK TurnTask {
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512; 
-    }
+    };
 };
