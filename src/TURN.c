@@ -1,25 +1,23 @@
-#include globalConstants.h
+#include "globalConstants.h"
 #include <stdlib.h>
 #include "kernel.h"
 #include "kernel_id.h"
 #include "ecrobot_interface.h"
-
-public void turn() {
+/*
+void turn() {
 	if (lightValue < optimalLightValue)
 	{
-		/*Turn right*/
 		ecrobot_set_motor_speed(NXT_PORT_A, -1)
 
 	}
 	else if (lightValue > optimalLightValue)
 	{
-		/*Turn left*/
 		ecrobot_set_motor_speed(NXT_PORT_A,1)
 
 	}
 	else if (lightValue == optimalLightValue)
 	{
-		/*This is an unncesesary call of the TURN task*/
 
 	}
 }
+*/
