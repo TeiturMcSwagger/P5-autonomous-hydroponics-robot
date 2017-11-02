@@ -6,6 +6,8 @@
 
 U32 getDestinationAngle(U32 startAngle, U32 degreesToRotate);
 bool rotateClockwiseToTarget(U32 startAngle, U32 targetAngle);
+void rotateMotor(int speedPercent, int brakeLength, bool turnDirection,
+                 U32 motorPort, int allowedDeviation, int targetAngle);
 /*  */
 void rotateMotorToAngle(int speedPercent, int brakeLength, U32 targetAngle,
                         U32 motorPort, int allowedDeviation) {
@@ -13,7 +15,7 @@ void rotateMotorToAngle(int speedPercent, int brakeLength, U32 targetAngle,
   rotateMotor(
       speedPercent, brakeLength,
       rotateClockwiseToTarget(nxt_motor_get_count(motorPort), targetAngle),
-      motorPort allowedDeviation, targetAngle);
+      motorPort, allowedDeviation, targetAngle);
 }
 
 /*  */

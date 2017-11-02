@@ -33,8 +33,14 @@ void printStringAndInt(char *str, int val, int row) {
 }
 
 TASK(FeedingTask) {
+  nxt_motor_set_count(NXT_PORT_A, 180);
+  
   while (1) {
-    rotateMotorByDegrees(100, 40, 90, 1, NXT_PORT_A);
+    //rotateMotorByDegrees(100, 40, 90, 1, NXT_PORT_A, 0);
+    
+    rotateMotorToAngle(100, 0, 210, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorToAngle(100, 0, 180, NXT_PORT_A, 0);
   }
   TerminateTask();
 }
