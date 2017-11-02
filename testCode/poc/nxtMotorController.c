@@ -13,7 +13,7 @@ void rotateMotorToAngle(int speedPercent, int brakeLength, U32 targetAngle,
   rotateMotor(
       speedPercent, brakeLength,
       rotateClockwiseToTarget(nxt_motor_get_count(motorPort), targetAngle),
-      allowedDeviation, targetAngle);
+      motorPort allowedDeviation, targetAngle);
 }
 
 /*  */
