@@ -24,4 +24,8 @@ while(1)
     // display_goto_xy(0, 1);
     // display_string("LIGHT:");
     // display_int(lightValue);
+    // display_clear(0);
+    while(1) {
+        print(0, "hello");
+    }
 }

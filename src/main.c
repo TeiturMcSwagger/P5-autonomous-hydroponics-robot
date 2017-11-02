@@ -1,24 +1,24 @@
-#include <stdlib.h>
+#include "ecrobot_interface.h"
 #include "kernel.h"
 #include "kernel_id.h"
-#include "ecrobot_interface.h"
 #include "path.h"
+#include <stdlib.h>
 
 #define PATH_SENSOR_PORT NXT_PORT_S2
 
 int lightValue;
 
 /* OSEK declarations */
-// DeclareTask(ScanPathTask);
+DeclareTask(ScanPathTask);
+DeclareCounter(SysTimerCnt);
+DeclareAlarm(ScanPathAlarm);
 
 /* LEJOS OSEK hooks */
-void ecrobot_device_initialize()
-{
+void ecrobot_device_initialize() {
     ecrobot_init_nxtcolorsensor(PATH_SENSOR_PORT, NXT_LIGHTSENSOR_RED);
 }
 
-void ecrobot_device_terminate()
-{
+void ecrobot_device_terminate() {
     ecrobot_term_nxtcolorsensor(PATH_SENSOR_PORT);
 }
 

@@ -26,12 +26,14 @@ CPU ATMEL_AT91SAM7S256
         SCHEDULE = FULL;
         STACKSIZE = 512;
     };
+
     TASK CalibrateTask {
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
-        STACKSIZE = 512; 
+        STACKSIZE = 512;
     };
+
     TASK ScanPlantTask {
 	AUTOSTART = TRUE
 	{
@@ -40,24 +42,49 @@ CPU ATMEL_AT91SAM7S256
         PRIORITY = 1; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
-        STACKSIZE = 512; 
+        STACKSIZE = 512;
     };
+
     TASK ScanPathTask {
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
-        STACKSIZE = 512; 
+        STACKSIZE = 512;
     };
+
     TASK MotorTask {
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
-        STACKSIZE = 512; 
+        STACKSIZE = 512;
     };
+
     TASK TurnTask {
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
-        STACKSIZE = 512; 
+        STACKSIZE = 512;
     };
+
+    COUNTER SysTimerCnt
+  	{
+    	MINCYCLE = 1;
+    	MAXALLOWEDVALUE = 10000;
+    	TICKSPERBASE = 1;
+  	};
+
+  	ALARM ScanPathAlarm
+  	{
+    	COUNTER = SysTimerCnt;
+    	ACTION = ACTIVATETASK
+    	{
+      		TASK = ScanPathTask;
+    	};
+    	AUTOSTART = TRUE
+    	{
+      		ALARMTIME = 1000;
+      		CYCLETIME = 200;
+      		APPMODE = appmode1;
+    	};
+  	};
 };
