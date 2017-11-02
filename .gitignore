@@ -4,6 +4,7 @@ ignore/
 .clang-format
 .clang_complete
 .vscode/
+.idea/
 
 # nxtOSEK stuff
 nxtOSEK/
