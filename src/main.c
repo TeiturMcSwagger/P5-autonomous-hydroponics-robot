@@ -22,26 +22,41 @@ void ecrobot_device_terminate()
     ecrobot_term_nxtcolorsensor(PATH_SENSOR_PORT);
 }
 
+void printf(int row, char *str, int val)
+{
+        display_clear(0);
+        display_goto_xy(0,row);
+        display_string(str);
+        display_int(val, 0);
+        display_update();
+
+}
+
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
 void user_1ms_isr_type2(void)
 {
 }
-
-TASK(FeedingTask){
+TASK(FeedingTask)
+{
 }
-TASK(CalibrateTask){
+TASK(CalibrateTask)
+{
 
 }
-TASK(ScanPlantTask){
+TASK(ScanPlantTask)
+{
 }
 
 TASK(ScanPathTask)
 {
-    scanPath();
+    printf(0, "asd", 0);
+    systick_wait_ms(1000);   
 }
 
-TASK(MotorTask){
+TASK(MotorTask)
+{
 }
 
-TASK(TurnTask){
+TASK(TurnTask)
+{
 }
