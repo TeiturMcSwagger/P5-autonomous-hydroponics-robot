@@ -2,6 +2,8 @@
 .DS_Store
 ignore/
 .clang-format
+.clang_complete
+.vscode/
 
 # nxtOSEK stuff
 nxtOSEK/
