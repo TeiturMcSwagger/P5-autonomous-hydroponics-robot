@@ -5,7 +5,7 @@ ignore/
 
 # nxtOSEK stuff
 nxtOSEK/
-build/
+*/build/
 implementation.oil
 kernel_cfg.c
 kernel_id.h
