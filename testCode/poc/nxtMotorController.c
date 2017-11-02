@@ -30,8 +30,6 @@ void rotateMotor(int speedPercent, int breakDistance, U32 degreesToRotate, char 
     return;
   }
   char direction = (nxt_motor_get_count(outputPort)>targetAngle) ? 0 : 1;
-  display_clear(0);
-  count++;
   rotateMotor(10, 0, variation, direction, outputPort);
 }
 
