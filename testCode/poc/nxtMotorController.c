@@ -6,6 +6,7 @@
 
 U32 getDestinationAngle(U32 startAngle, U32 degreesToRotate);
 bool rotateClockwiseToTarget(U32 startAngle, U32 targetAngle);
+
 void rotateMotor(int speedPercent, int brakeLength, bool turnDirection,
                  U32 motorPort, int allowedDeviation, int targetAngle);
 /*  */
