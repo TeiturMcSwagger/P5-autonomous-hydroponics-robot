@@ -1,4 +1,3 @@
-#include "ecrobot_interface.h"
 #include "globalConstants.h"
 #include "kernel.h"
 #include "kernel_id.h"
@@ -20,4 +19,3 @@ void scanPath() {
     display_goto_xy(0, 0);
     display_int(lightValue, 0);
     display_update();
-}

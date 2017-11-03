@@ -2,10 +2,16 @@
 #include "globalConstants.h"
 #include "kernel.h"
 #include "kernel_id.h"
-#include "nxtMotorController.c"
+#include "nxtMotorController.h"
 #include "path.h"
 #include "turn.h"
+#include "types.h"
+#include "util.h"
 #include <stdlib.h>
+
+int lightValue;
+
+bool first = TRUE;
 
 /* OSEK declarations */
 DeclareTask(ScanPathTask);
@@ -23,12 +29,11 @@ void ecrobot_device_terminate() {
     ecrobot_term_nxtcolorsensor(PATH_SENSOR_PORT);
 }
 
-void printf(int row, char *str, int val) {
-    display_clear(0);
-    display_goto_xy(0, row);
-    display_string(str);
-    display_int(val, 0);
-    display_update();
+TASK(FeedingTask) {
+    if (first) {
+        first = FALSE;
+        nxt_motor_set_count(NXT_PORT_A, DEFAULT_TURN_POSITION);
+    }
 }
 
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
@@ -49,6 +54,16 @@ TASK(TurnTask) {
     while (1) {
         turnMe();
     }
+    TerminateTask();
+}
+
+TASK(ScanPathTask) {
+    printString("asd");
+    systick_wait_ms(1000);
+}
+
+TASK(TurnTask) {
+    turnMe();
     TerminateTask();
 }
 
