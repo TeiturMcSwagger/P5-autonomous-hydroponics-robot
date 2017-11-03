@@ -4,6 +4,7 @@ ignore/
 .clang_complete
 .vscode/
 .idea/
+*.swp
 
 # Ignore nxtOSEK stuff
 nxtOSEK/
