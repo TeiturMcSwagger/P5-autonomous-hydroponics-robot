@@ -2,9 +2,9 @@
 #include "kernel.h"
 #include "kernel_id.h"
 #include "nxtMotorController.c"
+#include "path.h"
 #include "turn.h"
 #include <stdlib.h>
-#define PATH_SENSOR_PORT NXT_PORT_S2
 
 /* OSEK declarations */
 DeclareTask(ScanPathTask);
@@ -35,15 +35,21 @@ TASK(CalibrateTask) {}
 TASK(ScanPlantTask) {}
 TASK(ScanPlantBackgroundTask) {}
 
-TASK(ScanPathTask) {
-    printf(0, "asd", 0);
-    systick_wait_ms(1000);
-}
+TASK(ScanPathTask) { scanPath(); }
 
 TASK(MotorTask) {}
 
 TASK(TurnTask) {
     turnMe();
-
     TerminateTask();
+}
+
+/* Background Task */
+TASK(ScanPathBackgroundTask) {
+    SetRelAlarm(AlarmTask2, 1, 100); // set event for Task2 by Alarm
+    while (1) {
+        ecrobot_process_bg_nxtcolorsensor(); // communicates with NXT Color
+                                             // Sensor (this must be executed
+                                             // repeatedly in a background Task)
+    }
 }

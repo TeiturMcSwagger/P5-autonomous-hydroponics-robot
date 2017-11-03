@@ -74,12 +74,16 @@ CPU ATMEL_AT91SAM7S256
         STACKSIZE = 512;
     };
 
-    COUNTER SysTimerCnt
-  	{
-    	MINCYCLE = 1;
-    	MAXALLOWEDVALUE = 10000;
-    	TICKSPERBASE = 1;
-  	};
+    TASK ScanPathBackgroundTask {
+	AUTOSTART = TRUE
+	{
+	    APPMODE = appmode1;
+	};
+        PRIORITY = 2; /* lowest priority */
+        ACTIVATION = 1;
+        SCHEDULE = FULL;
+        STACKSIZE = 512;
+    };
 
   	ALARM ScanPathAlarm
   	{
@@ -95,4 +99,16 @@ CPU ATMEL_AT91SAM7S256
       		APPMODE = appmode1;
     	};
   	};
+
+    COUNTER SysTimerCnt
+  	{
+    	MINCYCLE = 1;
+    	MAXALLOWEDVALUE = 10000;
+    	TICKSPERBASE = 1;
+  	};
+
+    EVENT PathEvent
+    {
+        MASK = AUTO;
+    };
 };
