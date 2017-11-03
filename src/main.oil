@@ -21,6 +21,10 @@ CPU ATMEL_AT91SAM7S256
 
     TASK FeedingTask
     {
+        AUTOSTART = TRUE
+	{
+	    APPMODE = appmode1;
+	};
         PRIORITY = 5; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
@@ -35,10 +39,6 @@ CPU ATMEL_AT91SAM7S256
     };
 
     TASK ScanPlantTask {
-	AUTOSTART = TRUE
-	{
-	    APPMODE = appmode1;
-	};
         PRIORITY = 1; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
@@ -66,25 +66,5 @@ CPU ATMEL_AT91SAM7S256
         STACKSIZE = 512;
     };
 
-    COUNTER SysTimerCnt
-  	{
-    	MINCYCLE = 1;
-    	MAXALLOWEDVALUE = 10000;
-    	TICKSPERBASE = 1;
-  	};
-
-  	ALARM ScanPathAlarm
-  	{
-    	COUNTER = SysTimerCnt;
-    	ACTION = ACTIVATETASK
-    	{
-      		TASK = ScanPathTask;
-    	};
-    	AUTOSTART = TRUE
-    	{
-      		ALARMTIME = 1000;
-      		CYCLETIME = 200;
-      		APPMODE = appmode1;
-    	};
-  	};
+    
 };
