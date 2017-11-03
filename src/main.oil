@@ -35,10 +35,6 @@ CPU ATMEL_AT91SAM7S256
     };
 
     TASK ScanPlantTask {
-	AUTOSTART = TRUE
-	{
-	    APPMODE = appmode1;
-	};
         PRIORITY = 1; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
@@ -60,6 +56,10 @@ CPU ATMEL_AT91SAM7S256
     };
 
     TASK TurnTask {
+	AUTOSTART = TRUE
+	{
+	    APPMODE = appmode1;
+	};
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;

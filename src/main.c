@@ -2,6 +2,7 @@
 #include "kernel.h"
 #include "kernel_id.h"
 #include "path.h"
+#include "turn.h"
 #include <stdlib.h>
 
 #define PATH_SENSOR_PORT NXT_PORT_S2
@@ -59,4 +60,6 @@ TASK(MotorTask)
 
 TASK(TurnTask)
 {
+	turn();
+	TerminateTask();
 }

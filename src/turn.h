@@ -1,1 +1,1 @@
-extern int lightValue;
+void turn();
