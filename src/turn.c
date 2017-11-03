@@ -1,23 +1,22 @@
-#include "globalConstants.h"
-#include <stdlib.h>
-#include "kernel.h"
-#include "kernel_id.h"
 #include "ecrobot_interface.h"
-/*
-void turn() {
-	if (lightValue < optimalLightValue)
-	{
-		ecrobot_set_motor_speed(NXT_PORT_A, -1)
+#include "globalConstants.h"
+#include "nxtMotorController.h"
+#include "path.h"
 
-	}
-	else if (lightValue > optimalLightValue)
-	{
-		ecrobot_set_motor_speed(NXT_PORT_A,1)
+int translationFactor = MAX_STEERING_ANGLE / OPTIMAL_LIGHT_VALUE;
 
-	}
-	else if (lightValue == optimalLightValue)
-	{
+void turnMe() {
+    lightValue = 100;
 
-	}
+    if (lightValue <= OPTIMAL_LIGHT_VALUE) {
+        /*MAX_STEERING_ANGLE-(lightValue*translationFactor) is the amount of
+         * degress to be turned*/
+        rotateMotorToAngle(
+            100, 40,
+            180 + (MAX_STEERING_ANGLE - (lightValue * translationFactor)), 0,
+            0);
+    } else if (lightValue >= OPTIMAL_LIGHT_VALUE) {
+        /*The bitch should turn all sails due east, cuz shit's about to go
+         * down.*/
+    }
 }
-*/
