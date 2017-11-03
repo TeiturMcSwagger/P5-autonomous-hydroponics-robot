@@ -1,6 +1,7 @@
 #include "globalConstants.h"
 #include "kernel.h"
 #include "kernel_id.h"
+#include "util.h"
 
 int lightValue = 0;
 
@@ -15,8 +16,6 @@ int getLightValue() {
 
 void scanPath() {
     lightValue = getLightValue();
-    display_clear(0);
-    display_goto_xy(0, 0);
-    display_int(lightValue, 0);
-    display_update();
+    clearScreen();
+    printInt(lightValue);
 }
