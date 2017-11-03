@@ -1,6 +1,22 @@
-# Ignore nxtOSEK files
-build/
+.DS_Store
+ignore/
+.clang-format
+.clang_complete
+.vscode/
+.idea/
+*.swp
+
+# Ignore nxtOSEK stuff
 nxtOSEK/
+build/
 implementation.oil
 kernel_cfg.c
 kernel_id.h
+*_rom.*
+*_ram.*
+*rxe.*
+*rxe
+appflash.sh
+biosflash.sh
+ramboot.sh
+rxeflash.sh
