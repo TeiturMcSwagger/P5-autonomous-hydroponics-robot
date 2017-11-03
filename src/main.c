@@ -63,11 +63,12 @@ TASK(ScanPathTask)
     printString("asd");
     systick_wait_ms(1000);   
 }
-
 TASK(MotorTask)
 {
 }
 
 TASK(TurnTask)
 {
+	turnMe();
+	TerminateTask();
 }
