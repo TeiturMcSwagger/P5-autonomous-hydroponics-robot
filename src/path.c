@@ -19,3 +19,4 @@ void scanPath() {
     display_goto_xy(0, 0);
     display_int(lightValue, 0);
     display_update();
+}
