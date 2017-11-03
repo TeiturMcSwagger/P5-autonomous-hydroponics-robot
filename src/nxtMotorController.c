@@ -15,7 +15,7 @@ void rotateMotor(int speedPercent, int brakeLength, bool turnDirection,
 
 void rotateMotorToAngle(int speedPercent, int brakeLength, int targetAngle, U32 motorPort, int allowedDeviation) {
     display_clear(0);
-    printStringAndInt("Motor Count; ", nxt_motor_get_count(motorPort), displayCount++); 
+    printStringAndInt("Motor Count; ", nxt_motor_get_count(motorPort)); 
   U32 actualTargetAngle = DEFAULT_TURN_POSITION + targetAngle;
   bool turnClockwise =
       isTargetClockwise(nxt_motor_get_count(motorPort), actualTargetAngle);
@@ -34,15 +34,15 @@ void rotateMotorByDegrees(int speedPercent, int brakeLength,
 
 void rotateMotor(int speedPercent, int brakeLength, bool turnClockwise,
                  U32 motorPort, int allowedDeviation, int targetAngle) {
-  printString("@ rotateMotor", displayCount++);
+  printString("@ rotateMotor");
   if (turnClockwise) {
-    printString("true", displayCount++);
+    printString("true");
     nxt_motor_set_speed(motorPort, speedPercent, 1);
     while (nxt_motor_get_count(motorPort) + brakeLength < targetAngle)
       ;
 
   } else {
-    printString("false", displayCount++);
+    printString("false");
     nxt_motor_set_speed(motorPort, -speedPercent, 1);
     while (nxt_motor_get_count(motorPort) + brakeLength > targetAngle)
       ;
@@ -53,13 +53,13 @@ void rotateMotor(int speedPercent, int brakeLength, bool turnClockwise,
 
   U32 variation = targetAngle - nxt_motor_get_count(motorPort);
 
-  printStringAndInt("Variation: ", variation, displayCount++);
+  printStringAndInt("Variation: ", variation);
 
   if (variation == 0) {
     return;
   }
   
-  printString("Adjusting..", displayCount++);
+  printString("Adjusting..");
 
   bool isClockwise =
       isTargetClockwise(nxt_motor_get_count(motorPort), targetAngle);
@@ -67,8 +67,8 @@ void rotateMotor(int speedPercent, int brakeLength, bool turnClockwise,
 }
 
 bool isTargetClockwise(U32 startAngle, U32 targetAngle) {
-  printStringAndInt("StartAngle: ", startAngle, displayCount++);
-  printStringAndInt("TargetAngle: ", targetAngle, displayCount++);
+  printStringAndInt("StartAngle: ", startAngle);
+  printStringAndInt("TargetAngle: ", targetAngle);
   return startAngle > targetAngle;
 }
 

@@ -60,7 +60,7 @@ TASK(ScanPlantTask)
 
 TASK(ScanPathTask)
 {
-    printString("asd", displayCount++);
+    printString("asd");
     systick_wait_ms(1000);   
 }
 
