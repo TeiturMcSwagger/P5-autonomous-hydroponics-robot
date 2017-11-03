@@ -1,4 +1,5 @@
 #include "ecrobot_interface.h"
+#include "globalConstants.h"
 #include "kernel.h"
 #include "kernel_id.h"
 #include "nxtMotorController.c"
@@ -8,8 +9,10 @@
 
 /* OSEK declarations */
 DeclareTask(ScanPathTask);
+// DeclareTask(ScanPlantTask);
 DeclareCounter(SysTimerCnt);
 DeclareAlarm(ScanPathAlarm);
+DeclareEvent(PathEvent);
 
 /* LEJOS OSEK hooks */
 void ecrobot_device_initialize() {
@@ -29,24 +32,31 @@ void printf(int row, char *str, int val) {
 }
 
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
-void user_1ms_isr_type2(void) {}
-TASK(FeedingTask) {}
-TASK(CalibrateTask) {}
-TASK(ScanPlantTask) {}
-TASK(ScanPlantBackgroundTask) {}
+void user_1ms_isr_type2(void) {
+    (void)SignalCounter(SysTimerCnt); /* Increment OSEK Alarm Counter */
+}
 
-TASK(ScanPathTask) { scanPath(); }
-
-TASK(MotorTask) {}
+TASK(ScanPathTask) {
+    while (1) {
+        WaitEvent(PathEvent);
+        ClearEvent(PathEvent);
+        scanPath();
+    }
+    TerminateTask();
+}
 
 TASK(TurnTask) {
-    turnMe();
+    while (1) {
+        turnMe();
+    }
     TerminateTask();
 }
 
 /* Background Task */
 TASK(ScanPathBackgroundTask) {
-    SetRelAlarm(AlarmTask2, 1, 100); // set event for Task2 by Alarm
+    // set event
+    SetRelAlarm(ScanPathAlarm, 1, 100);
+    // SetRelAlarm(ScanPlantTask, 1, 100);
     while (1) {
         ecrobot_process_bg_nxtcolorsensor(); // communicates with NXT Color
                                              // Sensor (this must be executed
