@@ -44,6 +44,5 @@ TASK(MotorTask) {}
 
 TASK(TurnTask) {
     turnMe();
-
     TerminateTask();
 }
