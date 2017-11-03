@@ -4,7 +4,6 @@
 #include "path.h"
 #include "turn.h"
 #include <stdlib.h>
-
 #define PATH_SENSOR_PORT NXT_PORT_S2
 
 int lightValue;
@@ -60,6 +59,8 @@ TASK(MotorTask)
 
 TASK(TurnTask)
 {
-	turn();
+	int i = PIK;
+	turnasd();
+	
 	TerminateTask();
 }

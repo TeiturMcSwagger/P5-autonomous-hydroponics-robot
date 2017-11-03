@@ -3,9 +3,10 @@
 #include "path.h"
 #include "nxtMotorController.h"
 
+
 int translationFactor = MAX_STEERING_ANGLE / OPTIMAL_LIGHT_VALUE;
 
-void turn()
+void turnasd()
 {
 	lightValue = 100;
 

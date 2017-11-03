@@ -1,1 +1,2 @@
-void turn();
+void turnasd();
+#define PIK 100
