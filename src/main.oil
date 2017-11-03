@@ -34,12 +34,16 @@ CPU ATMEL_AT91SAM7S256
         STACKSIZE = 512;
     };
 
+    TASK ScanPlantBackgroundTask {
+	      AUTOSTART = FALSE;
+        PRIORITY = 8; /* lowest priority */
+        ACTIVATION = 1;
+        SCHEDULE = FULL;
+        STACKSIZE = 512;
+    };
     TASK ScanPlantTask {
-	AUTOSTART = TRUE
-	{
-	    APPMODE = appmode1;
-	};
-        PRIORITY = 1; /* lowest priority */
+	      AUTOSTART = FALSE;
+        PRIORITY = 7; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
@@ -60,6 +64,10 @@ CPU ATMEL_AT91SAM7S256
     };
 
     TASK TurnTask {
+	AUTOSTART = TRUE
+	{
+	    APPMODE = appmode1;
+	};
         PRIORITY = 2; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
