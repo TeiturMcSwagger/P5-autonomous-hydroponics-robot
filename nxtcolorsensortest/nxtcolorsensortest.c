@@ -24,18 +24,35 @@ void ecrobot_device_terminate(void) {
 void user_1ms_isr_type2(void) {
     (void)SignalCounter(SysTimerCnt); /* Increment OSEK Alarm Counter */
 }
-/* Alarm executed Task2 */
-TASK(Task2) {
+
+void getLightValue()
+{
 
     while (1) {
-        WaitEvent(EventTask2);
-        ClearEvent(EventTask2);
-        ecrobot_set_nxtcolorsensor(PORT_ID, NXT_LIGHTSENSOR_WHITE);
-        display_clear(0);
-        display_goto_xy(0, 0);
-        display_int(ecrobot_get_nxtcolorsensor_light(PORT_ID), 0);
-        display_update();
+    int sum = 0;
+        for (int i = 0; i <= 9; i++)
+        {
+       		WaitEvent(EventTask2);
+        	ClearEvent(EventTask2);
+        	ecrobot_set_nxtcolorsensor(PORT_ID, NXT_LIGHTSENSOR_WHITE);
+        	display_clear(0);
+        	display_goto_xy(0, 0);
+        	int lightValue = ecrobot_get_nxtcolorsensor_light(PORT_ID);
+        	display_int(lightValue, 0);
+        	sum += lightValue;
+        	display_update();
+        }
+	  sum = sum / 10;
+    display_int(sum, 1);
+    display_update();
     }
+}
+
+/* Alarm executed Task2 */
+TASK(Task2)
+{
+	getLightValue();
+	TerminateTask();
 }
 
 /* Background Task */
