@@ -5,6 +5,9 @@ ignore/
 .idea/
 *.swp
 
+[Mm]akefile
+*.oil
+
 # Ignore nxtOSEK stuff
 nxtOSEK/
 build/
