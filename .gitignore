@@ -1,6 +1,14 @@
 # Ignore nxtOSEK files
-build/
+.DS_Store
+ignore/
+.clang-format
+.clang_complete
+.vscode/
+.idea/
+
+# nxtOSEK stuff
 nxtOSEK/
+build/
 implementation.oil
 kernel_cfg.c
 kernel_id.h
