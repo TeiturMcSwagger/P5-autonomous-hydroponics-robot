@@ -1,2 +1,2 @@
 void scanPath();
-extern int lightValue
+extern int lightValue;

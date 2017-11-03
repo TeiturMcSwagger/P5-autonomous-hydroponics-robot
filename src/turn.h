@@ -1,2 +1,1 @@
-void turnasd();
-#define PIK 100
+void turnMe();
