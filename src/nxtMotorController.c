@@ -38,14 +38,14 @@ void rotateMotor(int speedPercent, int brakeLength, bool turnClockwise,
   if (turnClockwise) {
     printString("true");
     nxt_motor_set_speed(motorPort, speedPercent, 1);
-    while (nxt_motor_get_count(motorPort) + brakeLength < targetAngle)
-      ;
+    while (nxt_motor_get_count(motorPort) + brakeLength < targetAngle);
 
   } else {
     printString("false");
     nxt_motor_set_speed(motorPort, -speedPercent, 1);
-    while (nxt_motor_get_count(motorPort) + brakeLength > targetAngle)
-      ;
+    printStringAndInt("Start: ", nxt_motor_get_count(motorPort) + brakeLength);
+    printStringAndInt("Target: ", targetAngle);
+    while (nxt_motor_get_count(motorPort) + brakeLength > targetAngle);
   }
 
   nxt_motor_set_speed(motorPort, 0, 1);
@@ -61,14 +61,16 @@ void rotateMotor(int speedPercent, int brakeLength, bool turnClockwise,
   
   printString("Adjusting..");
 
+  systick_wait_ms(2000);
+  display_clear(0);
+  displayCount = 0;
+  
   bool isClockwise =
       isTargetClockwise(nxt_motor_get_count(motorPort), targetAngle);
   rotateMotor(10, 0, isClockwise, motorPort, allowedDeviation, targetAngle);
 }
 
 bool isTargetClockwise(U32 startAngle, U32 targetAngle) {
-  printStringAndInt("StartAngle: ", startAngle);
-  printStringAndInt("TargetAngle: ", targetAngle);
   return startAngle > targetAngle;
 }
 
