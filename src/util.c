@@ -17,3 +17,9 @@ void printStringAndInt(char *str, int val) {
   display_int(val, 0);
   display_update();
 }
+
+void clearScreen()
+{
+    display_clear(0);
+    displayCount = 0;
+}
