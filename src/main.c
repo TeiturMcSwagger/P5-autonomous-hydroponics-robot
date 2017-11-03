@@ -1,10 +1,17 @@
 #include "ecrobot_interface.h"
 #include "kernel.h"
 #include "kernel_id.h"
-#include "nxtMotorController.c"
-#include "turn.h"
+#include "path.h"
+#include "globalConstants.h"
+#include "types.h"
+#include "nxtMotorController.h"
 #include <stdlib.h>
-#define PATH_SENSOR_PORT NXT_PORT_S2
+
+#include "util.h"
+
+int lightValue;
+
+bool first = TRUE;
 
 /* OSEK declarations */
 DeclareTask(ScanPathTask);
@@ -20,29 +27,48 @@ void ecrobot_device_terminate() {
     ecrobot_term_nxtcolorsensor(PATH_SENSOR_PORT);
 }
 
-void printf(int row, char *str, int val) {
-    display_clear(0);
-    display_goto_xy(0, row);
-    display_string(str);
-    display_int(val, 0);
-    display_update();
-}
-
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
-void user_1ms_isr_type2(void) {}
-TASK(FeedingTask) {}
-TASK(CalibrateTask) {}
-TASK(ScanPlantTask) {}
-TASK(ScanPlantBackgroundTask) {}
+void user_1ms_isr_type2(void)
+{
+}
+TASK(FeedingTask)
+{
+    if(first){
+        first = FALSE;
+        nxt_motor_set_count(NXT_PORT_A, DEFAULT_TURN_POSITION);
+    }
 
-TASK(ScanPathTask) {
-    printf(0, "asd", 0);
+    rotateMotorToAngle(100, 0, 15, NXT_PORT_A, 0);
     systick_wait_ms(1000);
+    rotateMotorToAngle(100, 0, 0, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorToAngle(100, 0, -15, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorToAngle(100, 0, 15, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorToAngle(100, 0, 0, NXT_PORT_A, 0);
+
+    TerminateTask();
+}
+TASK(CalibrateTask)
+{
+
+}
+TASK(ScanPlantTask)
+{
 }
 
-TASK(MotorTask) {}
+TASK(ScanPathTask)
+{
+    printString("asd");
+    systick_wait_ms(1000);   
+}
+TASK(MotorTask)
+{
+}
 
-TASK(TurnTask) {
-    turnMe();
-    TerminateTask();
+TASK(TurnTask)
+{
+	turnMe();
+	TerminateTask();
 }
