@@ -1,13 +1,17 @@
-#include "kernel.h"
-#include "kernel_id.h"
+#include "globalConstants.h"
 #include "ecrobot_interface.h"
+#include "path.h"
 
-int lightValue;
+int translationFactor = MAX_STEERING_ANGLE / OPTIMAL_LIGHT_VALUE;
 
-void scanPath() {
-    // lightValue = ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
-    // display_goto_xy(0, 1);
-    // display_string("LIGHT:");
-    // display_int(lightValue);
-    display_string("Hello from PATH");
+void turn()
+{
+	if (lightValue <= OPTIMAL_LIGHT_VALUE)
+	{
+		/*MAX_STEERING_ANGLE-(lightValue*translationFactor) is the amount of degress to be turned*/
+	}
+	else if (lightValue >= OPTIMAL_LIGHT_VALUE)
+	{
+		/*the bitch should turn all sails due east, cuz shit's about to go down.*/
+	}
 }

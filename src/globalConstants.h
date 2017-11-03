@@ -1,4 +1,2 @@
-int lightValue = 666;
-
-#define optimalLightValue 200;
-#define marginLightValue 10;
+#define OPTIMAL_LIGHT_VALUE 200
+#define MAX_STEERING_ANGLE 40
