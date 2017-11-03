@@ -5,8 +5,6 @@
 #include "globalConstants.h"
 #include <stdlib.h>
 
-#include "util.h"
-
 U32 getDestinationAngle(U32 startAngle, U32 degreesToRotate);
 bool isTargetClockwise(U32 startAngle, U32 targetAngle);
 
