@@ -1,10 +1,12 @@
 .DS_Store
 ignore/
-.clang-format
 .clang_complete
 .vscode/
 .idea/
 *.swp
+
+[Mm]akefile
+*.oil
 
 # Ignore nxtOSEK stuff
 nxtOSEK/
