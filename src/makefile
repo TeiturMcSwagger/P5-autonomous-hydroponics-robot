@@ -5,4 +5,4 @@ TOPPERS_OSEK_OIL_SOURCE := main.oil
 
 O_PATH ?= build
 
-include ~/nxtOSEK/ecrobot/ecrobot.mak
+include ~/Code/nxtOSEK/ecrobot/ecrobot.mak

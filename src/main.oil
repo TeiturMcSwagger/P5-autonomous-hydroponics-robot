@@ -38,6 +38,13 @@ CPU ATMEL_AT91SAM7S256
         STACKSIZE = 512;
     };
 
+    TASK SensorBackgroundTask {
+	      AUTOSTART = FALSE;
+        PRIORITY = 8; /* lowest priority */
+        ACTIVATION = 1;
+        SCHEDULE = FULL;
+        STACKSIZE = 512;
+    };
     TASK ScanPlantTask {
         PRIORITY = 1; /* lowest priority */
         ACTIVATION = 1;
@@ -66,5 +73,5 @@ CPU ATMEL_AT91SAM7S256
         STACKSIZE = 512;
     };
 
-    
+
 };
