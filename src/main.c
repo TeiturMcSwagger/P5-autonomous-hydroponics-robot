@@ -2,18 +2,18 @@
 #include "globalConstants.h"
 #include "kernel.h"
 #include "kernel_id.h"
+#include "types.h"
+#include "util.h"
 #include "nxtMotorController.h"
 #include "path.h"
 #include "turn.h"
-#include "types.h"
-#include "util.h"
 #include <stdlib.h>
 
-int lightValue;
-
 /* OSEK declarations */
+DeclareTask(FeedingTask);
 DeclareTask(ScanPathTask);
-// DeclareTask(ScanPlantTask);
+DeclareTask(ScanPlantTask);
+DeclareTask(ScanPathBackgroundTask);
 DeclareCounter(SysTimerCnt);
 DeclareAlarm(ScanPathAlarm);
 DeclareEvent(PathEvent);
@@ -28,6 +28,25 @@ void ecrobot_device_terminate() {
 }
 
 TASK(FeedingTask) {
+    rotateMotorToAngle(100, 40, 15, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorToAngle(100, 40, 0, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorToAngle(100, 40, -15, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorToAngle(100, 40, 0, NXT_PORT_A, 0);
+    
+    systick_wait_ms(5000);
+    
+    rotateMotorByDegrees(100, 40, 180, TRUE, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorByDegrees(100, 40, 180, TRUE, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorByDegrees(100, 40, 180, FALSE, NXT_PORT_A, 0);
+    systick_wait_ms(1000);
+    rotateMotorByDegrees(100, 40, 180, FALSE, NXT_PORT_A, 0);
+    
+    TerminateTask();
 }
 
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
@@ -42,18 +61,6 @@ TASK(ScanPathTask) {
         scanPath();
     }
     TerminateTask();
-}
-
-TASK(TurnTask) {
-    while (1) {
-        turnMe();
-    }
-    TerminateTask();
-}
-
-TASK(ScanPathTask) {
-    printString("asd");
-    systick_wait_ms(1000);
 }
 
 TASK(TurnTask) {

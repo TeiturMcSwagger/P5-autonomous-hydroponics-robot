@@ -1,8 +1,8 @@
 #include "ecrobot_interface.h"
+#include "globalConstants.h"
 #include "kernel.h"
 #include "kernel_id.h"
 #include "types.h"
-#include "globalConstants.h"
 #include <stdlib.h>
 
 bool first = TRUE;
@@ -10,43 +10,46 @@ bool first = TRUE;
 U32 getDestinationAngle(U32 startAngle, U32 degreesToRotate);
 bool isTargetClockwise(U32 startAngle, U32 targetAngle);
 void rotateMotor(int speedPercent, int brakeLength, bool turnDirection,
-        U32 motorPort, int allowedDeviation, int targetAngle);
-    
-void rotateMotorToAngle(int speedPercent, int brakeLength, int targetAngle, U32 motorPort, int allowedDeviation) {
+                 U32 motorPort, int allowedDeviation, int targetAngle);
+
+void rotateMotorToAngle(int speedPercent, int brakeLength, int targetAngle,
+                        U32 motorPort, int allowedDeviation) {
     if (first) {
         first = FALSE;
         nxt_motor_set_count(NXT_PORT_A, DEFAULT_TURN_POSITION);
     }
-    
+
     U32 actualTargetAngle = DEFAULT_TURN_POSITION + targetAngle;
     bool turnClockwise =
         isTargetClockwise(nxt_motor_get_count(motorPort), actualTargetAngle);
     rotateMotor(speedPercent, brakeLength, turnClockwise, motorPort,
-        allowedDeviation, actualTargetAngle);
+                allowedDeviation, actualTargetAngle);
 }
 
 void rotateMotorByDegrees(int speedPercent, int brakeLength,
-        U32 degreesToRotate, bool turnDirection,
-        U32 motorPort, int allowedDeviation) {
+                          U32 degreesToRotate, bool turnDirection,
+                          U32 motorPort, int allowedDeviation) {
     if (first) {
         first = FALSE;
         nxt_motor_set_count(NXT_PORT_A, DEFAULT_TURN_POSITION);
     }
-    
+
     U32 targetAngle =
         getDestinationAngle(nxt_motor_get_count(motorPort), degreesToRotate);
     rotateMotor(speedPercent, brakeLength, turnDirection, motorPort,
-        allowedDeviation, targetAngle);
+                allowedDeviation, targetAngle);
 }
 
 void rotateMotor(int speedPercent, int brakeLength, bool turnClockwise,
                  U32 motorPort, int allowedDeviation, int targetAngle) {
     if (turnClockwise) {
         nxt_motor_set_speed(motorPort, speedPercent, 1);
-        while (nxt_motor_get_count(motorPort) + brakeLength < targetAngle);
+        while (nxt_motor_get_count(motorPort) + brakeLength < targetAngle)
+            ;
     } else {
         nxt_motor_set_speed(motorPort, -speedPercent, 1);
-        while (nxt_motor_get_count(motorPort) + brakeLength > targetAngle);
+        while (nxt_motor_get_count(motorPort) + brakeLength > targetAngle)
+            ;
     }
 
     nxt_motor_set_speed(motorPort, 0, 1);

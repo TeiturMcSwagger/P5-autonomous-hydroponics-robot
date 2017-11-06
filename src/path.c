@@ -1,6 +1,7 @@
-#include "globalConstants.h"
+#include "ecrobot_interface.h"
 #include "kernel.h"
 #include "kernel_id.h"
+#include "globalConstants.h"
 #include "util.h"
 
 int lightValue = 0;
