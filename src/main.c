@@ -11,8 +11,6 @@
 
 int lightValue;
 
-bool first = TRUE;
-
 /* OSEK declarations */
 DeclareTask(ScanPathTask);
 // DeclareTask(ScanPlantTask);
@@ -30,10 +28,6 @@ void ecrobot_device_terminate() {
 }
 
 TASK(FeedingTask) {
-    if (first) {
-        first = FALSE;
-        nxt_motor_set_count(NXT_PORT_A, DEFAULT_TURN_POSITION);
-    }
 }
 
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
