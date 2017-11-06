@@ -2,11 +2,11 @@
 #include "globalConstants.h"
 #include "kernel.h"
 #include "kernel_id.h"
-#include "types.h"
-#include "util.h"
 #include "nxtMotorController.h"
 #include "path.h"
 #include "turn.h"
+#include "types.h"
+#include "util.h"
 #include <stdlib.h>
 
 /* OSEK declarations */
@@ -35,9 +35,9 @@ TASK(FeedingTask) {
     rotateMotorToAngle(100, 40, -15, NXT_PORT_A, 0);
     systick_wait_ms(1000);
     rotateMotorToAngle(100, 40, 0, NXT_PORT_A, 0);
-    
+
     systick_wait_ms(5000);
-    
+
     rotateMotorByDegrees(100, 40, 180, TRUE, NXT_PORT_A, 0);
     systick_wait_ms(1000);
     rotateMotorByDegrees(100, 40, 180, TRUE, NXT_PORT_A, 0);
@@ -45,7 +45,7 @@ TASK(FeedingTask) {
     rotateMotorByDegrees(100, 40, 180, FALSE, NXT_PORT_A, 0);
     systick_wait_ms(1000);
     rotateMotorByDegrees(100, 40, 180, FALSE, NXT_PORT_A, 0);
-    
+
     TerminateTask();
 }
 
@@ -62,7 +62,10 @@ TASK(ScanPathTask) {
     }
     TerminateTask();
 }
-
+TASK(CalibrateTask) {}
+TASK(SensorBackgroundTask) {}
+TASK(ScanPlantTask) {}
+TASK(MotorTask) {}
 TASK(TurnTask) {
     turnMe();
     TerminateTask();
