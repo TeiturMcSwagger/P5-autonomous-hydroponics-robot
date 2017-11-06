@@ -26,5 +26,5 @@ void printStringAndInt(char *str, int val) {
 
 void clearScreen() {
     display_clear(0);
-    displayCount = 0;
+    displayRow = 0;
 }
