@@ -6,7 +6,7 @@ typedef struct nutrition {
     void *amount;
 } nutrition;
 
-void feed(nutrition nutr);
+void feed(nutrition n);
 void feedPills(int amount);
 
 #endif

@@ -9,7 +9,7 @@ bool first = TRUE;
 
 U32 getDestinationAngle(U32 startAngle, U32 degreesToRotate);
 bool isTargetClockwise(U32 startAngle, U32 targetAngle);
-void rotateMotor(int speedPercent, int brakeLength, bool turnDirection,
+void rotateMotor(int speedPercent, int brakeLength, bool clockwise,
                  U32 motorPort, int allowedDeviation, int targetAngle);
 
 void rotateMotorToAngle(int speedPercent, int brakeLength, int targetAngle,
@@ -20,15 +20,15 @@ void rotateMotorToAngle(int speedPercent, int brakeLength, int targetAngle,
     }
 
     U32 actualTargetAngle = DEFAULT_TURN_POSITION + targetAngle;
-    bool turnClockwise =
+    bool clockwise =
         isTargetClockwise(nxt_motor_get_count(motorPort), actualTargetAngle);
-    rotateMotor(speedPercent, brakeLength, turnClockwise, motorPort,
+    rotateMotor(speedPercent, brakeLength, clockwise, motorPort,
                 allowedDeviation, actualTargetAngle);
 }
 
 void rotateMotorByDegrees(int speedPercent, int brakeLength,
-                          U32 degreesToRotate, bool turnDirection,
-                          U32 motorPort, int allowedDeviation) {
+                          U32 degreesToRotate, bool clockwise, U32 motorPort,
+                          int allowedDeviation) {
     if (first) {
         first = FALSE;
         nxt_motor_set_count(NXT_PORT_A, DEFAULT_TURN_POSITION);
@@ -36,13 +36,13 @@ void rotateMotorByDegrees(int speedPercent, int brakeLength,
 
     U32 targetAngle =
         getDestinationAngle(nxt_motor_get_count(motorPort), degreesToRotate);
-    rotateMotor(speedPercent, brakeLength, turnDirection, motorPort,
+    rotateMotor(speedPercent, brakeLength, clockwise, motorPort,
                 allowedDeviation, targetAngle);
 }
 
-void rotateMotor(int speedPercent, int brakeLength, bool turnClockwise,
+void rotateMotor(int speedPercent, int brakeLength, bool clockwise,
                  U32 motorPort, int allowedDeviation, int targetAngle) {
-    if (turnClockwise) {
+    if (clockwise) {
         nxt_motor_set_speed(motorPort, speedPercent, 1);
         while (nxt_motor_get_count(motorPort) + brakeLength < targetAngle)
             ;
@@ -61,9 +61,8 @@ void rotateMotor(int speedPercent, int brakeLength, bool turnClockwise,
         return;
     }
 
-    bool isClockwise =
-        isTargetClockwise(nxt_motor_get_count(motorPort), targetAngle);
-    rotateMotor(10, 0, isClockwise, motorPort, allowedDeviation, targetAngle);
+    clockwise = isTargetClockwise(nxt_motor_get_count(motorPort), targetAngle);
+    rotateMotor(10, 0, clockwise, motorPort, allowedDeviation, targetAngle);
 }
 
 bool isTargetClockwise(U32 startAngle, U32 targetAngle) {

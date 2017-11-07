@@ -9,6 +9,6 @@ void rotateMotorToAngle(int speedPercent, int brakeLength, int targetAngle,
                         U32 motorPort, int allowedDeviation);
 
 void rotateMotorByDegrees(int speedPercent, int brakeLength,
-                          U32 degreesToRotate, bool turnDirection,
-                          U32 motorPort, int allowedDeviation);
+                          U32 degreesToRotate, bool clockwise, U32 motorPort,
+                          int allowedDeviation);
 #endif
