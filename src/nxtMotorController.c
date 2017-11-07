@@ -1,7 +1,7 @@
 #include "ecrobot_interface.h"
-#include "globalConstants.h"
 #include "kernel.h"
 #include "kernel_id.h"
+#include "sym.h"
 #include "types.h"
 #include <stdlib.h>
 
@@ -66,7 +66,7 @@ void rotateMotor(int speedPercent, int brakeLength, bool clockwise,
 }
 
 bool isTargetClockwise(U32 startAngle, U32 targetAngle) {
-    return startAngle > targetAngle;
+    return startAngle < targetAngle;
 }
 
 U32 getDestinationAngle(U32 startAngle, U32 degreesToRotate) {

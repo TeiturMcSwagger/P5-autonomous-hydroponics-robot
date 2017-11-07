@@ -1,5 +1,7 @@
-#ifndef SYMCONSTS
-#define SYMCONSTS
+#ifndef SYM_H
+#define SYM_H
+
+#define ARM_MOTOR_PORT 0
 
 #define OPTIMAL_LIGHT_VALUE 200
 #define MAX_STEERING_ANGLE 40

@@ -1,9 +1,9 @@
+#include "armController.h"
 #include "ecrobot_interface.h"
-#include "globalConstants.h"
 #include "kernel.h"
 #include "kernel_id.h"
-#include "nxtMotorController.h"
 #include "path.h"
+#include "sym.h"
 #include "turn.h"
 #include "types.h"
 #include "util.h"
@@ -32,7 +32,12 @@ void user_1ms_isr_type2(void) {
     (void)SignalCounter(SysTimerCnt); /* Increment OSEK Alarm Counter */
 }
 
-TASK(FeedingTask) { TerminateTask(); }
+TASK(FeedingTask) {
+    int amount = 3;
+    nutrition n = {.feedProc = feedPills, .amount = &amount};
+    feed(n);
+    TerminateTask();
+}
 
 TASK(ScanPathTask) {
     while (1) {
