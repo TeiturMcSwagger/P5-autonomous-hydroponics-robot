@@ -1,0 +1,123 @@
+
+#include "implementation.oil"
+
+CPU ATMEL_AT91SAM7S256
+{
+    OS LEJOS_OSEK
+    {
+        STATUS = EXTENDED;
+        STARTUPHOOK = FALSE;
+        ERRORHOOK = FALSE;
+        SHUTDOWNHOOK = FALSE;
+        PRETASKHOOK = FALSE;
+        POSTTASKHOOK = FALSE;
+        USEGETSERVICEID = FALSE;
+        USEPARAMETERACCESS = FALSE;
+        USERESSCHEDULER = FALSE;
+    };
+
+    /* Definition of application mode */
+    APPMODE appmode1{};
+
+    TASK CalibrateTask {
+
+        AUTOSTART = TRUE
+        {
+          APPMODE = appmode1;
+        };
+        PRIORITY = 10;
+        ACTIVATION = 1;
+        SCHEDULE = FULL;
+        STACKSIZE = 512;
+    };
+
+    TASK SensorBackgroundTask {
+	      AUTOSTART = FALSE;
+        PRIORITY = 5; /* lowest priority */
+        ACTIVATION = 1;
+        SCHEDULE = FULL;
+        STACKSIZE = 512;
+    };
+
+    /* Definition of Task2 execution timing */
+    ALARM SensorBackgroundAlarm
+    {
+      COUNTER = SysTimerCnt;
+      ACTION = ACTIVATETASK
+      {
+          TASK = SensorBackgroundTask;
+      };
+      AUTOSTART = TRUE
+      {
+          ALARMTIME = 1;
+          CYCLETIME = 10; /* Task2 is executed every 500msec */
+          APPMODE = appmode1;
+      };
+    };
+
+    TASK SamplePlantColourTask {
+	    AUTOSTART = FALSE;
+        PRIORITY = 7; /* lowest priority */
+        ACTIVATION = 1;
+        SCHEDULE = FULL;
+        STACKSIZE = 512;
+    };
+
+    /* Definition of SamplePlantColourTask execution timing */
+    ALARM SamplePlantColourAlarm
+    {
+      COUNTER = SysTimerCnt;
+      ACTION = ACTIVATETASK
+      {
+          TASK = SamplePlantColourTask;
+      };
+      AUTOSTART = TRUE
+      {
+          ALARMTIME = 1;
+          CYCLETIME = 1000; /* SamplePlantColourTask is executed every 207msec */
+          APPMODE = appmode1;
+      };
+    };
+    TASK FeedingTask
+    {
+        AUTOSTART = FALSE;
+        PRIORITY = 5; /* lowest priority */
+        ACTIVATION = 1;
+        SCHEDULE = FULL;
+        STACKSIZE = 512;
+    };
+
+
+    TASK ScanPathTask {
+	    AUTOSTART = FALSE;
+      PRIORITY = 8; /* lowest priority */
+      ACTIVATION = 1;
+      SCHEDULE = FULL;
+      STACKSIZE = 512;
+    };
+
+    TASK MotorTask {
+	    AUTOSTART = FALSE;
+      PRIORITY = 2; /* lowest priority */
+      ACTIVATION = 1;
+      SCHEDULE = FULL;
+      STACKSIZE = 512;
+    };
+
+    TASK TurnTask {
+	    AUTOSTART = FALSE;
+      PRIORITY = 2; /* lowest priority */
+      ACTIVATION = 1;
+      SCHEDULE = FULL;
+      STACKSIZE = 512;
+    };
+
+    /* Definition of OSEK Alarm Counter */
+    COUNTER SysTimerCnt
+    {
+        MINCYCLE = 1;
+        MAXALLOWEDVALUE = 10000;
+        TICKSPERBASE = 1; /* One tick is equal to 1msec */
+    };
+
+};

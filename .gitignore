@@ -6,7 +6,6 @@ ignore/
 *.swp
 
 [Mm]akefile
-*.oil
 
 # Ignore nxtOSEK stuff
 nxtOSEK/
