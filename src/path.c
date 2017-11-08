@@ -22,5 +22,5 @@ void scanPath() {
     clearScreen();
     printString("Lightvalue: ");
     printInt(v);
-    turnMe(v);
+    // turnMe(v);
 }
