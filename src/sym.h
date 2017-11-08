@@ -3,6 +3,11 @@
 
 #define ARM_MOTOR_PORT 0
 
+#define RED_AMOUNT 1
+#define GREEN_AMOUNT 2
+#define BLUE_AMOUNT 3
+#define ERROR 0
+
 #define OPTIMAL_LIGHT_VALUE 200
 #define MAX_STEERING_ANGLE 40
 #define DEFAULT_TURN_POSITION 180

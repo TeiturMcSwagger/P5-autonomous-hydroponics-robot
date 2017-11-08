@@ -4,6 +4,7 @@
 #include "kernel_id.h"
 #include "nxtMotorController.h"
 #include "path.h"
+#include "sensorController.h"
 #include "sym.h"
 #include "turn.h"
 #include "types.h"
@@ -48,26 +49,10 @@ TASK(SensorBackgroundTask) {
 TASK(SamplePlantColourTask) {
     printString("Sampling");
 
-    int amount = 0;
-    S16 inputRGB[3];
-    ecrobot_get_nxtcolorsensor_inputRGB(PLANT_SENSOR_PORT, inputRGB);
-    if (inputRGB[0] > 200 && (inputRGB[0] - inputRGB[1]) > 100 &&
-        (inputRGB[0] - inputRGB[2]) > 100) {
-        printString("RED");
-        amount = 1;
-    } else if (inputRGB[1] > 200 && (inputRGB[1] - inputRGB[0]) > 100 &&
-               (inputRGB[1] - inputRGB[2]) > 100) {
-        printString("GREEN");
-        amount = 2;
-    } else if (inputRGB[2] > 200 && (inputRGB[2] - inputRGB[0]) > 100 &&
-               (inputRGB[2] - inputRGB[1]) > 100) {
-        printString("BLUE");
-        amount = 3;
-    } else {
-        printString("UNKNOWN");
-        amount = 0;
-    }
-    if (amount != 0) {
+    U16 colour = sampleColour(PLANT_SENSOR_PORT);
+    U8 amount = getAmountFromSample(colour);
+
+    if (amount != ERROR) {
         nutrition n = {.feedProc = feedPills, .amount = &amount};
         feed(n);
     }
