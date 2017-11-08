@@ -40,8 +40,9 @@ void rotateMotorByDegrees(int speedPercent, int brakeLength,
                 allowedDeviation, targetAngle);
 }
 
-void rotateMotor(int speedPercent, int brakeLength, bool clockwise,
-                 U32 motorPort, int allowedDeviation, int targetAngle) {
+void rotateToTarget(int speedPercent, int targetAngle, U32 motorPort,
+
+                    int brakeLength, bool clockwise) {
     if (clockwise) {
         nxt_motor_set_speed(motorPort, speedPercent, 1);
         while (nxt_motor_get_count(motorPort) + brakeLength < targetAngle)
@@ -50,6 +51,15 @@ void rotateMotor(int speedPercent, int brakeLength, bool clockwise,
         nxt_motor_set_speed(motorPort, -speedPercent, 1);
         while (nxt_motor_get_count(motorPort) + brakeLength > targetAngle)
             ;
+    }
+}
+void rotateMotor(int speedPercent, int brakeLength, bool clockwise,
+                 U32 motorPort, int allowedDeviation, int targetAngle) {
+    if (nxt_motor_get_count(motorPort) - brakeLength < targetAngle) {
+        rotateToTarget(speedPercent, targetAngle, motorPort, brakeLength,
+                       clockwise);
+    } else {
+        rotateToTarget(speedPercent, targetAngle, motorPort, 0, clockwise);
     }
 
     nxt_motor_set_speed(motorPort, 0, 1);
