@@ -2,10 +2,11 @@
 #include "kernel.h"
 #include "kernel_id.h"
 #include "sym.h"
+#include "util.h"
 #include "types.h"
 #include <stdlib.h>
 
-bool first = TRUE;
+int lastCount = DEFAULT_TURN_POSITION;
 
 U32 getDestinationAngle(U32 startAngle, U32 degreesToRotate);
 bool isTargetClockwise(U32 startAngle, U32 targetAngle);
@@ -13,11 +14,7 @@ void rotateMotor(int speedPercent, int brakeLength, bool clockwise,
                  U32 motorPort, int allowedDeviation, int targetAngle);
 
 void rotateMotorToAngle(int speedPercent, int brakeLength, int targetAngle,
-                        U32 motorPort, int allowedDeviation) {
-    if (first) {
-        first = FALSE;
-        nxt_motor_set_count(NXT_PORT_A, DEFAULT_TURN_POSITION);
-    }
+                        U32 motorPort, int allowedDeviation){
 
     U32 actualTargetAngle = DEFAULT_TURN_POSITION + targetAngle;
     bool clockwise =
@@ -29,10 +26,6 @@ void rotateMotorToAngle(int speedPercent, int brakeLength, int targetAngle,
 void rotateMotorByDegrees(int speedPercent, int brakeLength,
                           U32 degreesToRotate, bool clockwise, U32 motorPort,
                           int allowedDeviation) {
-    if (first) {
-        first = FALSE;
-        nxt_motor_set_count(NXT_PORT_A, DEFAULT_TURN_POSITION);
-    }
 
     U32 targetAngle =
         getDestinationAngle(nxt_motor_get_count(motorPort), degreesToRotate);
@@ -55,6 +48,9 @@ void rotateToTarget(int speedPercent, int targetAngle, U32 motorPort,
 }
 void rotateMotor(int speedPercent, int brakeLength, bool clockwise,
                  U32 motorPort, int allowedDeviation, int targetAngle) {
+
+    nxt_motor_set_count(NXT_PORT_A, lastCount);
+    
     if (nxt_motor_get_count(motorPort) - brakeLength < targetAngle) {
         rotateToTarget(speedPercent, targetAngle, motorPort, brakeLength,
                        clockwise);
@@ -66,8 +62,11 @@ void rotateMotor(int speedPercent, int brakeLength, bool clockwise,
     systick_wait_ms(150);
 
     U32 variation = targetAngle - nxt_motor_get_count(motorPort);
-
+    
+    lastCount = nxt_motor_get_count(NXT_PORT_A);
+    
     if (variation == 0) {
+        
         return;
     }
 

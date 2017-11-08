@@ -6,7 +6,6 @@
 #include "sym.h"
 #include "turn.h"
 #include "types.h"
-#include "util.h"
 #include <stdlib.h>
 
 /* OSEK declarations */
