@@ -54,7 +54,6 @@ TASK(SensorBackgroundTask) {}
 TASK(ScanPlantTask) {}
 TASK(MotorTask) {}
 TASK(TurnTask) {
-    printString("gfff");
     turnMe();
     TerminateTask();
 }

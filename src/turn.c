@@ -10,7 +10,6 @@ int translationFactor = MAX_STEERING_ANGLE / OPTIMAL_LIGHT_VALUE;
 void turnMe() {
     int lightValue = 100;
     // nxt_motor_set_count(0, 180);
-    nxt_motor_set_speed(NXT_PORT_A, 100, 1);
 
     while (1) {
         if (lightValue <= OPTIMAL_LIGHT_VALUE) {
