@@ -74,31 +74,47 @@ CPU ATMEL_AT91SAM7S256
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 1000; /* SamplePlantColourTask is executed every 207msec */
+          CYCLETIME = 100; /* SamplePlantColourTask is executed every 207msec */
           APPMODE = appmode1;
       };
     };
     TASK FeedingTask
     {
         AUTOSTART = FALSE;
-        PRIORITY = 5; /* lowest priority */
+        PRIORITY = 5;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
     };
 
 
-    TASK ScanPathTask {
-	    AUTOSTART = FALSE;
-      PRIORITY = 8; /* lowest priority */
+    TASK ScanPathTask
+    {
+      AUTOSTART = FALSE;
+      PRIORITY = 8;
       ACTIVATION = 1;
       SCHEDULE = FULL;
       STACKSIZE = 512;
     };
 
+    ALARM ScanPathAlarm
+    {
+      COUNTER = SysTimerCnt;
+      ACTION = ACTIVATETASK
+      {
+          TASK = ScanPathTask;
+      };
+      AUTOSTART = TRUE
+      {
+          ALARMTIME = 1;
+          CYCLETIME = 50;
+          APPMODE = appmode1;
+      };
+    };
+
     TASK MotorTask {
 	    AUTOSTART = FALSE;
-      PRIORITY = 2; /* lowest priority */
+      PRIORITY = 2;
       ACTIVATION = 1;
       SCHEDULE = FULL;
       STACKSIZE = 512;
@@ -106,7 +122,7 @@ CPU ATMEL_AT91SAM7S256
 
     TASK TurnTask {
 	    AUTOSTART = FALSE;
-      PRIORITY = 2; /* lowest priority */
+      PRIORITY = 2;
       ACTIVATION = 1;
       SCHEDULE = FULL;
       STACKSIZE = 512;
