@@ -96,6 +96,21 @@ CPU ATMEL_AT91SAM7S256
       SCHEDULE = FULL;
       STACKSIZE = 512;
     };
+    /* Definition of SamplepathTask execution timing */
+    ALARM SamplePathAlarm
+    {
+      COUNTER = SysTimerCnt;
+      ACTION = ACTIVATETASK
+      {
+          TASK = ScanPathTask;
+      };
+      AUTOSTART = TRUE
+      {
+          ALARMTIME = 1;
+          CYCLETIME = 10; /* SamplePlantColourTask is executed every 207msec */
+          APPMODE = appmode1;
+      };
+    };
 
     ALARM ScanPathAlarm
     {

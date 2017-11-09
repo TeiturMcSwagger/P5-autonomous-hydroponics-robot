@@ -61,11 +61,7 @@ TASK(SamplePlantColourTask) {
 }
 
 TASK(ScanPathTask) {
-    printString("TASK: ScanPath");
-    int lightValue = getLightValue();
-    rotateMotorToAngle(100, 0,
-                       MAX_STEERING_ANGLE - (lightValue * TRANSLATIONFACTOR),
-                       NXT_PORT_A, 0);
+    scanPath();
     TerminateTask();
 }
 
