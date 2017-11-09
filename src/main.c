@@ -13,11 +13,9 @@
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
-DeclareTask(TurnTask);
-DeclareTask(FeedingTask);
-DeclareTask(ScanPathTask);
-DeclareTask(SamplePlantColourTask);
-DeclareTask(ScanPathBackgroundTask);
+DeclareAlarm(SamplePlantColourAlarm);
+DeclareAlarm(SensorBackgroundAlarm);
+DeclareAlarm(ScanPathAlarm);
 
 /* LEJOS OSEK hooks */
 void ecrobot_device_initialize() {
@@ -49,18 +47,40 @@ TASK(SensorBackgroundTask) {
 }
 TASK(SamplePlantColourTask) {
     printString("Sampling");
-
-    U16 colour = sampleColour(PLANT_SENSOR_PORT);
-    U8 amount = getAmountFromSample(colour);
-
-    if (amount != ERROR) {
+    int amount = 0;
+    S16 inputRGB[3];
+    ecrobot_get_nxtcolorsensor_rgb(PLANT_SENSOR_PORT, inputRGB);
+    if (inputRGB[0] > 200 && (inputRGB[0] - inputRGB[1]) > 100 &&
+        (inputRGB[0] - inputRGB[2]) > 100) {
+        printString("RED");
+        amount = 1;
+    } else if (inputRGB[1] > 200 && (inputRGB[1] - inputRGB[0]) > 100 &&
+               (inputRGB[1] - inputRGB[2]) > 100) {
+        printString("GREEN");
+        amount = 2;
+    } else if (inputRGB[2] > 200 && (inputRGB[2] - inputRGB[0]) > 100 &&
+               (inputRGB[2] - inputRGB[1]) > 100) {
+        printString("BLUE");
+        amount = 3;
+    } else {
+        printString("UNKNOWN");
+        amount = 0;
+    }
+    if (amount != 0) {
         nutrition n = {.feedProc = feedPills, .amount = &amount};
         feed(n);
     }
     TerminateTask();
 }
 
-TASK(ScanPathTask) {}
+TASK(ScanPathTask) {
+    printString("TASK: ScanPath");
+    int lightValue = getLightValue();
+    rotateMotorToAngle(100, 0,
+                       MAX_STEERING_ANGLE - (lightValue * TRANSLATIONFACTOR),
+                       NXT_PORT_A, 0);
+    TerminateTask();
+}
 
 TASK(FeedingTask) {
     int amount = 3;
