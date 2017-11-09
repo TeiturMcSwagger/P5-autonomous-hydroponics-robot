@@ -9,6 +9,7 @@
 #include "turn.h"
 #include "types.h"
 #include "util.h"
+#include "calibrate.h"
 #include <stdlib.h>
 
 /* OSEK declarations */
@@ -41,6 +42,8 @@ void user_1ms_isr_type2(void) {
 
 TASK(CalibrateTask) {
     printString("CALIBRATES");
+    ecrobot_process_bg_nxtcolorsensor(); // communicates with NXT Color
+    scanPathToCalibrate();
     TerminateTask();
 }
 TASK(SensorBackgroundTask) {

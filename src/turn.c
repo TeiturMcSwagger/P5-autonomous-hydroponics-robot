@@ -6,5 +6,5 @@ void turnMe() {
     lightValue = 250;
     // Rotate motor to angle based on lightValue
     rotateMotorToAngle(
-        100, MAX_STEERING_ANGLE - (lightValue * TRANSLATIONFACTOR), NXT_PORT_A);
+        100, MAX_STEERING_ANGLE - (lightValue * translationfactor), NXT_PORT_A);
 }
