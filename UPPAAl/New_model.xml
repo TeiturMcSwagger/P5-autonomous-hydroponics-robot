@@ -4,146 +4,206 @@
 	<declaration>// Place global declarations here.
 clock t;
 clock d;
-const int ColorNone =0;
 const int ColorRed = 1;
 const int ColorGreen = 2;
 const int ColorBlue = 3;
 //colorError?
-const int MAXCOLOR=3;
+const int MAXCOLOUR=2;
 
-typedef int[0,MAXCOLOR] ColorType;
-bool reverse;
-bool FeedRedy;
+int fed = 0;
 
+typedef int[0,MAXCOLOUR] ColorType;
+bool IsAdjusting;
+bool FeedReady;
+bool IsAtPlant;
+bool IsOnTrack;
+bool IsDriving;
 
 
 ColorType colour;
-broadcast chan	OnTrack, OffTrack, IsDriving, Calibrated, Plant, FeedingDone;</declaration>
+broadcast chan OnTrack, ButtonPress, OffTrack, Calibrated, Plant, FeedingDone, RunFinished;</declaration>
 	<template>
-		<name x="5" y="5">Template</name>
+		<name x="5" y="5">User</name>
 		<declaration>// Place local declarations here.</declaration>
-		<location id="id0" x="0" y="0">
+		<location id="id0" x="-204" y="-119">
+			<name x="-229" y="-153">Relaxing</name>
 		</location>
-		<init ref="id0"/>
+		<location id="id1" x="-340" y="-119">
+			<name x="-374" y="-153">Stressing</name>
+		</location>
+		<init ref="id1"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-322" y="-68">RunFinished?</label>
+			<nail x="-204" y="-51"/>
+			<nail x="-340" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-322" y="-136">ButtonPress!</label>
+		</transition>
 	</template>
 	<template>
 		<name x="5" y="5">Robot</name>
 		<declaration>// Place local declarations here.</declaration>
-		<location id="id1" x="119" y="-170">
+		<location id="id2" x="-569" y="-323">
+			<name x="-579" y="-357">Idle</name>
+		</location>
+		<location id="id3" x="119" y="-170">
 			<name x="93" y="-204">Feeding</name>
 			<label kind="invariant" x="136" y="-178">colour &gt;= 0</label>
 		</location>
-		<location id="id2" x="-348" y="-170">
+		<location id="id4" x="-348" y="-170">
 			<name x="-365" y="-204">Ready</name>
 		</location>
-		<location id="id3" x="-323" y="-93">
-			<name x="-357" y="-127">Adjusting</name>
+		<location id="id5" x="-399" y="-42">
+			<name x="-433" y="-76">Adjusting</name>
 		</location>
-		<location id="id4" x="-127" y="-170">
+		<location id="id6" x="-127" y="-170">
 			<name x="-186" y="-204">DrivingOnTrack</name>
 		</location>
-		<location id="id5" x="-569" y="-170">
+		<location id="id7" x="-569" y="-170">
 			<name x="-603" y="-204">Calibrating</name>
 		</location>
-		<init ref="id5"/>
+		<init ref="id2"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-671" y="-272">ButtonPress?</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-391" y="-280">RunFinished?</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-348" y="17">Plant?</label>
+			<nail x="-102" y="110"/>
+			<nail x="17" y="110"/>
+			<nail x="17" y="110"/>
+			<nail x="17" y="-85"/>
+		</transition>
 		<transition>
 			<source ref="id3"/>
-			<target ref="id4"/>
-			<label kind="guard" x="-153" y="9">reverse==true</label>
-			<label kind="synchronisation" x="-153" y="-8">OnTrack?</label>
-			<label kind="assignment" x="-153" y="25">reverse=false,
-FeedRedy=true</label>
-			<nail x="-127" y="-8"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-51" y="-153">colour == 0</label>
+			<label kind="synchronisation" x="-51" y="-170">FeedingDone!</label>
+			<label kind="assignment" x="10" y="-140">fed++</label>
+			<nail x="-8" y="-110"/>
+			<nail x="-8" y="-110"/>
 		</transition>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id3"/>
-			<label kind="synchronisation" x="-348" y="-42">Plant?</label>
-			<label kind="assignment" x="-357" y="-25">reverse=true</label>
-			<nail x="-392" y="29"/>
-			<nail x="-426" y="-64"/>
-		</transition>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id4"/>
-			<label kind="guard" x="-51" y="-153">colour == ColorNone</label>
-			<label kind="synchronisation" x="-51" y="-170">FeedingDone!</label>
-			<nail x="-8" y="-110"/>
-			<nail x="-8" y="-110"/>
-		</transition>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id1"/>
 			<label kind="guard" x="84" y="-102">colour &gt; 0</label>
-			<label kind="assignment" x="84" y="-119">colour = colour-1</label>
+			<label kind="assignment" x="84" y="-119">colour--</label>
 			<nail x="255" y="-85"/>
 			<nail x="161" y="-85"/>
 			<nail x="67" y="-85"/>
 			<nail x="59" y="-85"/>
 		</transition>
 		<transition>
-			<source ref="id4"/>
-			<target ref="id1"/>
+			<source ref="id6"/>
+			<target ref="id3"/>
 			<label kind="synchronisation" x="-34" y="-195">Plant?</label>
 		</transition>
 		<transition>
-			<source ref="id2"/>
-			<target ref="id4"/>
-			<label kind="synchronisation" x="-280" y="-187">IsDriving!</label>
+			<source ref="id4"/>
+			<target ref="id6"/>
+			<label kind="assignment" x="-306" y="-187">IsDriving = true</label>
 		</transition>
 		<transition>
-			<source ref="id5"/>
-			<target ref="id2"/>
+			<source ref="id7"/>
+			<target ref="id4"/>
 			<label kind="synchronisation" x="-501" y="-195">Calibrated?</label>
 		</transition>
 		<transition>
-			<source ref="id3"/>
-			<target ref="id4"/>
-			<label kind="guard" x="-238" y="-76">reverse==false</label>
-			<label kind="synchronisation" x="-238" y="-93">OnTrack?</label>
-			<label kind="assignment" x="-246" y="-110">FeedRedy=true</label>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-246" y="-110">IsOnTrack</label>
 			<nail x="-170" y="-93"/>
 		</transition>
 		<transition>
-			<source ref="id4"/>
-			<target ref="id3"/>
-			<label kind="synchronisation" x="-272" y="-153">OffTrack?</label>
-			<label kind="assignment" x="-280" y="-136">FeedRedy=false</label>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-381" y="-140">!IsOnTrack</label>
 		</transition>
 	</template>
 	<template>
 		<name>Environment</name>
 		<declaration>
-const int NO_PLANTS=10;
-int Plants[NO_PLANTS]={10,22,28,40,52,58,68, 82,90, 100}; 
 
-int [0,120]  pos=0;
+const int NO_PLANTS = 10;
+int Plants[NO_PLANTS] = {13,19,27,44,52,60,66,77,90,99}; 
+int lastFeedingPos = 0;
+
+
+int[0,120]  pos = 0;
+int endPos = 120;
+
+
+int plantsFed = 0;
 int hasPlant(int pos){
   int i;
-  for(i=0;i&lt;NO_PLANTS;i++){
-    if(Plants[i]==pos) return true;
+  for(i = 0; i &lt; NO_PLANTS; i++){
+    if(Plants[i] == pos){
+        return 1;
+    }
   }
-  return false;
+  return 0;
 }  
+int hasFedPlant(int pos){
+    return pos == lastFeedingPos;
+}
 
+
+int shouldStop(int pos){
+    return hasPlant(pos) &amp;&amp; !hasFedPlant(pos);
+}
+
+int shouldDrive(int pos){
+    return !(pos == endPos) &amp;&amp; !shouldStop(pos);
+}
 </declaration>
-		<location id="id6" x="-1895" y="-2253">
-			<name x="-1905" y="-2287">Feeding</name>
+		<location id="id8" x="-2431" y="-2337">
 		</location>
-		<location id="id7" x="-2184" y="-2193">
-			<name x="-2209" y="-2227">Driving</name>
-			<label kind="invariant" x="-2159" y="-2201">d&lt;=1</label>
-			<label kind="comments" x="-2728" y="-2286">Remember Invariant to force output before a given timeout</label>
+		<location id="id9" x="-1895" y="-2253">
+			<name x="-1921" y="-2286">AtPlant</name>
 		</location>
-		<location id="id8" x="-2431" y="-2193">
-			<name x="-2467" y="-2227">Calibrating</name>
+		<location id="id10" x="-2184" y="-2193">
+			<name x="-2209" y="-2227">InRoute</name>
+			<label kind="invariant" x="-2269" y="-2184">d &lt;= 5</label>
+		</location>
+		<location id="id11" x="-2431" y="-2193">
+			<name x="-2456" y="-2227">AtStart</name>
 		</location>
 		<init ref="id8"/>
 		<transition>
-			<source ref="id6"/>
-			<target ref="id7"/>
-			<label kind="synchronisation" x="-2141" y="-2508">FeedingDone?</label>
-			<label kind="assignment" x="-2107" y="-2491">d = 0</label>
+			<source ref="id8"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-2524" y="-2286">ButtonPress?</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-2176" y="-1963">pos == endPos</label>
+			<label kind="synchronisation" x="-2176" y="-1946">RunFinished!</label>
+			<nail x="-1844" y="-2193"/>
+			<nail x="-1844" y="-1921"/>
+			<nail x="-2422" y="-1921"/>
+			<nail x="-2431" y="-1921"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-2108" y="-2507">FeedingDone?</label>
+			<label kind="assignment" x="-2107" y="-2491">d = 0,
+plantsFed++,
+lastFeedingPos = pos</label>
 			<nail x="-1818" y="-2253"/>
 			<nail x="-1818" y="-2474"/>
 			<nail x="-2303" y="-2474"/>
@@ -151,54 +211,52 @@ int hasPlant(int pos){
 			<nail x="-2303" y="-2261"/>
 		</transition>
 		<transition>
-			<source ref="id7"/>
-			<target ref="id6"/>
-			<label kind="select" x="-2099" y="-2371">c: ColorType</label>
-			<label kind="guard" x="-2099" y="-2354">hasPlant(pos) &amp;&amp;
-FeedRedy==true</label>
-			<label kind="synchronisation" x="-2099" y="-2320">Plant!</label>
-			<label kind="assignment" x="-2099" y="-2303">colour = c</label>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="select" x="-2125" y="-2371">c: ColorType</label>
+			<label kind="guard" x="-2125" y="-2354">shouldStop(pos)</label>
+			<label kind="synchronisation" x="-2125" y="-2337">Plant!</label>
+			<label kind="assignment" x="-2125" y="-2320">colour = c</label>
 			<nail x="-2106" y="-2253"/>
 		</transition>
 		<transition>
-			<source ref="id7"/>
-			<target ref="id7"/>
-			<label kind="guard" x="-2108" y="-2142">d==1</label>
-			<label kind="synchronisation" x="-2108" y="-2091">OffTrack!</label>
-			<label kind="assignment" x="-2108" y="-2125">reverse ? pos-- : pos++,
-d=0</label>
-			<label kind="comments" x="-2371" y="-2040">We assume that being offtrack costs one time unit.</label>
+			<source ref="id10"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-2099" y="-2142">d==5 &amp;&amp; shouldDrive(pos)</label>
+			<label kind="assignment" x="-2099" y="-2125">d = d-1,
+IsOnTrack = false</label>
 			<nail x="-2159" y="-2125"/>
 			<nail x="-2125" y="-2133"/>
 		</transition>
 		<transition>
-			<source ref="id7"/>
-			<target ref="id7"/>
-			<label kind="guard" x="-2286" y="-2125">d==1</label>
-			<label kind="synchronisation" x="-2286" y="-2074">OnTrack!</label>
-			<label kind="assignment" x="-2286" y="-2108">reverse ? pos=pos : pos++,
-d=0</label>
+			<source ref="id10"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-2312" y="-2116">d==5 &amp;&amp; shouldDrive(pos)</label>
+			<label kind="assignment" x="-2312" y="-2099">pos++,
+d = 0,
+IsOnTrack = true</label>
 			<nail x="-2261" y="-2125"/>
 			<nail x="-2184" y="-2125"/>
 		</transition>
 		<transition>
-			<source ref="id8"/>
-			<target ref="id8"/>
+			<source ref="id11"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-2592" y="-2244">!IsOnTrack</label>
 			<label kind="synchronisation" x="-2592" y="-2227">Calibrated!</label>
+			<label kind="assignment" x="-2626" y="-2210">IsOnTrack = true</label>
 			<nail x="-2499" y="-2184"/>
 			<nail x="-2507" y="-2227"/>
 		</transition>
 		<transition>
-			<source ref="id8"/>
-			<target ref="id7"/>
-			<label kind="synchronisation" x="-2344" y="-2211">IsDriving?</label>
-			<label kind="assignment" x="-2363" y="-2184">d = 0,
-pos=0,
-FeedRedy=true</label>
+			<source ref="id11"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-2388" y="-2218">IsDriving</label>
+			<label kind="assignment" x="-2388" y="-2252">d = 0,
+pos=0</label>
 		</transition>
 	</template>
 	<system>system
-       Robot, Environment;</system>
+       Robot, Environment, User;</system>
 	<queries>
 	</queries>
 </nta>
