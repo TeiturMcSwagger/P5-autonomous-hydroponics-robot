@@ -1,1 +1,2 @@
-void scanPathToCalibrate();
+void getOptimalLightValue();
+extern int optimalLightValue;

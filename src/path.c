@@ -4,8 +4,7 @@
 #include "sym.h"
 #include "turn.h"
 #include "util.h"
-
-int lightValue = 0;
+#include "calibrate.h"
 
 int getLightValue() {
     int sum = 0;
@@ -20,6 +19,10 @@ int getLightValue() {
 void scanPath() {
     int v = getLightValue();
     clearScreen();
-    printString("Lightvalue: ");
-    printInt(v);
+    printStringAndInt("Lightvalue: ", v);
+}
+
+int getDiviation(){
+    int currentValue = getLightValue();
+    return (((float)(currentValue) / (float)(optimalLightValue)) * 100) - 100;
 }

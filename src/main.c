@@ -41,7 +41,7 @@ void user_1ms_isr_type2(void) {
 TASK(CalibrateTask) {
     printString("CALIBRATES");
     ecrobot_process_bg_nxtcolorsensor(); // communicates with NXT Color
-    scanPathToCalibrate();
+    getOptimalLightValue();
     TerminateTask();
 }
 TASK(SensorBackgroundTask) {
@@ -54,6 +54,7 @@ TASK(SamplePlantColourTask) {
     U8 amount = getAmountFromSample(colour);
 
     if (amount != ERROR) {
+        stopMotor();
         nutrition n = {.feedProc = feedPills, .amount = &amount};
         feed(n);
     }
@@ -62,6 +63,7 @@ TASK(SamplePlantColourTask) {
 
 TASK(ScanPathTask) {
     scanPath();
+    drive();
     TerminateTask();
 }
 
@@ -74,6 +76,6 @@ TASK(FeedingTask) {
 
 TASK(MotorTask) {}
 TASK(TurnTask) {
-    turnMe();
+    
     TerminateTask();
 }

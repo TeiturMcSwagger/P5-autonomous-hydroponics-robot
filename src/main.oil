@@ -25,7 +25,7 @@ CPU ATMEL_AT91SAM7S256
         {
           APPMODE = appmode1;
         };
-        PRIORITY = 10;
+        PRIORITY = 11;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
@@ -33,7 +33,7 @@ CPU ATMEL_AT91SAM7S256
 
     TASK SensorBackgroundTask {
 	      AUTOSTART = FALSE;
-        PRIORITY = 5; /* lowest priority */
+        PRIORITY = 10; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
@@ -108,21 +108,6 @@ CPU ATMEL_AT91SAM7S256
       {
           ALARMTIME = 1;
           CYCLETIME = 10; /* SamplePlantColourTask is executed every 207msec */
-          APPMODE = appmode1;
-      };
-    };
-
-    ALARM ScanPathAlarm
-    {
-      COUNTER = SysTimerCnt;
-      ACTION = ACTIVATETASK
-      {
-          TASK = ScanPathTask;
-      };
-      AUTOSTART = TRUE
-      {
-          ALARMTIME = 1;
-          CYCLETIME = 50;
           APPMODE = appmode1;
       };
     };
