@@ -9,7 +9,6 @@
 int getLightValue() {
     int sum = 0;
     int numLoops = 1;
-    printString("getlight");
     for (int i = 0; i < numLoops; i++) {
         sum += ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
     }
@@ -19,7 +18,7 @@ int getLightValue() {
 void scanPath() {
     int v = getLightValue();
     clearScreen();
-    printStringAndInt("Lightvalue: ", v);
+//    printStringAndInt("Lightvalue: ", v);
 }
 
 int getDiviation(){

@@ -62,6 +62,9 @@ TASK(SamplePlantColourTask) {
 }
 
 TASK(ScanPathTask) {
+    if(areWeFeeding == 1){
+        TerminateTask();
+    }
     scanPath();
     drive();
     TerminateTask();
