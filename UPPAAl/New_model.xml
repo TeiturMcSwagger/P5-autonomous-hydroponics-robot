@@ -12,7 +12,7 @@ const int MAXCOLOUR=2;
 
 int fed = 0;
 
-typedef int[0,MAXCOLOUR] ColorType;
+typedef int[0,MAXCOLOUR] ColourType;
 bool IsAtPlant;
 bool IsOnTrack;
 bool IsDriving;
@@ -45,8 +45,7 @@ broadcast chan ButtonPress, Calibrated, Plant, FeedingDone, RunFinished;</declar
 	</template>
 	<template>
 		<name x="5" y="5">Robot</name>
-		<declaration>// Place local declarations here.
-isValidColour(</declaration>
+		<declaration>// Place local declarations here.</declaration>
 		<location id="id2" x="-569" y="-323">
 			<name x="-579" y="-357">Idle</name>
 		</location>
