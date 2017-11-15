@@ -10,7 +10,6 @@ const int ColorBlue = 3;
 //colorError?
 const int MAXCOLOUR=2;
 
-int fed = 0;
 
 typedef int[0,MAXCOLOUR] ColourType;
 bool IsAtPlant;
