@@ -1,4 +1,3 @@
-#include "armController.h"
 #include "calibrate.h"
 #include "ecrobot_interface.h"
 #include "kernel.h"
@@ -11,6 +10,7 @@
 #include "types.h"
 #include "util.h"
 #include <stdlib.h>
+#include "armController.h"
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
@@ -62,7 +62,7 @@ TASK(SamplePlantColourTask) {
 }
 
 TASK(ScanPathTask) {
-    if(areWeFeeding == 1){
+    if(areWeFeeding){
         TerminateTask();
     }
     scanPath();
