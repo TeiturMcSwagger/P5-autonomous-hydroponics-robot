@@ -1,7 +1,9 @@
 #ifndef ARMCONTROLLER_H
 #define ARMCONTROLLER_H
 
-extern int areWeFeeding;
+#include "types.h"
+
+extern bool areWeFeeding;
 
 typedef struct nutrition {
     void (*feedProc)(void *amount);
