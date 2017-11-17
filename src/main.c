@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include "armController.h"
 
+int armFireCounter = 0;
+
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
 DeclareAlarm(SamplePlantColourAlarm);
@@ -50,6 +52,12 @@ TASK(SensorBackgroundTask) {
 }
 TASK(SamplePlantColourTask) {
     printString("Sampling");
+
+	if (!(systick_get_ms() >= armFireCounter + 3000))
+	{
+		TerminateTask();
+	}
+ 
     U16 colour = sampleColour(PLANT_SENSOR_PORT);
     U8 amount = getAmountFromSample(colour);
 
@@ -58,6 +66,9 @@ TASK(SamplePlantColourTask) {
         nutrition n = {.feedProc = feedPills, .amount = &amount};
         feed(n);
     }
+
+	armFireCounter = systick_get_ms();
+
     TerminateTask();
 }
 
