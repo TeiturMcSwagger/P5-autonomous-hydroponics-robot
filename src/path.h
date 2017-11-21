@@ -1,4 +1,7 @@
-void scanPath();
-int getLightValue();
-int getDiviation();
-extern int lightValue;
+#ifndef PATH_H
+#define PATH_H
+
+void followLine();
+void stopDriving();
+
+#endif

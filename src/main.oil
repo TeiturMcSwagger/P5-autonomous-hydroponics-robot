@@ -19,20 +19,8 @@ CPU ATMEL_AT91SAM7S256
     /* Definition of application mode */
     APPMODE appmode1{};
 
-    TASK CalibrateTask {
-
-        AUTOSTART = TRUE
-        {
-          APPMODE = appmode1;
-        };
-        PRIORITY = 11;
-        ACTIVATION = 1;
-        SCHEDULE = FULL;
-        STACKSIZE = 512;
-    };
-
     TASK SensorBackgroundTask {
-	      AUTOSTART = FALSE;
+	    AUTOSTART = FALSE;
         PRIORITY = 10; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
@@ -57,7 +45,7 @@ CPU ATMEL_AT91SAM7S256
 
     TASK SamplePlantColourTask {
 	    AUTOSTART = FALSE;
-        PRIORITY = 10; /* lowest priority */
+        PRIORITY = 9;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
@@ -74,21 +62,12 @@ CPU ATMEL_AT91SAM7S256
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 100; /* SamplePlantColourTask is executed every 207msec */
+          CYCLETIME = 200; /* SamplePlantColourTask is executed every 207msec */
           APPMODE = appmode1;
       };
     };
-    TASK FeedingTask
-    {
-        AUTOSTART = FALSE;
-        PRIORITY = 5;
-        ACTIVATION = 1;
-        SCHEDULE = FULL;
-        STACKSIZE = 512;
-    };
 
-
-    TASK ScanPathTask
+    TASK SamplePathTask
     {
       AUTOSTART = FALSE;
       PRIORITY = 8;
@@ -96,13 +75,14 @@ CPU ATMEL_AT91SAM7S256
       SCHEDULE = FULL;
       STACKSIZE = 512;
     };
+
     /* Definition of SamplepathTask execution timing */
     ALARM SamplePathAlarm
     {
       COUNTER = SysTimerCnt;
       ACTION = ACTIVATETASK
       {
-          TASK = ScanPathTask;
+          TASK = SamplePathTask;
       };
       AUTOSTART = TRUE
       {
@@ -110,22 +90,6 @@ CPU ATMEL_AT91SAM7S256
           CYCLETIME = 10; /* SamplePlantColourTask is executed every 207msec */
           APPMODE = appmode1;
       };
-    };
-
-    TASK MotorTask {
-	    AUTOSTART = FALSE;
-      PRIORITY = 2;
-      ACTIVATION = 1;
-      SCHEDULE = FULL;
-      STACKSIZE = 512;
-    };
-
-    TASK TurnTask {
-	    AUTOSTART = FALSE;
-      PRIORITY = 2;
-      ACTIVATION = 1;
-      SCHEDULE = FULL;
-      STACKSIZE = 512;
     };
 
     /* Definition of OSEK Alarm Counter */

@@ -1,24 +1,21 @@
-#include "calibrate.h"
 #include "ecrobot_interface.h"
 #include "kernel.h"
 #include "kernel_id.h"
-#include "nxtMotorController.h"
-#include "path.h"
-#include "sensorController.h"
 #include "sym.h"
-#include "turn.h"
-#include "types.h"
 #include "util.h"
+#include "motorController.h"
+#include "path.h"
+#include "feed.h"
+#include "types.h"
 #include <stdlib.h>
-#include "armController.h"
 
-int armFireCounter = 0;
+U32 armFireCounter = 0;
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
 DeclareAlarm(SamplePlantColourAlarm);
+DeclareAlarm(SamplePathAlarm);
 DeclareAlarm(SensorBackgroundAlarm);
-DeclareAlarm(ScanPathAlarm);
 
 /* LEJOS OSEK hooks */
 void ecrobot_device_initialize() {
@@ -28,6 +25,7 @@ void ecrobot_device_initialize() {
 
 void ecrobot_device_terminate() {
     ecrobot_term_nxtcolorsensor(PATH_SENSOR_PORT);
+    ecrobot_term_nxtcolorsensor(PLANT_SENSOR_PORT);
 }
 
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
@@ -40,56 +38,29 @@ void user_1ms_isr_type2(void) {
     }
 }
 
-TASK(CalibrateTask) {
-    printString("CALIBRATES");
-    ecrobot_process_bg_nxtcolorsensor(); // communicates with NXT Color
-    getOptimalLightValue();
-    TerminateTask();
-}
+// Keeps the color sensor alive
+// is neccessary or the color sensor won't work
 TASK(SensorBackgroundTask) {
-    ecrobot_process_bg_nxtcolorsensor(); // communicates with NXT Color
+    ecrobot_process_bg_nxtcolorsensor();
     TerminateTask();
 }
+
 TASK(SamplePlantColourTask) {
     printString("Sampling");
-
-	if (!(systick_get_ms() >= armFireCounter + 3000))
-	{
-		TerminateTask();
-	}
- 
-    U16 colour = sampleColour(PLANT_SENSOR_PORT);
-    U8 amount = getAmountFromSample(colour);
-
-    if (amount != ERROR) {
-        stopMotor();
-        nutrition n = {.feedProc = feedPills, .amount = &amount};
-        feed(n);
-    }
-
-	armFireCounter = systick_get_ms();
-
-    TerminateTask();
-}
-
-TASK(ScanPathTask) {
-    if(areWeFeeding){
+    if (systick_get_ms() < armFireCounter + 3000) {
         TerminateTask();
     }
-    scanPath();
-    drive();
+    U8 feedAmount = getFeedAmount();
+    if (feedAmount == 0) {
+        TerminateTask();
+    }
+    stopDriving();
+    feedPills(feedAmount);
+    armFireCounter = systick_get_ms();
     TerminateTask();
 }
 
-TASK(FeedingTask) {
-    int amount = 3;
-    nutrition n = {.feedProc = feedPills, .amount = &amount};
-    feed(n);
-    TerminateTask();
-}
-
-TASK(MotorTask) {}
-TASK(TurnTask) {
-    
+TASK(SamplePathTask) {
+    followLine();
     TerminateTask();
 }
