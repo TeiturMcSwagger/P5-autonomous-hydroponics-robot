@@ -46,7 +46,7 @@ TASK(SensorBackgroundTask) {
 }
 
 TASK(SamplePlantColourTask) {
-    printString("Sampling");
+
     if (systick_get_ms() < armFireCounter + 3000) {
         TerminateTask();
     }
@@ -62,5 +62,10 @@ TASK(SamplePlantColourTask) {
 
 TASK(SamplePathTask) {
     followLine();
+    TerminateTask();
+}
+
+TASK(Calibrate) {
+    calibratePID();
     TerminateTask();
 }

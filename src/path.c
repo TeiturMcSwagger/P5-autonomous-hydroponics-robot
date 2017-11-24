@@ -3,37 +3,75 @@
 #include "kernel_id.h"
 #include "sym.h"
 #include "util.h"
-#define PROPORTIONAL 0.2
-#define INTEGRAL 0.1
-#define DERIVATIVE 0.4
 
 int getLight();
 int getAverageLightValue(int numLoops);
 void turn(double pid);
 
 double integral = 0;
-int previousError = 0;
+int previousError = 0, maxLight = 0, minLight = 0, optimalLight = 0;
 
-// Assumes to robot is placed on the right side of the tape
+// Assumes the robot is placed on the right side of the tape
 void followLine() {
-    int error = getLight() - OPTIMAL_LIGHT;
+    int error = getLight() - optimalLight;
     double proportional = error * PROPORTIONAL;
-    integral = integral + error;
-    // double integ = integral * INTEGRAL;
     double derivative = (error - previousError) * DERIVATIVE;
     double pid = proportional + derivative;
     previousError = error;
     turn(pid);
 }
 
+void calibratePID()
+{
+    systick_wait_ms(1000);
+    optimalLight = getLight();
+
+    //Calibrate Right
+    nxt_motor_set_speed(LEFT_MOTOR, 20, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, -20, 1);
+    systick_wait_ms(CALIBRATE_MS);
+    nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
+    systick_wait_ms(1000);
+    minLight = getLight();
+
+    //Calibrate Left
+    nxt_motor_set_speed(LEFT_MOTOR, -20, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, 20, 1);
+    systick_wait_ms(CALIBRATE_MS * 2);
+    nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
+    systick_wait_ms(1000);
+    maxLight = getLight();
+    
+    //Reset Heading
+    nxt_motor_set_speed(LEFT_MOTOR, 20, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, -20, 1);
+    systick_wait_ms(CALIBRATE_MS);
+    nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
+}
+
 void turn(double pid) {
-    printStringAndInt("PID: ", pid);
+    const int baseSpeed = 30;
+    const int maxSpeed = 70;
+    int leftSpeed = 0;
+    int rightSpeed = 0;
 
-    const int baseSpeed = 20;
-    const int maxSpeed = 50;
-
-    int leftSpeed = baseSpeed + pid;
-    int rightSpeed = baseSpeed - pid;
+    //Just right
+    if(pid < 100 && pid > 50){
+        leftSpeed = rightSpeed = baseSpeed + pid;
+    }
+    //Too far away from tape
+    else if(pid > 100){
+        leftSpeed = maxSpeed;
+        rightSpeed = -maxSpeed;
+    }
+    //Too far on tape
+    else if(pid < 50){
+        leftSpeed = -maxSpeed;
+        rightSpeed = maxSpeed;
+    }
 
     if(leftSpeed > maxSpeed) {
         leftSpeed = maxSpeed;
@@ -71,4 +109,3 @@ int getAverageLightValue(int numLoops) {
     }
     return sum / numLoops;
 }
-

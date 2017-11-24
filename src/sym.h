@@ -15,7 +15,9 @@
 #define MAX_STEERING_ANGLE 40
 #define DEFAULT_TURN_POSITION 180
 
-#define OPTIMAL_LIGHT 310;
-
+//PID
+#define CALIBRATE_MS 200
+#define PROPORTIONAL 0.2
+#define DERIVATIVE 0.1
 
 #endif

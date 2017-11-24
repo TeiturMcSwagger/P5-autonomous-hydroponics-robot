@@ -38,20 +38,16 @@ U8 getAmountFromSample(U16 colour) {
 U16 getColourFromRGB(S16 rgb[3], U8 intensityLowerBound, U8 deltaThreshold) {
     if (rgb[0] > intensityLowerBound && (rgb[0] - rgb[1]) > deltaThreshold &&
         (rgb[0] - rgb[2]) > deltaThreshold) {
-        printString("RED");
         return NXT_COLOR_RED;
     } else if (rgb[1] > intensityLowerBound &&
                (rgb[1] - rgb[0]) > deltaThreshold &&
                (rgb[1] - rgb[2]) > deltaThreshold) {
-        printString("GREEN");
         return NXT_COLOR_GREEN;
     } else if (rgb[2] > intensityLowerBound &&
                (rgb[2] - rgb[0]) > deltaThreshold &&
                (rgb[2] - rgb[1]) > deltaThreshold) {
-        printString("BLUE");
         return NXT_COLOR_BLUE;
     } else {
-        printString("UNKNOWN");
         return NXT_COLOR_UNKNOWN;
     }
 }
