@@ -57,8 +57,8 @@ void calibratePID()
 
 void turn(double pid) {
     clearScreen();
-    const int rightBaseSpeed = 40;
-    const int leftBaseSpeed = 45;
+    const int rightBaseSpeed = 60;
+    const int leftBaseSpeed = 65;
     const int maxSpeed = 100;
     int leftSpeed = 0;
     int rightSpeed = 0;
@@ -69,7 +69,7 @@ void turn(double pid) {
         leftSpeed = -leftBaseSpeed;
         rightSpeed = rightBaseSpeed;
     }
-    else if(pid <= -20)
+    else if(pid <= -18)
     {
         leftSpeed = leftBaseSpeed;
         rightSpeed = -rightBaseSpeed;
