@@ -78,7 +78,7 @@ void turn(double pid) {
     {
         leftSpeed = rightBaseSpeed - pid;
         if(pid < -10) {
-            leftSpeed += 5;
+            leftSpeed += 10;
         }
         rightSpeed = rightBaseSpeed + pid;
     }
