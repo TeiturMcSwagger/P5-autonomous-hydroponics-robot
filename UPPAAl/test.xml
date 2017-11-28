@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+const int N=6;
+typedef int [1,N] id_t;
+
+chan ready, release;
+urgent chan run;
+
+clock time;</declaration>
+	<template>
+		<name>FPPS</name>
+		<declaration>typedef struct {
+    int [0, Tasks] length ;
+    t_id element[Tasks];
+} buffer_t
+
+typedef struct {
+ time_t min period;
+ time_t max period;
+ time_t deadline ;
+ time_t wcet;
+ int pri ;
+} task_t;
+
+void insert_task_in_buffer ()
+{
+    t_id t = param.task;
+    r_id r = param.resource;
+    int place = (param.preempt ? 0 : 1);
+    int i ;
+    while(){}
+}
+
+/*
+6 while(place&lt;buffer[ r ]. length &amp;&amp;
+7 task[ buffer [ r ]. element[place ]]. pri&gt;=task[t]. pri ){
+8 place++;
+9 }
+10 insert at (place, t, r );
+11 }
+*/
+</declaration>
+		<location id="id0" x="-374" y="-34">
+		</location>
+		<location id="id1" x="-374" y="-212">
+		</location>
+		<init ref="id1"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<nail x="-467" y="-34"/>
+			<nail x="-467" y="-212"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-365" y="-178">insert_task_in_buffer()</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">TASK</name>
+		<parameter>const id_t id, const int T, const int C</parameter>
+		<declaration>// Place local declarations here.
+clock t, c;</declaration>
+		<location id="id2" x="68" y="68">
+			<name x="85" y="59">ERR</name>
+		</location>
+		<location id="id3" x="-68" y="136">
+			<name x="-51" y="136">Running</name>
+			<label kind="invariant" x="-51" y="153">c&lt;=C &amp;&amp;
+t&lt;=T</label>
+		</location>
+		<location id="id4" x="-68" y="0">
+			<name x="-127" y="-8">Ready</name>
+			<label kind="invariant" x="-109" y="8">t&lt;=T</label>
+		</location>
+		<location id="id5" x="-68" y="-136">
+			<name x="-78" y="-170">Idle</name>
+			<label kind="invariant" x="-51" y="-144">t&lt;=T</label>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-221" y="-17">c==C</label>
+			<label kind="synchronisation" x="-238" y="8">release!</label>
+			<nail x="-170" y="136"/>
+			<nail x="-170" y="-136"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="25" y="110">t==T</label>
+			<nail x="68" y="136"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="guard" x="17" y="-25">t==T</label>
+			<nail x="68" y="0"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-59" y="59">run?</label>
+			<label kind="assignment" x="-59" y="93">c=0</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-51" y="-119">t==T</label>
+			<label kind="assignment" x="-51" y="-42">t=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>CPU</name>
+		<location id="id6" x="-102" y="34">
+			<name x="-112" y="0">USED</name>
+		</location>
+		<location id="id7" x="-102" y="-102">
+			<name x="-112" y="-136">IDLE</name>
+		</location>
+		<init ref="id7"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-246" y="-42">release?</label>
+			<nail x="-170" y="34"/>
+			<nail x="-170" y="-102"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-25" y="-51">run!</label>
+			<nail x="-34" y="-102"/>
+			<nail x="-34" y="34"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+PrA = TASK(1,207,20.7);
+PrB = TASK(2,10,1);
+PrC = TASK(3,10,1);
+
+
+// List one or more processes to be composed into a system.
+system PrA, PrB, PrC, CPU;
+
+
+</system>
+	<queries>
+		<query>
+			<formula>E&lt;&gt; PrA.Ready and PrB.Ready and PrC.Ready and PrD.Ready and PrE.Ready and  PrA.t==0 and PrB.t==0 and PrC.t==0 and PrD.t==0 and PrE.t==0 and time&gt;0
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E[] not (PrA.ERR or PrB.ERR or PrC.ERR or PrD.ERR or PrE.ERR)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; PrA.Ready and PrB.Ready and PrC.Ready and PrD.Ready and PrE.Ready and  PrA.t==0 and PrB.t==0 and PrC.t==0 and PrD.t==0 and PrE.t==0 and time&gt;0
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E[] not (PrA.ERR or PrB.ERR or PrC.ERR or PrD.ERR or PrE.ERR)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>
