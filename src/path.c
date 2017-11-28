@@ -28,8 +28,8 @@ void calibratePID()
     systick_wait_ms(1000);
 
     //Calibrate Right
-    nxt_motor_set_speed(LEFT_MOTOR, 20, 1);
-    nxt_motor_set_speed(RIGHT_MOTOR, -20, 1);
+    nxt_motor_set_speed(LEFT_MOTOR, -20, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, 20, 1);
     systick_wait_ms(CALIBRATE_MS);
     nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
@@ -37,8 +37,8 @@ void calibratePID()
     minLight = getLight();
 
     //Calibrate Left
-    nxt_motor_set_speed(LEFT_MOTOR, -20, 1);
-    nxt_motor_set_speed(RIGHT_MOTOR, 20, 1);
+    nxt_motor_set_speed(LEFT_MOTOR, 20, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, -20, 1);
     systick_wait_ms(CALIBRATE_MS * 2);
     nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
@@ -46,8 +46,8 @@ void calibratePID()
     maxLight = getLight();
     
     //Reset Heading
-    nxt_motor_set_speed(LEFT_MOTOR, 20, 1);
-    nxt_motor_set_speed(RIGHT_MOTOR, -20, 1);
+    nxt_motor_set_speed(LEFT_MOTOR, -20, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, 20, 1);
     systick_wait_ms(CALIBRATE_MS);
     nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
@@ -57,30 +57,30 @@ void calibratePID()
 
 void turn(double pid) {
     clearScreen();
-    const int baseSpeed = 40;
-    const int maxSpeed = 70;
+    const int rightBaseSpeed = 40;
+    const int leftBaseSpeed = 45;
+    const int maxSpeed = 100;
     int leftSpeed = 0;
     int rightSpeed = 0;
-    if(pid < 0){
-        pid = pid * 1.3;
-    }
-
     printStringAndInt("PID: ", pid);
 
-    if(pid >= 30)
+    if(pid >= 20)
     {
-        leftSpeed = -baseSpeed;
-        rightSpeed = baseSpeed;
+        leftSpeed = -leftBaseSpeed;
+        rightSpeed = rightBaseSpeed;
     }
-    else if(pid <= -15)
+    else if(pid <= -20)
     {
-        leftSpeed = baseSpeed;
-        rightSpeed = -baseSpeed;
+        leftSpeed = leftBaseSpeed;
+        rightSpeed = -rightBaseSpeed;
     }
     else
     {
-        leftSpeed = baseSpeed - pid;
-        rightSpeed = baseSpeed + pid;
+        leftSpeed = rightBaseSpeed - pid;
+        if(pid < -10) {
+            leftSpeed += t;
+        }
+        rightSpeed = rightBaseSpeed + pid;
     }
 
     if(leftSpeed > maxSpeed) {

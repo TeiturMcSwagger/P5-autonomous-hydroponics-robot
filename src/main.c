@@ -47,7 +47,6 @@ TASK(SensorBackgroundTask) {
 }
 
 TASK(SamplePlantColourTask) {
-
     if (systick_get_ms() < armFireCounter + 3000) {
         TerminateTask();
     }
