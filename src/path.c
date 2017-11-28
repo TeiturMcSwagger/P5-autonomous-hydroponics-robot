@@ -3,6 +3,7 @@
 #include "kernel_id.h"
 #include "sym.h"
 #include "util.h"
+#include "types.h"
 
 int getLight();
 int getAverageLightValue(int numLoops);
@@ -10,6 +11,7 @@ void turn(double pid);
 
 double integral = 0;
 int previousError = 0, maxLight = 0, minLight = 0, optimalLight = 0;
+bool skip = FALSE;
 
 // Assumes the robot is placed on the right side of the tape
 void followLine() {
@@ -24,7 +26,6 @@ void followLine() {
 void calibratePID()
 {
     systick_wait_ms(1000);
-    optimalLight = getLight();
 
     //Calibrate Right
     nxt_motor_set_speed(LEFT_MOTOR, 20, 1);
@@ -50,27 +51,36 @@ void calibratePID()
     systick_wait_ms(CALIBRATE_MS);
     nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
+
+    optimalLight = maxLight - minLight;
 }
 
 void turn(double pid) {
-    const int baseSpeed = 30;
+    clearScreen();
+    const int baseSpeed = 40;
     const int maxSpeed = 70;
     int leftSpeed = 0;
     int rightSpeed = 0;
+    if(pid < 0){
+        pid = pid * 1.3;
+    }
 
-    //Just right
-    if(pid < 100 && pid > 50){
-        leftSpeed = rightSpeed = baseSpeed + pid;
+    printStringAndInt("PID: ", pid);
+
+    if(pid >= 30)
+    {
+        leftSpeed = -baseSpeed;
+        rightSpeed = baseSpeed;
     }
-    //Too far away from tape
-    else if(pid > 100){
-        leftSpeed = maxSpeed;
-        rightSpeed = -maxSpeed;
+    else if(pid <= -15)
+    {
+        leftSpeed = baseSpeed;
+        rightSpeed = -baseSpeed;
     }
-    //Too far on tape
-    else if(pid < 50){
-        leftSpeed = -maxSpeed;
-        rightSpeed = maxSpeed;
+    else
+    {
+        leftSpeed = baseSpeed - pid;
+        rightSpeed = baseSpeed + pid;
     }
 
     if(leftSpeed > maxSpeed) {
@@ -87,6 +97,8 @@ void turn(double pid) {
         rightSpeed = -maxSpeed;
     }
 
+    printStringAndInt("SpeedR: ", rightSpeed);
+    printStringAndInt("SpeedL: ", leftSpeed);
     nxt_motor_set_speed(LEFT_MOTOR, leftSpeed, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, rightSpeed, 1);
 }

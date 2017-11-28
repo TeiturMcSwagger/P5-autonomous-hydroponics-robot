@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 U32 armFireCounter = 0;
+U8 feedAmount = 0;
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
@@ -50,17 +51,23 @@ TASK(SamplePlantColourTask) {
     if (systick_get_ms() < armFireCounter + 3000) {
         TerminateTask();
     }
-    U8 feedAmount = getFeedAmount();
+
+    feedAmount = getFeedAmount();
     if (feedAmount == 0) {
         TerminateTask();
     }
+
+    armFireCounter = systick_get_ms();
     stopDriving();
     feedPills(feedAmount);
-    armFireCounter = systick_get_ms();
     TerminateTask();
 }
 
 TASK(SamplePathTask) {
+    if (systick_get_ms() < armFireCounter + 500 * feedAmount) {
+        TerminateTask();
+    }
+
     followLine();
     TerminateTask();
 }
