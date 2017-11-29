@@ -47,14 +47,13 @@ TASK(CalibrateTask) {
     TerminateTask();
 }
 TASK(SensorBackgroundTask) {
+    startTime = systick_get_ms();
     ecrobot_process_bg_nxtcolorsensor(); // communicates with NXT Color
+    printInt(systick_get_ms() - startTime);
     TerminateTask();
 }
 TASK(SamplePlantColourTask) {
     U32 firstTime = systick_get_ms();
-    printString("First read");
-    printInt(firstTime);
-
 
 	if (!(systick_get_ms() >= armFireCounter + 3000))
 	{
@@ -72,21 +71,10 @@ TASK(SamplePlantColourTask) {
     }
 
     armFireCounter = systick_get_ms();
-    systick_wait_ms(2000);
 
     U32 lastTime = systick_get_ms();
-    printString("last read");
-    printInt(lastTime);
 
-    //U32 sum = lastTime-firstTime;
-
-    //printString("This is my world \n");
-    //printInt(sum);
-
-    //systick_wait_ms(5000);
-    
     TerminateTask();
-
 }
 
 TASK(ScanPathTask) {
