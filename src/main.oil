@@ -20,7 +20,7 @@ CPU ATMEL_AT91SAM7S256
 
     TASK SensorBackgroundTask {
 	    AUTOSTART = FALSE;
-        PRIORITY = 10;
+        PRIORITY = 12;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
@@ -44,7 +44,7 @@ CPU ATMEL_AT91SAM7S256
 
     TASK SamplePlantColourTask {
 	    AUTOSTART = FALSE;
-        PRIORITY = 1;
+        PRIORITY = 10;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
@@ -61,7 +61,7 @@ CPU ATMEL_AT91SAM7S256
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 200; /* SamplePlantColourTask is executed every 207msec */
+          CYCLETIME = 25; /* SamplePlantColourTask is executed every 207msec */
           APPMODE = appmode1;
       };
     };
@@ -86,7 +86,7 @@ CPU ATMEL_AT91SAM7S256
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 4;
+          CYCLETIME = 6;
           APPMODE = appmode1;
       };
     };
@@ -97,7 +97,7 @@ CPU ATMEL_AT91SAM7S256
 	{
           APPMODE = appmode1;
         };
-        PRIORITY = 9;
+        PRIORITY = 11;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
