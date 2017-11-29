@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 U32 armFireCounter = 0;
+// shared resource
 bool isFeeding = FALSE;
 
 /* OSEK declarations */
