@@ -9,9 +9,8 @@ int getLight();
 int getAverageLightValue(int numLoops);
 void turn(double pid);
 
-double integral = 0;
-int previousError = 0, maxLight = 0, minLight = 0, optimalLight = 0;
-bool skip = FALSE;
+int previousError = 0;
+int optimalLight = 0;
 
 // Assumes the robot is placed on the right side of the tape
 void followLine() {
@@ -37,7 +36,7 @@ void calibrateOptimalLight()
     nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
     systick_wait_ms(1000);
-    minLight = getLight();
+    int minLight = getLight();
 
     //Calibrate Left
     nxt_motor_set_speed(LEFT_MOTOR, 20, 1);
@@ -46,7 +45,7 @@ void calibrateOptimalLight()
     nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
     systick_wait_ms(1000);
-    maxLight = getLight();
+    int maxLight = getLight();
 
     //Reset Heading
     nxt_motor_set_speed(LEFT_MOTOR, -20, 1);

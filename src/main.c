@@ -10,7 +10,6 @@
 #include <stdlib.h>
 
 U32 armFireCounter = 0;
-U8 feedAmount = 0;
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
@@ -39,7 +38,7 @@ void user_1ms_isr_type2(void) {
     }
 }
 
-// Keeps the color sensor alive
+// Keeps the color sensor alive / samples
 // is neccessary or the color sensor won't work
 TASK(SensorBackgroundTask) {
     ecrobot_process_bg_nxtcolorsensor();
@@ -47,11 +46,13 @@ TASK(SensorBackgroundTask) {
 }
 
 TASK(SamplePlantColourTask) {
+    // delays the scan after feeding
+    // so we're not stuck in an infinite feeding loop
     if (systick_get_ms() < armFireCounter + 3000) {
         TerminateTask();
     }
 
-    feedAmount = getFeedAmount();
+    U8 feedAmount = getFeedAmount();
     if (feedAmount == 0) {
         TerminateTask();
     }
@@ -59,14 +60,12 @@ TASK(SamplePlantColourTask) {
     armFireCounter = systick_get_ms();
     stopDriving();
     feedPills(feedAmount);
+    // wait a bit for the ball to fall into the plant
+    systick_wait_ms(500);
     TerminateTask();
 }
 
 TASK(SamplePathTask) {
-    if (systick_get_ms() < armFireCounter + 500 * feedAmount) {
-        TerminateTask();
-    }
-
     followLine();
     TerminateTask();
 }
