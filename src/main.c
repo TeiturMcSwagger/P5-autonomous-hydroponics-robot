@@ -49,17 +49,13 @@ TASK(CalibrateTask) {
 TASK(SensorBackgroundTask) {
     U32 startTime = systick_get_ms();
     ecrobot_process_bg_nxtcolorsensor(); // communicates with NXT Color
-    printString("BG TASK:")
+    printString("BG TASK:");
     printInt(systick_get_ms() - startTime);
     TerminateTask();
 }
 TASK(SamplePlantColourTask) {
     U32 startTime = systick_get_ms();
-	if (!(systick_get_ms() >= armFireCounter + 3000))
-	{
-		TerminateTask();
-	}
- 
+
     U16 colour = sampleColour(PLANT_SENSOR_PORT);
     U8 amount = getAmountFromSample(colour);
 
@@ -70,8 +66,7 @@ TASK(SamplePlantColourTask) {
         feed(n);
     }
 
-    armFireCounter = systick_get_ms();
-    printString("PLANT TASK:")
+    printString("PLANT TASK:");
     printInt(systick_get_ms() - startTime);
 
     TerminateTask();

@@ -57,7 +57,7 @@ CPU ATMEL_AT91SAM7S256
 
     TASK SamplePlantColourTask {
 	    AUTOSTART = FALSE;
-        PRIORITY = 10; /* lowest priority */
+        PRIORITY = 13; /* lowest priority */
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
