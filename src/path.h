@@ -1,7 +1,7 @@
 #ifndef PATH_H
 #define PATH_H
 
-void calibratePID();
+void calibrateOptimalLight();
 int getLight();
 void followLine();
 void stopDriving();

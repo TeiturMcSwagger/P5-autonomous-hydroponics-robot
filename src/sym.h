@@ -16,8 +16,8 @@
 #define DEFAULT_TURN_POSITION 180
 
 //PID
-#define CALIBRATE_MS 430
-#define PROPORTIONAL 0.12
-#define DERIVATIVE 0.2
+#define CALIBRATE_MS 250
+#define PROPORTIONAL 0.1
+#define DERIVATIVE 0.22
 
 #endif

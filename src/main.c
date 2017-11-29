@@ -72,6 +72,8 @@ TASK(SamplePathTask) {
 }
 
 TASK(Calibrate) {
-    calibratePID();
+    // hack to fix the feeding not working the first time
+    feedPills(1);
+    calibrateOptimalLight();
     TerminateTask();
 }
