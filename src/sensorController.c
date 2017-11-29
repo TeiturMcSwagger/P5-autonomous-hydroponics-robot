@@ -43,7 +43,7 @@ U16 getColourFromRGB(S16 rgb[3], U8 intensityLowerBound, U8 deltaThreshold) {
         printString("BLUE");
         return NXT_COLOR_BLUE;
     } else {
-        printString("UNKNOWN");
+        //printString("UNKNOWN");
         return NXT_COLOR_UNKNOWN;
     }
 }

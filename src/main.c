@@ -41,7 +41,7 @@ void user_1ms_isr_type2(void) {
 }
 
 TASK(CalibrateTask) {
-    printString("CALIBRATES");
+    //printString("CALIBRATES");
     ecrobot_process_bg_nxtcolorsensor(); // communicates with NXT Color
     getOptimalLightValue();
     TerminateTask();
@@ -51,7 +51,10 @@ TASK(SensorBackgroundTask) {
     TerminateTask();
 }
 TASK(SamplePlantColourTask) {
-    printString("Sampling");
+    U32 firstTime = systick_get_ms();
+    printString("First read");
+    printInt(firstTime);
+
 
 	if (!(systick_get_ms() >= armFireCounter + 3000))
 	{
@@ -61,15 +64,29 @@ TASK(SamplePlantColourTask) {
     U16 colour = sampleColour(PLANT_SENSOR_PORT);
     U8 amount = getAmountFromSample(colour);
 
+
     if (amount != ERROR) {
         stopMotor();
         nutrition n = {.feedProc = feedPills, .amount = &amount};
         feed(n);
     }
 
-	armFireCounter = systick_get_ms();
+    armFireCounter = systick_get_ms();
+    systick_wait_ms(2000);
 
+    U32 lastTime = systick_get_ms();
+    printString("last read");
+    printInt(lastTime);
+
+    //U32 sum = lastTime-firstTime;
+
+    //printString("This is my world \n");
+    //printInt(sum);
+
+    //systick_wait_ms(5000);
+    
     TerminateTask();
+
 }
 
 TASK(ScanPathTask) {

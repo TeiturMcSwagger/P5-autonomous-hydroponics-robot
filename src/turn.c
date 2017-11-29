@@ -14,43 +14,43 @@ void drive() {
 
     // robot is way of the tape to the right
     if (error > 60) {
-        printString("error > 50");
+        //printString("error > 50");
         nxt_motor_set_speed(leftMotor, -20, 1);
         nxt_motor_set_speed(rightMotor, 20, 1);
     }
     // robot is almost to the right of the tape
     else if (error > 30) {
-        printString("error > 30");
+        //printString("error > 30");
         nxt_motor_set_speed(leftMotor, 20, 1);
         nxt_motor_set_speed(rightMotor, 70, 1);
     }
     // robot is sligty too far right
     else if (error > 10) {
-        printString("error > 10");
+        //printString("error > 10");
         nxt_motor_set_speed(leftMotor, 50, 1);
         nxt_motor_set_speed(rightMotor, 70, 1);
     }
     // robot is way of the tape to the left
     else if (error > -50) {
-        printString("error > -50");
+        //printString("error > -50");
         nxt_motor_set_speed(leftMotor, 50, 1);
         nxt_motor_set_speed(rightMotor, -50, 1);
     }
     // robot is almost to the left of the tape
     else if (error > -30) {
-        printString("error > -30");
+        //printString("error > -30");
         nxt_motor_set_speed(leftMotor, 70, 1);
         nxt_motor_set_speed(rightMotor, 40, 1);
     }
     // robot is sligty too far left
     else if (error > -10) {
-        printString("error > -10");
+        //printString("error > -10");
         nxt_motor_set_speed(leftMotor, 70, 1);
         nxt_motor_set_speed(rightMotor, 50, 1);
     }
     // almost at optimal position, drive straight
     else {
-        printString("drive straight");
+        //printString("drive straight");
         nxt_motor_set_speed(leftMotor, 20, 1);
         nxt_motor_set_speed(rightMotor, -20, 1);
     }

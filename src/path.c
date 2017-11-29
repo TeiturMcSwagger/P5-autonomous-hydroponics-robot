@@ -4,11 +4,13 @@
 #include "sym.h"
 #include "turn.h"
 #include "util.h"
-#include "calibrate.h"
+
+int lightValue = 0;
 
 int getLightValue() {
     int sum = 0;
     int numLoops = 1;
+    //printString("getlight");
     for (int i = 0; i < numLoops; i++) {
         sum += ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
     }
@@ -17,11 +19,7 @@ int getLightValue() {
 
 void scanPath() {
     int v = getLightValue();
-    clearScreen();
-//    printStringAndInt("Lightvalue: ", v);
-}
-
-int getDiviation(){
-    int currentValue = getLightValue();
-    return (((float)(currentValue) / (float)(optimalLightValue)) * 100) - 100;
+    clearScreen();  
+    //printString("Lightvalue: ");
+    //printInt(v);
 }
