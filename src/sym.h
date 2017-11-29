@@ -17,7 +17,7 @@
 
 //PID
 #define CALIBRATE_MS 250
-#define PROPORTIONAL 0.1
-#define DERIVATIVE 0.22
+#define PROPORTIONAL 0.12
+#define DERIVATIVE 0.33
 
 #endif

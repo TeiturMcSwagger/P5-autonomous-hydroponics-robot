@@ -66,13 +66,13 @@ void turn(double pid) {
     printStringAndInt("PID: ", pid);
 
     // turn 90 degrees left
-    if(pid >= 20)
+    if(pid >= 25)
     {
         leftSpeed = -baseSpeed;
         rightSpeed = baseSpeed;
     }
     // turn 90 degrees right
-    else if(pid <= -20)
+    else if(pid <= -25)
     {
         leftSpeed = baseSpeed;
         rightSpeed = -baseSpeed;
