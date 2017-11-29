@@ -2,144 +2,152 @@
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
 	<declaration>// Place global declarations here.
-const int N=6;
+const int N=3;
 typedef int [1,N] id_t;
+int taskToInsert = 0;
+int taskToRun = 0;
 
-chan ready, release;
-urgent chan run;
+chan ready, release, inserted;
+urgent chan run[N];
 
 clock time;</declaration>
-	<template>
-		<name>FPPS</name>
-		<declaration>typedef struct {
-    int [0, Tasks] length ;
-    t_id element[Tasks];
-} buffer_t
-
-typedef struct {
- time_t min period;
- time_t max period;
- time_t deadline ;
- time_t wcet;
- int pri ;
-} task_t;
-
-void insert_task_in_buffer ()
-{
-    t_id t = param.task;
-    r_id r = param.resource;
-    int place = (param.preempt ? 0 : 1);
-    int i ;
-    while(){}
-}
-
-/*
-6 while(place&lt;buffer[ r ]. length &amp;&amp;
-7 task[ buffer [ r ]. element[place ]]. pri&gt;=task[t]. pri ){
-8 place++;
-9 }
-10 insert at (place, t, r );
-11 }
-*/
-</declaration>
-		<location id="id0" x="-374" y="-34">
-		</location>
-		<location id="id1" x="-374" y="-212">
-		</location>
-		<init ref="id1"/>
-		<transition>
-			<source ref="id0"/>
-			<target ref="id1"/>
-			<nail x="-467" y="-34"/>
-			<nail x="-467" y="-212"/>
-		</transition>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id0"/>
-			<label kind="synchronisation" x="-365" y="-178">insert_task_in_buffer()</label>
-		</transition>
-	</template>
 	<template>
 		<name x="5" y="5">TASK</name>
 		<parameter>const id_t id, const int T, const int C</parameter>
 		<declaration>// Place local declarations here.
 clock t, c;</declaration>
-		<location id="id2" x="68" y="68">
-			<name x="85" y="59">ERR</name>
+		<location id="id0" x="68" y="153">
+			<name x="85" y="144">ERR</name>
 		</location>
-		<location id="id3" x="-68" y="136">
-			<name x="-51" y="136">Running</name>
-			<label kind="invariant" x="-51" y="153">c&lt;=C &amp;&amp;
+		<location id="id1" x="-68" y="221">
+			<name x="-51" y="221">Running</name>
+			<label kind="invariant" x="-51" y="238">c&lt;=C &amp;&amp;
 t&lt;=T</label>
 		</location>
-		<location id="id4" x="-68" y="0">
+		<location id="id2" x="-68" y="0">
 			<name x="-127" y="-8">Ready</name>
 			<label kind="invariant" x="-109" y="8">t&lt;=T</label>
 		</location>
-		<location id="id5" x="-68" y="-136">
+		<location id="id3" x="-68" y="-136">
 			<name x="-78" y="-170">Idle</name>
 			<label kind="invariant" x="-51" y="-144">t&lt;=T</label>
 		</location>
-		<init ref="id4"/>
+		<init ref="id2"/>
 		<transition>
-			<source ref="id3"/>
-			<target ref="id5"/>
-			<label kind="guard" x="-221" y="-17">c==C</label>
-			<label kind="synchronisation" x="-238" y="8">release!</label>
-			<nail x="-170" y="136"/>
-			<nail x="-170" y="-136"/>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-306" y="0">c==C</label>
+			<label kind="synchronisation" x="-306" y="17">release!</label>
+			<nail x="-314" y="221"/>
+			<nail x="-314" y="-136"/>
 		</transition>
 		<transition>
-			<source ref="id3"/>
-			<target ref="id2"/>
-			<label kind="guard" x="25" y="110">t==T</label>
-			<nail x="68" y="136"/>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="25" y="195">t==T</label>
+			<nail x="68" y="221"/>
 		</transition>
 		<transition>
-			<source ref="id4"/>
-			<target ref="id2"/>
+			<source ref="id2"/>
+			<target ref="id0"/>
 			<label kind="guard" x="17" y="-25">t==T</label>
 			<nail x="68" y="0"/>
 		</transition>
 		<transition>
-			<source ref="id4"/>
-			<target ref="id3"/>
-			<label kind="synchronisation" x="-59" y="59">run?</label>
-			<label kind="assignment" x="-59" y="93">c=0</label>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-59" y="144">run[id]?</label>
+			<label kind="assignment" x="-59" y="178">c=0</label>
 		</transition>
 		<transition>
-			<source ref="id5"/>
-			<target ref="id4"/>
+			<source ref="id3"/>
+			<target ref="id2"/>
 			<label kind="guard" x="-51" y="-119">t==T</label>
+			<label kind="synchronisation" x="-59" y="-76">ready?</label>
 			<label kind="assignment" x="-51" y="-42">t=0</label>
 		</transition>
 	</template>
 	<template>
 		<name>CPU</name>
-		<location id="id6" x="-102" y="34">
+		<declaration>int highestPriorityTask(){
+    return 1;
+}</declaration>
+		<location id="id4" x="-102" y="34">
 			<name x="-112" y="0">USED</name>
 		</location>
-		<location id="id7" x="-102" y="-102">
+		<location id="id5" x="-102" y="-102">
 			<name x="-112" y="-136">IDLE</name>
 		</location>
-		<init ref="id7"/>
+		<init ref="id5"/>
 		<transition>
-			<source ref="id6"/>
-			<target ref="id7"/>
-			<label kind="synchronisation" x="-246" y="-42">release?</label>
+			<source ref="id4"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-178" y="136">run[highestPriorityTask()]!</label>
+			<nail x="-59" y="119"/>
+			<nail x="-144" y="119"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-246" y="-51">release?</label>
 			<nail x="-170" y="34"/>
 			<nail x="-170" y="-102"/>
 		</transition>
 		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="60" y="-51">run[highestPriorityTask()]!</label>
+			<nail x="51" y="-102"/>
+			<nail x="51" y="34"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scheduler</name>
+		<declaration>id_t buffer[3];
+
+void insertTask(){
+    buffer[taskToInsert] = taskToInsert;
+    for(i = buffer.length - 1; i &gt;= 0; i--){
+        if(buffer[i] != 0){
+            taskToRun = i;
+            return;
+        }
+    }
+}
+void removeTask(){
+    buffer[taskToRun] = 0;
+}
+
+</declaration>
+		<location id="id6" x="-17" y="76">
+		</location>
+		<location id="id7" x="-17" y="-127">
+		</location>
+		<init ref="id7"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="85" y="-178">release?</label>
+			<label kind="assignment" x="85" y="-161">removeTask()</label>
+			<nail x="76" y="-127"/>
+			<nail x="76" y="-237"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-153" y="0">inserted!</label>
+			<nail x="-110" y="-42"/>
+			<nail x="-110" y="-42"/>
+		</transition>
+		<transition>
 			<source ref="id7"/>
 			<target ref="id6"/>
-			<label kind="synchronisation" x="-25" y="-51">run!</label>
-			<nail x="-34" y="-102"/>
-			<nail x="-34" y="34"/>
+			<label kind="synchronisation" x="-8" y="-51">ready?</label>
+			<label kind="assignment" x="-8" y="-34">insertTask()</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
-PrA = TASK(1,207,20.7);
+PrA = TASK(1,207,21);
 PrB = TASK(2,10,1);
 PrC = TASK(3,10,1);
 
