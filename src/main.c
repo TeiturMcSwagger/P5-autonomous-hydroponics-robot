@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 U32 armFireCounter = 0;
+bool isFeeding = FALSE;
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
@@ -56,16 +57,20 @@ TASK(SamplePlantColourTask) {
     if (feedAmount == 0) {
         TerminateTask();
     }
-
+    isFeeding = TRUE;
     armFireCounter = systick_get_ms();
     stopDriving();
     feedPills(feedAmount);
     // wait a bit for the ball to fall into the plant
     systick_wait_ms(500);
+    isFeeding = FALSE;
     TerminateTask();
 }
 
 TASK(SamplePathTask) {
+    if(isFeeding == TRUE) {
+        TerminateTask();
+    }
     followLine();
     TerminateTask();
 }

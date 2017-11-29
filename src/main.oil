@@ -37,7 +37,7 @@ CPU ATMEL_AT91SAM7S256
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 5; /* Task2 is executed every 500msec */
+          CYCLETIME = 4; /* Task2 is executed every 500msec */
           APPMODE = appmode1;
       };
     };
@@ -69,7 +69,7 @@ CPU ATMEL_AT91SAM7S256
     TASK SamplePathTask
     {
       AUTOSTART = FALSE;
-      PRIORITY = 8;
+      PRIORITY = 12;
       ACTIVATION = 1;
       SCHEDULE = FULL;
       STACKSIZE = 512;
