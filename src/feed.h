@@ -4,7 +4,7 @@
 #include "kernel.h"
 #include "kernel_id.h"
 
-U16 sampleColour(U8 sensorPort);
-U8 getAmountFromSample(U16 colour);
+U16 getFeedAmount();
+void feedPills(U8 amount);
 
 #endif

@@ -1,2 +1,0 @@
-void drive();
-void stopMotor();
