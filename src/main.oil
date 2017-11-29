@@ -61,7 +61,7 @@ CPU ATMEL_AT91SAM7S256
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 25; /* SamplePlantColourTask is executed every 207msec */
+          CYCLETIME = 10; /* SamplePlantColourTask is executed every 207msec */
           APPMODE = appmode1;
       };
     };
