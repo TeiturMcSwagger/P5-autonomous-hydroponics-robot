@@ -5,6 +5,8 @@
 #include "util.h"
 #include "types.h"
 
+#define MAGIC_CONSTANT 1.4
+
 int getLight();
 int getAverageLightValue(int numLoops);
 void turn(double pid);
@@ -21,7 +23,7 @@ void followLine() {
     if(pid < 0) {
         // multiply by a magic constant to make it turn more right
         // because the robot struggles with right turns
-        pid = pid * 1.4;
+        pid = pid * MAGIC_CONSTANT;
     }
     previousError = error;
     turn(pid);
