@@ -18,6 +18,8 @@ DeclareCounter(SysTimerCnt);
 DeclareAlarm(SamplePlantColourAlarm);
 DeclareAlarm(SamplePathAlarm);
 DeclareAlarm(SensorBackgroundAlarm);
+DeclareResource(FeedingResource);
+
 
 /* LEJOS OSEK hooks */
 void ecrobot_device_initialize() {
@@ -58,6 +60,7 @@ TASK(SamplePlantColourTask) {
     if (feedAmount == 0) {
         TerminateTask();
     }
+    GetResource(FeedingResource);
     isFeeding = TRUE;
     armFireCounter = systick_get_ms();
     stopDriving();
@@ -65,13 +68,17 @@ TASK(SamplePlantColourTask) {
     // wait a bit for the ball to fall into the plant
     systick_wait_ms(500);
     isFeeding = FALSE;
+    ReleaseResource(FeedingResource);
     TerminateTask();
 }
 
 TASK(SamplePathTask) {
+    GetResource(FeedingResource);
     if(isFeeding == TRUE) {
+        ReleaseResource(FeedingResource);
         TerminateTask();
     }
+    ReleaseResource(FeedingResource);
     followLine();
     TerminateTask();
 }

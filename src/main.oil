@@ -103,6 +103,11 @@ CPU ATMEL_AT91SAM7S256
         STACKSIZE = 512;
     };
 
+    RESOURCE FeedingResource
+    {
+        RESOURCEPROPERTY = STANDARD;
+    };
+
     /* Definition of OSEK Alarm Counter */
     COUNTER SysTimerCnt
     {
