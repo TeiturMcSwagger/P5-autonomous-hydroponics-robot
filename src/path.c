@@ -5,8 +5,6 @@
 #include "types.h"
 #include "util.h"
 
-#define MAGIC_CONSTANT 1.4
-
 int getLight();
 int getAverageLightValue(int numLoops);
 void turn(double pid);
@@ -26,39 +24,55 @@ void followLine() {
     double derivative = (error - previousError) * DERIVATIVE;
     double pid = proportional + integral + derivative;
     if (pid < 0) {
-        // multiply by a magic constant to make SARAH turn more right
+        // multiply by a constant to make SARAH turn more right
         // because the robot struggles with right turns
-        pid = pid * MAGIC_CONSTANT;
+        pid = pid * 1.4;
     }
     previousError = error;
     turn(pid);
 }
 
 void calibrateOptimalLight() {
-    // Calibrate Right
-    nxt_motor_set_speed(LEFT_MOTOR, -20, 1);
-    nxt_motor_set_speed(RIGHT_MOTOR, 20, 1);
-    systick_wait_ms(CALIBRATE_MS);
-    nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
-    nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
-    systick_wait_ms(1000);
-    int minLight = getAverageLightValue(50);
-
+    int speedPercent = 20;
     // Calibrate Left
-    nxt_motor_set_speed(LEFT_MOTOR, 20, 1);
-    nxt_motor_set_speed(RIGHT_MOTOR, -20, 1);
-    systick_wait_ms(CALIBRATE_MS * 2);
-    nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
-    nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
-    systick_wait_ms(1000);
-    int maxLight = getAverageLightValue(50);
+    nxt_motor_set_speed(LEFT_MOTOR, -speedPercent, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, speedPercent, 1);
+    // the light sensor returns a result between 0-1023
+    int minLight = 1024;
+    for (int i = 0; i < 100; i++) {
+        systick_wait_ms(CALIBRATE_MS / 100);
+        int lightIntensity = getLight();
+        if (lightIntensity < minLight) {
+            minLight = lightIntensity;
+        }
+    }
+    stopDriving();
 
     // Reset Heading
-    nxt_motor_set_speed(LEFT_MOTOR, -20, 1);
-    nxt_motor_set_speed(RIGHT_MOTOR, 20, 1);
+    nxt_motor_set_speed(LEFT_MOTOR, speedPercent, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, -speedPercent, 1);
     systick_wait_ms(CALIBRATE_MS);
-    nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
-    nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
+    stopDriving();
+
+    // Calibrate Right
+    nxt_motor_set_speed(LEFT_MOTOR, speedPercent, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, -speedPercent, 1);
+    // the light sensor returns a result between 0-1023
+    int maxLight = -1;
+    for (int i = 0; i < 100; i++) {
+        systick_wait_ms(CALIBRATE_MS / 100);
+        int lightIntensity = getLight();
+        if (lightIntensity > maxLight) {
+            maxLight = lightIntensity;
+        }
+    }
+    stopDriving();
+
+    // Reset Heading
+    nxt_motor_set_speed(LEFT_MOTOR, -speedPercent, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, speedPercent, 1);
+    systick_wait_ms(CALIBRATE_MS);
+    stopDriving();
 
     if (minLight > maxLight) {
         // swap min and max, to handle if the path is brighter than the floor
@@ -69,6 +83,7 @@ void calibrateOptimalLight() {
     optimalLight = maxLight - minLight;
 }
 
+// Assumes the robot is placed on the right side of the tape
 void turn(double pid) {
     clearScreen();
     const int baseSpeed = 60;
@@ -123,6 +138,8 @@ int getLight() { return getAverageLightValue(3); }
 
 // Returns the average light value based on a number of readings, because the
 // sensor is not reliable
+// Since we figured out the background task samples the sensors, this function
+// is probably unnecessary
 int getAverageLightValue(int numLoops) {
     int sum = 0;
     for (int i = 0; i < numLoops; i++) {
