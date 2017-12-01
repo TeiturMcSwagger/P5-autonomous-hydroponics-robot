@@ -6,7 +6,7 @@
 #include "util.h"
 #include <stdlib.h>
 
-int lastCount = DEFAULT_TURN_POSITION;
+int lastCount = 0;
 
 void rotateMotor(int speedPercent, bool clockwise, U32 motorPort,
                  int targetAngle);
