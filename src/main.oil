@@ -20,7 +20,7 @@ CPU ATMEL_AT91SAM7S256
 
     TASK SensorBackgroundTask {
 	    AUTOSTART = FALSE;
-        PRIORITY = 12;
+        PRIORITY = 14;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
@@ -99,7 +99,7 @@ CPU ATMEL_AT91SAM7S256
 	{
           APPMODE = appmode1;
         };
-        PRIORITY = 11;
+        PRIORITY = 13;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
