@@ -15,9 +15,10 @@
 #define MAX_STEERING_ANGLE 40
 #define DEFAULT_TURN_POSITION 180
 
-//PID
+// PID
 #define CALIBRATE_MS 250
 #define PROPORTIONAL 0.12
+#define INTEGRAL 0.2
 #define DERIVATIVE 0.33
 
 #endif
