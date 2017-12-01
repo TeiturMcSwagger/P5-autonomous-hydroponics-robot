@@ -47,6 +47,7 @@ CPU ATMEL_AT91SAM7S256
         PRIORITY = 10;
         ACTIVATION = 1;
         SCHEDULE = FULL;
+        RESOURCE = FeedingResource;
         STACKSIZE = 512;
     };
 
@@ -72,6 +73,7 @@ CPU ATMEL_AT91SAM7S256
       PRIORITY = 12;
       ACTIVATION = 1;
       SCHEDULE = FULL;
+      RESOURCE = FeedingResource;
       STACKSIZE = 512;
     };
 
