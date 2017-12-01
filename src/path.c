@@ -42,7 +42,7 @@ void calibrateOptimalLight() {
     nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
     systick_wait_ms(1000);
-    int minLight = getLight();
+    int minLight = getAverageLightValue(50);
 
     // Calibrate Left
     nxt_motor_set_speed(LEFT_MOTOR, 20, 1);
@@ -51,7 +51,7 @@ void calibrateOptimalLight() {
     nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
     systick_wait_ms(1000);
-    int maxLight = getLight();
+    int maxLight = getAverageLightValue(50);
 
     // Reset Heading
     nxt_motor_set_speed(LEFT_MOTOR, -20, 1);
