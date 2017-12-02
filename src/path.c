@@ -73,13 +73,6 @@ void calibrateOptimalLight() {
     nxt_motor_set_speed(RIGHT_MOTOR, speedPercent, 1);
     systick_wait_ms(CALIBRATE_MS);
     stopDriving();
-
-    if (minLight > maxLight) {
-        // swap min and max, to handle if the path is brighter than the floor
-        int temp = minLight;
-        minLight = maxLight;
-        maxLight = temp;
-    }
     optimalLight = maxLight - minLight;
 }
 
