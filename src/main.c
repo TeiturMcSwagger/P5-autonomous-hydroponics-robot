@@ -11,16 +11,13 @@
 #include <stdlib.h>
 
 U32 armFireCounter = 0;
-// shared resource
-bool isFeeding = FALSE;
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
 DeclareAlarm(SamplePlantColourAlarm);
 DeclareAlarm(SamplePathAlarm);
 DeclareAlarm(SensorBackgroundAlarm);
-DeclareResource(FeedingResource);
-
+DeclareResource(MotorResource);
 
 /* LEJOS OSEK hooks */
 void ecrobot_device_initialize() {
@@ -57,30 +54,25 @@ TASK(SamplePlantColourTask) {
         TerminateTask();
     }
 
+    GetResource(MotorResource);
     U8 feedAmount = getFeedAmount();
     if (feedAmount == 0) {
+        ReleaseResource(MotorResource);
         TerminateTask();
     }
-    GetResource(FeedingResource);
-    isFeeding = TRUE;
     armFireCounter = systick_get_ms();
     stopDriving();
     feedPills(feedAmount);
     // wait a bit for the ball to fall into the plant
     systick_wait_ms(500);
-    isFeeding = FALSE;
-    ReleaseResource(FeedingResource);
+    ReleaseResource(MotorResource);
     TerminateTask();
 }
 
 TASK(SamplePathTask) {
-    GetResource(FeedingResource);
-    if(isFeeding == TRUE) {
-        ReleaseResource(FeedingResource);
-        TerminateTask();
-    }
-    ReleaseResource(FeedingResource);
+    GetResource(MotorResource);
     followLine();
+    ReleaseResource(MotorResource);
     TerminateTask();
 }
 
