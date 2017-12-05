@@ -6,8 +6,6 @@
 #include "util.h"
 #include <stdlib.h>
 
-int lastCount = 0;
-
 void rotateMotor(int speedPercent, bool clockwise, U32 motorPort,
                  int targetAngle);
 int getBrakeLength(int speedPercent);
@@ -16,17 +14,8 @@ void rotateToTarget(int speedPercent, int targetAngle, U32 motorPort,
 U32 getDestinationAngle(U32 startAngle, U32 degreesToRotate);
 bool isTargetClockwise(U32 startAngle, U32 targetAngle);
 
-void rotateMotorToAngle(int speedPercent, int targetAngle, U32 motorPort) {
-
-    U32 actualTargetAngle = DEFAULT_TURN_POSITION + targetAngle;
-    bool clockwise =
-        isTargetClockwise(nxt_motor_get_count(motorPort), actualTargetAngle);
-    rotateMotor(speedPercent, clockwise, motorPort, actualTargetAngle);
-}
-
 void rotateMotorByDegrees(int speedPercent, U32 degreesToRotate, bool clockwise,
                           U32 motorPort) {
-
     U32 targetAngle =
         getDestinationAngle(nxt_motor_get_count(motorPort), degreesToRotate);
     rotateMotor(speedPercent, clockwise, motorPort, targetAngle);
@@ -48,8 +37,6 @@ void rotateMotor(int speedPercent, bool clockwise, U32 motorPort,
     systick_wait_ms(150);
 
     U32 variation = targetAngle - nxt_motor_get_count(motorPort);
-
-    lastCount = nxt_motor_get_count(motorPort);
 
     if (variation == 0) {
         return;
