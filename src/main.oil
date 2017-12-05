@@ -20,7 +20,7 @@ CPU ATMEL_AT91SAM7S256
 
     TASK SensorBackgroundTask {
 	    AUTOSTART = FALSE;
-        PRIORITY = 12;
+        PRIORITY = 14;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
@@ -47,6 +47,7 @@ CPU ATMEL_AT91SAM7S256
         PRIORITY = 10;
         ACTIVATION = 1;
         SCHEDULE = FULL;
+        RESOURCE = FeedingResource;
         STACKSIZE = 512;
     };
 
@@ -72,6 +73,7 @@ CPU ATMEL_AT91SAM7S256
       PRIORITY = 12;
       ACTIVATION = 1;
       SCHEDULE = FULL;
+      RESOURCE = FeedingResource;
       STACKSIZE = 512;
     };
 
@@ -97,10 +99,15 @@ CPU ATMEL_AT91SAM7S256
 	{
           APPMODE = appmode1;
         };
-        PRIORITY = 11;
+        PRIORITY = 13;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
+    };
+
+    RESOURCE FeedingResource
+    {
+        RESOURCEPROPERTY = STANDARD;
     };
 
     /* Definition of OSEK Alarm Counter */
