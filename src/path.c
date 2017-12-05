@@ -5,8 +5,7 @@
 #include "types.h"
 #include "util.h"
 
-int getLight();
-int getAverageLightValue(int numLoops);
+int getPathLight();
 void turn(double pid);
 
 // used for integral
@@ -16,7 +15,7 @@ int previousError = 0;
 
 // Assumes the robot is placed on the right side of the tape
 void followLine() {
-    int error = getLight() - optimalLight;
+    int error = getPathLight() - optimalLight;
     errorSum = errorSum + error;
     double proportional = error * PROPORTIONAL;
     double integral = errorSum * INTEGRAL;
@@ -31,7 +30,13 @@ void followLine() {
     turn(pid);
 }
 
+// Returns the light intensity of the path
+int getPathLight() {
+    return ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
+}
+
 // Assumes the robot is placed on the right side of the tape
+// Translates the pid input to two outputs for the left and right motor
 void turn(double pid) {
     clearScreen();
     const int baseSpeed = 60;
@@ -76,22 +81,9 @@ void turn(double pid) {
     nxt_motor_set_speed(RIGHT_MOTOR, rightSpeed, 1);
 }
 
+// Stops the left and right motor
 void stopDriving() {
     int speedPercent = 0;
     nxt_motor_set_speed(LEFT_MOTOR, speedPercent, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, speedPercent, 1);
-}
-
-int getLight() { return getAverageLightValue(3); }
-
-// Returns the average light value based on a number of readings, because the
-// sensor is not reliable
-// Since we figured out the background task samples the sensors, this function
-// is probably unnecessary
-int getAverageLightValue(int numLoops) {
-    int sum = 0;
-    for (int i = 0; i < numLoops; i++) {
-        sum += ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
-    }
-    return sum / numLoops;
 }
