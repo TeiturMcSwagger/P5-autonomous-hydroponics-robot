@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+const int N=3;
+typedef int[0,N] id_t;
+
+chan ready[N], stop, release[N];
+urgent chan run[N];
+
+clock time;</declaration>
+	<template>
+		<name x="5" y="5">TASK</name>
+		<parameter>const id_t id, const int T, const int C, const int D</parameter>
+		<declaration>// Place local declarations here.
+clock t, c;</declaration>
+		<location id="id0" x="-76" y="314">
+			<name x="-102" y="280">Blocked</name>
+			<label kind="invariant" x="-93" y="331">c'==0</label>
+		</location>
+		<location id="id1" x="170" y="136">
+			<name x="187" y="127">ERROR</name>
+		</location>
+		<location id="id2" x="-68" y="136">
+			<name x="-93" y="153">Running</name>
+			<label kind="invariant" x="-93" y="170">c&lt;=C &amp;&amp;
+t&lt;=T</label>
+		</location>
+		<location id="id3" x="-68" y="-59">
+			<name x="-127" y="-76">Ready</name>
+			<label kind="invariant" x="-127" y="-59">t&lt;=T</label>
+		</location>
+		<location id="id4" x="-68" y="-272">
+			<name x="-78" y="-306">Idle</name>
+			<label kind="invariant" x="-51" y="-280">t&lt;=T</label>
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-17" y="110">t&gt;D</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="51" y="238">run[id]?</label>
+			<nail x="102" y="314"/>
+			<nail x="102" y="204"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="178" y="229">t&gt;D</label>
+			<nail x="170" y="314"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-238" y="246">stop?</label>
+			<nail x="-246" y="212"/>
+			<nail x="-246" y="314"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-322" y="-67">c==C</label>
+			<label kind="synchronisation" x="-322" y="-51">release[id]!</label>
+			<nail x="-246" y="136"/>
+			<nail x="-246" y="-272"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="178" y="-51">t==T</label>
+			<nail x="170" y="-59"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-59" y="8">run[id]?</label>
+			<label kind="assignment" x="-59" y="25">c=0</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-51" y="-195">t==T</label>
+			<label kind="synchronisation" x="-51" y="-178">ready[id]!</label>
+			<label kind="assignment" x="-51" y="-161">t=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>SCHEDULER</name>
+		<declaration>id_t list[N] = {2,1,0}; //Index value 3 is out of range. Array length = 3, Element size = 1
+id_t P[N] = {2,1,0};
+int[0,N] len = N; 
+
+// put an element in queue
+void enqueue(id_t element) {
+
+    int tmp = 0;
+
+    list[len] = element;
+
+    if (len&gt;0){
+
+        int i = len-1;
+
+        while (i&gt;0 &amp;&amp; P[list[i]]&gt;P[list[i-1]]) {
+
+            tmp = list[i-1];
+
+            list[i-1] = list[i];
+
+            list[i] = tmp;
+
+            i--;
+        }
+    }
+}
+
+// Remove the frontmost element from queue.
+void dequeue(){
+    int i = 0;
+    len -= 1;
+    while (i &lt; len) {
+        list[i] = list[i+1];
+        i++;
+    }
+    list[i] = 0;
+}
+
+// Return the firstmost element.
+id_t front(){
+
+    return list[len-1];
+
+}</declaration>
+		<location id="id5" x="-127" y="68">
+		</location>
+		<location id="id6" x="-297" y="68">
+		</location>
+		<location id="id7" x="-212" y="-34">
+		</location>
+		<location id="id8" x="-213" y="-119">
+		</location>
+		<location id="id9" x="-212" y="-272">
+		</location>
+		<init ref="id9"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-153" y="0">run[front()]!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-229" y="42">stop!</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="select" x="-348" y="-25">e : id_t</label>
+			<label kind="synchronisation" x="-348" y="-8">ready[e]?</label>
+			<label kind="assignment" x="-348" y="8">enqueue(e)</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-204" y="-93">run[front()]!</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="select" x="-76" y="-170">e : id_t</label>
+			<label kind="guard" x="-76" y="-153">e == front()</label>
+			<label kind="synchronisation" x="-76" y="-136">release[e]?</label>
+			<label kind="assignment" x="-76" y="-119">dequeue()</label>
+			<nail x="-102" y="-34"/>
+			<nail x="-102" y="-272"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-306" y="-204">len &gt; 0</label>
+			<label kind="synchronisation" x="-306" y="-187">run[front()]!</label>
+			<nail x="-314" y="-272"/>
+			<nail x="-314" y="-34"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+			<label kind="select" x="-204" y="-246">e : id_t</label>
+			<label kind="synchronisation" x="-204" y="-229">ready[e]?</label>
+			<label kind="assignment" x="-204" y="-212">enqueue(e)</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+//TASK: id, period, cost and deadline
+PathColourSensorTask = TASK(1,25,10, 10);
+PotPlantColourSensorTask = TASK(2,25,8, 10);
+BackgroundTask = TASK(3,50,5, 10);
+Schedule = SCHEDULER();
+
+// List one or more processes to be composed into a system.
+system PathColourSensorTask, PotPlantColourSensorTask, BackgroundTask, Schedule;
+
+
+</system>
+	<queries>
+	</queries>
+</nta>
