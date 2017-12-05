@@ -20,5 +20,6 @@
 #define PROPORTIONAL 0.12
 #define INTEGRAL 0.2
 #define DERIVATIVE 0.33
+extern int optimalLight;
 
 #endif

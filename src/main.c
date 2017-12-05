@@ -4,6 +4,7 @@
 #include "sym.h"
 #include "util.h"
 #include "motorController.h"
+#include "calibrate.h"
 #include "path.h"
 #include "feed.h"
 #include "types.h"
