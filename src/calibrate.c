@@ -4,6 +4,7 @@
 #include "sym.h"
 #include "types.h"
 #include "util.h"
+#include "path.h"
 
 int optimalLight;
 
@@ -16,7 +17,7 @@ void calibrateOptimalLight() {
     int minLight = 1024;
     for (int i = 0; i < 100; i++) {
         systick_wait_ms(CALIBRATE_MS / 100);
-        int lightIntensity = getLight();
+        int lightIntensity = getPathLight();
         if (lightIntensity < minLight) {
             minLight = lightIntensity;
         }
@@ -36,7 +37,7 @@ void calibrateOptimalLight() {
     int maxLight = -1;
     for (int i = 0; i < 100; i++) {
         systick_wait_ms(CALIBRATE_MS / 100);
-        int lightIntensity = getLight();
+        int lightIntensity = getPathLight();
         if (lightIntensity > maxLight) {
             maxLight = lightIntensity;
         }

@@ -2,7 +2,7 @@
 #define PATH_H
 
 void calibrateOptimalLight();
-int getLight();
+int getPathLight();
 void followLine();
 void stopDriving();
 
