@@ -18,7 +18,9 @@ U8 getFeedAmount() {
 
 U16 sampleColour(U32 sensorPort) {
     S16 inputRGB[3];
+    GetResource(ColourSensorResource);
     ecrobot_get_nxtcolorsensor_rgb(PLANT_SENSOR_PORT, inputRGB);
+    ReleaseResource(ColourSensorResource);
     return getColourFromRGB(inputRGB, 180, 100);
 }
 

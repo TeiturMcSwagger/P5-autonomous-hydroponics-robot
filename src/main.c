@@ -18,6 +18,7 @@ DeclareAlarm(SamplePlantColourAlarm);
 DeclareAlarm(SamplePathAlarm);
 DeclareAlarm(SensorBackgroundAlarm);
 DeclareResource(MotorResource);
+DeclareResource(ColourSensorResource);
 
 /* LEJOS OSEK hooks */
 void ecrobot_device_initialize() {
@@ -43,7 +44,9 @@ void user_1ms_isr_type2(void) {
 // Keeps the color sensor alive / samples
 // is neccessary or the color sensor won't work
 TASK(SensorBackgroundTask) {
+    GetResource(ColourSensorResource);
     ecrobot_process_bg_nxtcolorsensor();
+    ReleaseResource(ColourSensorResource);
     TerminateTask();
 }
 

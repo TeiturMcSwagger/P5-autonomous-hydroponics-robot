@@ -110,6 +110,11 @@ CPU ATMEL_AT91SAM7S256
         RESOURCEPROPERTY = STANDARD;
     };
 
+    RESOURCE ColourSensorResource
+    {
+        RESOURCEPROPERTY = STANDARD;
+    };
+
     /* Definition of OSEK Alarm Counter */
     COUNTER SysTimerCnt
     {

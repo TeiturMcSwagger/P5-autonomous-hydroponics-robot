@@ -32,7 +32,10 @@ void followLine() {
 
 // Returns the light intensity of the path
 int getPathLight() {
-    return ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
+    GetResource(ColourSensorResource);
+    int lightValue = ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
+    ReleaseResource(ColourSensorResource);
+    return lightValue;
 }
 
 // Assumes the robot is placed on the right side of the tape
