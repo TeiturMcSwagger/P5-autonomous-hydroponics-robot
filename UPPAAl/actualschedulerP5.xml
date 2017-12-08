@@ -26,7 +26,7 @@ clock t, c;</declaration>
 			<label kind="invariant" x="-93" y="170">c&lt;=C &amp;&amp;
 t&lt;=T</label>
 		</location>
-		<location id="id3" x="-68" y="-59" color="#00ffff">
+		<location id="id3" x="-68" y="-59" color="#ff00ff">
 			<name x="-127" y="-85">Ready</name>
 			<label kind="invariant" x="-127" y="-59">t&lt;=T</label>
 		</location>
@@ -209,7 +209,7 @@ system SamplePlant, SamplePath, ColourSensorBG, Scheduler;
 gantt {
     SamplePlant:
         SamplePlant.Idle -&gt; 6,
-        SamplePlant.Ready -&gt; 19,
+        SamplePlant.Ready -&gt; 20,
         SamplePlant.Running -&gt; 1,
         SamplePlant.Blocked -&gt; 0;
     SamplePath:
@@ -219,7 +219,7 @@ gantt {
         SamplePath.Blocked -&gt; 0;
     ColourSensorBG:
         ColourSensorBG.Idle -&gt; 6,
-        ColourSensorBG.Ready -&gt; 31,
+        ColourSensorBG.Ready -&gt; 20,
         ColourSensorBG.Running -&gt; 1,
         ColourSensorBG.Blocked -&gt; 0;
 }

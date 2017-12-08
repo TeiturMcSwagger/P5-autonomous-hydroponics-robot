@@ -4,47 +4,52 @@
 	<declaration>// Place global declarations here.
 clock t;
 clock d;
-const int ColorRed = 1;
-const int ColorGreen = 2;
-const int ColorBlue = 3;
-//colorError?
-const int MAXCOLOUR=2;
-
+int runCount = 0;
+const int MAXCOLOUR=3;
 
 typedef int[0,MAXCOLOUR] ColourType;
+//ColorRed = 1;
+//ColorGreen = 2;
+//ColorBlue = 3;
+ColourType colour;
+
 bool IsAtPlant;
 bool IsOnTrack;
 bool IsDriving;
 
 
-ColourType colour;
-broadcast chan ButtonPress, Calibrated, Plant, FeedingDone, RunFinished;</declaration>
+
+broadcast chan ButtonPress, Calibrated, PlantFound, FeedingDone, RunFinished;</declaration>
 	<template>
 		<name x="5" y="5">User</name>
+		<parameter>const int targetCount</parameter>
 		<declaration>// Place local declarations here.</declaration>
-		<location id="id0" x="-204" y="-119">
-			<name x="-229" y="-153">Relaxing</name>
+		<location id="id0" x="-110" y="-119">
+			<name x="-135" y="-153">Relaxing</name>
 		</location>
-		<location id="id1" x="-340" y="-119">
-			<name x="-374" y="-153">Stressing</name>
+		<location id="id1" x="-374" y="-119">
+			<name x="-408" y="-153">Stressing</name>
 		</location>
 		<init ref="id1"/>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id1"/>
 			<label kind="synchronisation" x="-322" y="-68">RunFinished?</label>
-			<nail x="-204" y="-51"/>
-			<nail x="-340" y="-51"/>
+			<label kind="assignment" x="-323" y="-85">runCount++</label>
+			<nail x="-110" y="-51"/>
+			<nail x="-374" y="-51"/>
 		</transition>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id0"/>
-			<label kind="synchronisation" x="-322" y="-136">ButtonPress!</label>
+			<label kind="guard" x="-314" y="-161">runCount &lt; targetCount</label>
+			<label kind="synchronisation" x="-314" y="-144">ButtonPress!</label>
 		</transition>
 	</template>
 	<template>
 		<name x="5" y="5">Robot</name>
-		<declaration>// Place local declarations here.</declaration>
+		<declaration>// Place local declarations here.
+clock f;</declaration>
 		<location id="id2" x="-569" y="-323">
 			<name x="-579" y="-357">Idle</name>
 		</location>
@@ -87,8 +92,10 @@ broadcast chan ButtonPress, Calibrated, Plant, FeedingDone, RunFinished;</declar
 		<transition>
 			<source ref="id5"/>
 			<target ref="id3"/>
-			<label kind="guard" x="-348" y="34">colour &gt;= 0</label>
-			<label kind="synchronisation" x="-348" y="17">Plant?</label>
+			<label kind="guard" x="-374" y="34">colour &gt;= 0</label>
+			<label kind="synchronisation" x="-374" y="17">PlantFound?</label>
+			<label kind="assignment" x="-374" y="51">IsDriving = false,
+f = 0</label>
 			<nail x="-102" y="110"/>
 			<nail x="17" y="110"/>
 			<nail x="17" y="110"/>
@@ -105,19 +112,21 @@ broadcast chan ButtonPress, Calibrated, Plant, FeedingDone, RunFinished;</declar
 		<transition>
 			<source ref="id3"/>
 			<target ref="id3"/>
-			<label kind="guard" x="84" y="-102">colour &gt; 0</label>
-			<label kind="assignment" x="84" y="-119">colour--</label>
-			<nail x="255" y="-85"/>
-			<nail x="161" y="-85"/>
-			<nail x="67" y="-85"/>
-			<nail x="59" y="-85"/>
+			<label kind="guard" x="93" y="-68">f &gt; 5 &amp;&amp; colour &gt; 0</label>
+			<label kind="assignment" x="93" y="-102">colour--,
+f = 0</label>
+			<nail x="256" y="-51"/>
+			<nail x="162" y="-51"/>
+			<nail x="68" y="-51"/>
+			<nail x="60" y="-51"/>
 		</transition>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id3"/>
-			<label kind="guard" x="-42" y="-229">colour &gt;= 0</label>
-			<label kind="synchronisation" x="-42" y="-195">Plant?</label>
-			<label kind="assignment" x="-42" y="-212">IsDriving = false</label>
+			<label kind="guard" x="-42" y="-246">colour &gt; 0</label>
+			<label kind="synchronisation" x="-42" y="-229">PlantFound?</label>
+			<label kind="assignment" x="-42" y="-212">IsDriving = false,
+f = 0</label>
 		</transition>
 		<transition>
 			<source ref="id4"/>
@@ -225,7 +234,7 @@ lastFeedingPos = pos</label>
 			<target ref="id9"/>
 			<label kind="select" x="-2125" y="-2371">c: ColourType</label>
 			<label kind="guard" x="-2125" y="-2354">shouldStop(pos)</label>
-			<label kind="synchronisation" x="-2125" y="-2337">Plant!</label>
+			<label kind="synchronisation" x="-2125" y="-2337">PlantFound!</label>
 			<label kind="assignment" x="-2125" y="-2320">colour = c</label>
 			<nail x="-2108" y="-2252"/>
 		</transition>
@@ -264,8 +273,21 @@ IsOnTrack = true</label>
 pos=0</label>
 		</transition>
 	</template>
-	<system>system
-       Robot, Environment, User;</system>
+	<system>U = User(1);
+system
+       Robot, Environment, U;</system>
 	<queries>
+		<query>
+			<formula>A[] not (Robot.Feeding and not Environment.AtPlant)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Robot.Feeding and not IsDriving)
+			</formula>
+			<comment>
+			</comment>
+		</query>
 	</queries>
 </nta>
