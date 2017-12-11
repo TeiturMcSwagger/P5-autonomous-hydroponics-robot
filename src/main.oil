@@ -21,6 +21,7 @@ CPU ATMEL_AT91SAM7S256
     TASK SensorBackgroundTask {
 	    AUTOSTART = FALSE;
         PRIORITY = 14;
+        RESOURCE = ColourSensorResource;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
@@ -48,6 +49,7 @@ CPU ATMEL_AT91SAM7S256
         ACTIVATION = 1;
         SCHEDULE = FULL;
         RESOURCE = MotorResource;
+        RESOURCE = ColourSensorResource;
         STACKSIZE = 512;
     };
 
@@ -74,6 +76,7 @@ CPU ATMEL_AT91SAM7S256
       ACTIVATION = 1;
       SCHEDULE = FULL;
       RESOURCE = MotorResource;
+      RESOURCE = ColourSensorResource;
       STACKSIZE = 512;
     };
 

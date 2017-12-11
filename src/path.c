@@ -8,6 +8,8 @@
 int getPathLight();
 void turn(double pid);
 
+DeclareResource(ColourSensorResource);
+
 // used for integral
 int errorSum = 0;
 // used for derivative

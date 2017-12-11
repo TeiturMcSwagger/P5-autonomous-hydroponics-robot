@@ -14,11 +14,11 @@ U32 armFireCounter = 0;
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
+DeclareResource(MotorResource);
+DeclareResource(ColourSensorResource);
 DeclareAlarm(SamplePlantColourAlarm);
 DeclareAlarm(SamplePathAlarm);
 DeclareAlarm(SensorBackgroundAlarm);
-DeclareResource(MotorResource);
-DeclareResource(ColourSensorResource);
 
 /* LEJOS OSEK hooks */
 void ecrobot_device_initialize() {
