@@ -278,13 +278,25 @@ system
        Robot, Environment, U;</system>
 	<queries>
 		<query>
+			<formula>A[] not (Robot.Calibrating and not Environment.AtStart)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] not (Robot.Adjusting and not Environment.InRoute)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
 			<formula>A[] not (Robot.Feeding and not Environment.AtPlant)
 			</formula>
 			<comment>
 			</comment>
 		</query>
 		<query>
-			<formula>E&lt;&gt; (Robot.Feeding and not IsDriving)
+			<formula>A[] not (Robot.Feeding and IsDriving)
 			</formula>
 			<comment>
 			</comment>
