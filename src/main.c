@@ -82,6 +82,9 @@ TASK(SamplePathTask) {
 }
 
 TASK(Calibrate) {
-    calibrateOptimalLight();
+    nxt_motor_set_speed(LEFT_MOTOR, 60, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, 60, 1);
+    systick_wait_ms(3000);
+    exit(0);
     TerminateTask();
 }
