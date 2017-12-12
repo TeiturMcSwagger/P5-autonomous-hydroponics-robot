@@ -48,8 +48,9 @@ TASK(SensorBackgroundTask) {
     U32 startTicks = systick_get_ms();
     ecrobot_process_bg_nxtcolorsensor();
     U32 elapsedTicks = systick_get_ms()-startTicks;
-    ReleaseResource(ColourSensorResource);}
+    ReleaseResource(ColourSensorResource);
     TerminateTask();
+}
 
 TASK(SamplePlantColourTask) {
     // delays the scan after feeding

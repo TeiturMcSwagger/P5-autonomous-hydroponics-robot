@@ -45,17 +45,17 @@ void turn(double pd) {
     int rightSpeed = 0;
 
     // turn 90 degrees left
-    if (pid >= 25) {
+    if (pd >= 25) {
         leftSpeed = -baseSpeed;
         rightSpeed = baseSpeed;
     }
     // turn 90 degrees right
-    else if (pid <= -25) {
+    else if (pd <= -25) {
         leftSpeed = baseSpeed;
         rightSpeed = -baseSpeed;
     } else {
-        leftSpeed = baseSpeed - pid;
-        rightSpeed = baseSpeed + pid;
+        leftSpeed = baseSpeed - pd;
+        rightSpeed = baseSpeed + pd;
     }
 
     // lots of guards to make sure we don't send too high values to the motor
