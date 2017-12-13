@@ -45,7 +45,9 @@ void user_1ms_isr_type2(void) {
 // is neccessary or the color sensor won't work
 TASK(SensorBackgroundTask) {
     GetResource(ColourSensorResource);
+    U32 startTicks = systick_get_ms();
     ecrobot_process_bg_nxtcolorsensor();
+    U32 elapsedTicks = systick_get_ms()-startTicks;
     ReleaseResource(ColourSensorResource);
     TerminateTask();
 }
@@ -57,12 +59,12 @@ TASK(SamplePlantColourTask) {
         TerminateTask();
     }
 
-    GetResource(MotorResource);
     U8 feedAmount = getFeedAmount();
+
     if (feedAmount == 0) {
-        ReleaseResource(MotorResource);
         TerminateTask();
     }
+    GetResource(MotorResource);
     armFireCounter = systick_get_ms();
     stopDriving();
     feedPills(feedAmount);
