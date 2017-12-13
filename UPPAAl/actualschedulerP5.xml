@@ -5,40 +5,25 @@
 const int N=3;
 typedef int[0,N-1] id_t;
 
-const int R=2;
-
-int LausArray[1];
-
-chan ready[N], stop, release[N], allocateResource[R], deallocateResource[R];
+chan ready[N], stop, release[N];
 urgent chan run[N];
 
 clock time;</declaration>
 	<template>
 		<name x="5" y="5">TASK</name>
-		<parameter>int LausArray[10][3], const id_t id, const int T, const int C, const int D</parameter>
+		<parameter>const id_t id, const int T, const int C, const int D</parameter>
 		<declaration>// Place local declarations here.
-clock t, c;
-int resourceIteration;
-
-void allocateResource()
-{
-    allocateResource[LausArray[resourceIteration][2]]
-}
-void deallocateResource()
-{
-
-}
-</declaration>
-		<location id="id0" x="-76" y="510" color="#ff0000">
-			<name x="-102" y="476">Blocked</name>
-			<label kind="invariant" x="-93" y="527">c'==0</label>
+clock t, c;</declaration>
+		<location id="id0" x="-76" y="314" color="#ff0000">
+			<name x="-102" y="280">Blocked</name>
+			<label kind="invariant" x="-93" y="331">c'==0</label>
 		</location>
 		<location id="id1" x="170" y="136">
 			<name x="187" y="127">Error</name>
 		</location>
 		<location id="id2" x="-68" y="136" color="#00ff00">
-			<name x="-51" y="68">Running</name>
-			<label kind="invariant" x="-51" y="85">c&lt;=C &amp;&amp;
+			<name x="-93" y="153">Running</name>
+			<label kind="invariant" x="-93" y="170">c&lt;=C &amp;&amp;
 t&lt;=T</label>
 		</location>
 		<location id="id3" x="-68" y="-59" color="#ff00ff">
@@ -53,35 +38,35 @@ t&lt;=T</label>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id1"/>
-			<label kind="guard" x="51" y="110">t&gt;T</label>
+			<label kind="guard" x="-17" y="110">t&gt;T</label>
 		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id2"/>
-			<label kind="synchronisation" x="60" y="340">run[id]?</label>
-			<nail x="119" y="510"/>
-			<nail x="119" y="178"/>
+			<label kind="synchronisation" x="51" y="238">run[id]?</label>
+			<nail x="102" y="314"/>
+			<nail x="102" y="204"/>
 		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id1"/>
-			<label kind="guard" x="136" y="340">t&gt;T</label>
-			<nail x="170" y="510"/>
+			<label kind="guard" x="187" y="246">t&gt;T</label>
+			<nail x="170" y="314"/>
 		</transition>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id0"/>
-			<label kind="synchronisation" x="-357" y="306">stop?</label>
-			<nail x="-365" y="136"/>
-			<nail x="-365" y="510"/>
+			<label kind="synchronisation" x="-238" y="246">stop?</label>
+			<nail x="-246" y="212"/>
+			<nail x="-246" y="314"/>
 		</transition>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id4"/>
-			<label kind="guard" x="-441" y="-67">c==C</label>
-			<label kind="synchronisation" x="-450" y="-51">release[id]!</label>
-			<nail x="-365" y="136"/>
-			<nail x="-365" y="-272"/>
+			<label kind="guard" x="-322" y="-67">c==C</label>
+			<label kind="synchronisation" x="-331" y="-51">release[id]!</label>
+			<nail x="-246" y="136"/>
+			<nail x="-246" y="-272"/>
 		</transition>
 		<transition>
 			<source ref="id3"/>
@@ -92,8 +77,8 @@ t&lt;=T</label>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id2"/>
-			<label kind="synchronisation" x="-59" y="-34">run[id]?</label>
-			<label kind="assignment" x="-59" y="-17">c=0</label>
+			<label kind="synchronisation" x="-59" y="8">run[id]?</label>
+			<label kind="assignment" x="-59" y="25">c=0</label>
 		</transition>
 		<transition>
 			<source ref="id4"/>
@@ -101,37 +86,6 @@ t&lt;=T</label>
 			<label kind="guard" x="-51" y="-195">t==T</label>
 			<label kind="synchronisation" x="-51" y="-178">ready[id]!</label>
 			<label kind="assignment" x="-51" y="-161">t=0</label>
-		</transition>
-	</template>
-	<template>
-		<name>RESOURCE</name>
-		<parameter>const int id, int Delay</parameter>
-		<declaration>clock delay;
-
-void updateDelay(int _delay)
-{
-    delay = _delay;
-}</declaration>
-		<location id="id5" x="93" y="-25">
-			<name x="110" y="-34">Allocated</name>
-		</location>
-		<location id="id6" x="-297" y="-25">
-			<name x="-357" y="-34">Free</name>
-		</location>
-		<init ref="id6"/>
-		<transition>
-			<source ref="id5"/>
-			<target ref="id6"/>
-			<label kind="guard" x="-178" y="-127">delay &gt;= Delay</label>
-			<label kind="synchronisation" x="-178" y="-144">deallocateResource[id]?</label>
-			<nail x="93" y="-144"/>
-			<nail x="-297" y="-144"/>
-		</transition>
-		<transition>
-			<source ref="id6"/>
-			<target ref="id5"/>
-			<nail x="-297" y="93"/>
-			<nail x="93" y="93"/>
 		</transition>
 	</template>
 	<template>
@@ -179,43 +133,43 @@ void dequeue(){
 id_t front(){
     return list[0];
 }</declaration>
-		<location id="id7" x="-127" y="68">
+		<location id="id5" x="-127" y="68">
 		</location>
-		<location id="id8" x="-297" y="68">
+		<location id="id6" x="-297" y="68">
 			<urgent/>
 		</location>
-		<location id="id9" x="-212" y="-34">
+		<location id="id7" x="-212" y="-34">
 		</location>
-		<location id="id10" x="-212" y="-119">
+		<location id="id8" x="-212" y="-119">
 		</location>
-		<location id="id11" x="-212" y="-272">
+		<location id="id9" x="-212" y="-272">
 		</location>
-		<init ref="id11"/>
+		<init ref="id9"/>
 		<transition>
-			<source ref="id7"/>
-			<target ref="id9"/>
+			<source ref="id5"/>
+			<target ref="id7"/>
 			<label kind="synchronisation" x="-153" y="0">run[front()]!</label>
 		</transition>
 		<transition>
-			<source ref="id8"/>
-			<target ref="id7"/>
+			<source ref="id6"/>
+			<target ref="id5"/>
 			<label kind="synchronisation" x="-229" y="42">stop!</label>
 		</transition>
 		<transition>
-			<source ref="id9"/>
-			<target ref="id8"/>
+			<source ref="id7"/>
+			<target ref="id6"/>
 			<label kind="select" x="-348" y="-25">e : id_t</label>
 			<label kind="synchronisation" x="-348" y="-8">ready[e]?</label>
 			<label kind="assignment" x="-348" y="8">enqueue(e)</label>
 		</transition>
 		<transition>
-			<source ref="id10"/>
-			<target ref="id9"/>
+			<source ref="id8"/>
+			<target ref="id7"/>
 			<label kind="synchronisation" x="-204" y="-93">run[front()]!</label>
 		</transition>
 		<transition>
-			<source ref="id9"/>
-			<target ref="id11"/>
+			<source ref="id7"/>
+			<target ref="id9"/>
 			<label kind="select" x="-76" y="-170">e : id_t</label>
 			<label kind="guard" x="-76" y="-153">e == front()</label>
 			<label kind="synchronisation" x="-76" y="-136">release[e]?</label>
@@ -224,16 +178,16 @@ id_t front(){
 			<nail x="-102" y="-272"/>
 		</transition>
 		<transition>
-			<source ref="id11"/>
-			<target ref="id9"/>
+			<source ref="id9"/>
+			<target ref="id7"/>
 			<label kind="guard" x="-306" y="-204">len &gt; 0</label>
 			<label kind="synchronisation" x="-306" y="-187">run[front()]!</label>
 			<nail x="-314" y="-272"/>
 			<nail x="-314" y="-34"/>
 		</transition>
 		<transition>
-			<source ref="id11"/>
-			<target ref="id10"/>
+			<source ref="id9"/>
+			<target ref="id8"/>
 			<label kind="select" x="-204" y="-246">e : id_t</label>
 			<label kind="synchronisation" x="-204" y="-229">ready[e]?</label>
 			<label kind="assignment" x="-204" y="-212">enqueue(e)</label>
@@ -241,9 +195,9 @@ id_t front(){
 	</template>
 	<system>// Place template instantiations here.
 //TASK: id, period, cost and deadline
-SamplePlant = TASK({{,,}{,,}{,,}}, 0, 150, 15, 150);
-SamplePath = TASK(, 1, 125, 13, 125);
-ColourSensorBG = TASK(, 2, 10, 1, 10);
+SamplePlant = TASK(0, 150, 15, 150);
+SamplePath = TASK(1, 125, 13, 125);
+ColourSensorBG = TASK(2, 10, 1, 10);
 Scheduler = SCHEDULER();
 
 
