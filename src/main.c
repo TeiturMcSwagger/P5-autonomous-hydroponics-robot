@@ -116,7 +116,9 @@ TASK(SamplePlantColourTask) {
         TerminateTask();
     }
 
+    GetResource(ColourSensorResource);
     U8 feedAmount = getFeedAmount();
+    ReleaseResource(ColourSensorResource);
 
     if (feedAmount == 0) {
         int taskTime = systick_get_ms - startTime;
@@ -126,19 +128,17 @@ TASK(SamplePlantColourTask) {
 
         TerminateTask();
     }
-    GetResource(ColourSensorResource);
-    GetResource(MotorResource);
     armFireCounter = systick_get_ms();
+    GetResource(MotorResource);
     stopDriving();
     feedPills(feedAmount);
     ReleaseResource(MotorResource);
-    ReleaseResource(ColourSensorResource);
 
     int taskTime = systick_get_ms - startTime;
     if(taskTime > spcTaskWorst)
         spcTaskWorst = taskTime;
     spcTaskMean = (spcTaskMean + taskTime) / spcTaskItr;
-    
+
     TerminateTask();
 }
 
@@ -146,11 +146,9 @@ TASK(SamplePathTask) {
     spTaskItr++;
     int startTime = systick_get_ms;
 
-    GetResource(ColourSensorResource);
     GetResource(MotorResource);
     followLine();
     ReleaseResource(MotorResource);
-    ReleaseResource(ColourSensorResource);
 
     int taskTime = systick_get_ms - startTime;
     if(taskTime > spTaskWorst)
@@ -163,7 +161,6 @@ TASK(SamplePathTask) {
 TASK(Calibrate) {
     calTaskItr++;
     int startTime = systick_get_ms;
-
     calibrateOptimalLight();
 
     int taskTime = systick_get_ms - startTime;
