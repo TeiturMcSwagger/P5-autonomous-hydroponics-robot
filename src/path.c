@@ -8,8 +8,6 @@
 int getPathLight();
 void turn(double pid);
 
-DeclareResource(ColourSensorResource);
-
 // used for derivative
 int previousError = 0;
 
@@ -30,9 +28,7 @@ void followLine() {
 
 // Returns the light intensity of the path
 int getPathLight() {
-    GetResource(ColourSensorResource);
     int lightValue = ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
-    ReleaseResource(ColourSensorResource);
     return lightValue;
 }
 
@@ -45,12 +41,12 @@ void turn(double pd) {
     int rightSpeed = 0;
 
     // turn 90 degrees left
-    if (pd >= 25) {
+    if (pd >= optimalLight * 0.0556) {
         leftSpeed = -baseSpeed;
         rightSpeed = baseSpeed;
     }
     // turn 90 degrees right
-    else if (pd <= -25) {
+    else if (pd <= -(optimalLight * 0.0556)) {
         leftSpeed = baseSpeed;
         rightSpeed = -baseSpeed;
     } else {

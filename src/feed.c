@@ -6,8 +6,6 @@
 #include "util.h"
 #include "motorController.h"
 
-DeclareResource(ColourSensorResource);
-
 U16 getColourFromRGB(S16 rgb[3], U8 intensityLowerBound, U8 deltaThreshold);
 U8 getAmountFromSample(U16 colour);
 U16 sampleColour(U32 sensorPort);
@@ -20,9 +18,7 @@ U8 getFeedAmount() {
 
 U16 sampleColour(U32 sensorPort) {
     S16 inputRGB[3];
-    GetResource(ColourSensorResource);
     ecrobot_get_nxtcolorsensor_rgb(PLANT_SENSOR_PORT, inputRGB);
-    ReleaseResource(ColourSensorResource);
     return getColourFromRGB(inputRGB, 180, 100);
 }
 
