@@ -68,8 +68,6 @@ TASK(SamplePlantColourTask) {
     armFireCounter = systick_get_ms();
     stopDriving();
     feedPills(feedAmount);
-    // wait a bit for the ball to fall into the plant
-    systick_wait_ms(500);
     ReleaseResource(MotorResource);
     TerminateTask();
 }
