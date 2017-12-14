@@ -396,7 +396,7 @@ id_t front(){
 	<system>// Place template instantiations here.
 //TASK: id, period, cost and deadline
 SamplePlant = TASK(0, 63, 3, 150);
-SamplePath = TASK(1, 15, 3, 125);
+SamplePath = TASK(1, 11, 3, 125);
 ColourSensorBG = TASK(2, 10, 9, 10);
 DrivingMotors = RESOURCE(0);
 SensorBuffer = RESOURCE(1);
@@ -409,11 +409,6 @@ Scheduler = SCHEDULER();
 system SamplePlant, SamplePath, ColourSensorBG, Scheduler, DrivingMotors, SensorBuffer;
 
 gantt {
-    SamplePlant:
-        SamplePlant.Idle -&gt; 6,
-        SamplePlant.Ready -&gt; 20,
-        SamplePlant.Running -&gt; 1,
-        SamplePlant.Blocked -&gt; 3;
     SamplePath:
         SamplePath.Idle -&gt; 6,
         SamplePath.Ready -&gt; 20,
