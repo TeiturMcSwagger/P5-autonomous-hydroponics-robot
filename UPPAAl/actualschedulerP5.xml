@@ -6,8 +6,8 @@ const int N=3;
 const int R=2;
 typedef int[0,N-1] id_t;
 typedef int[0,R-1] id_r;
-chan ready[N], stop, releaseCPU[N], request[R], block[R], lock[R], unlock[R];
-
+chan ready[N], stop, releaseCPU[N], request[R], block[R], lock[R];
+urgent broadcast chan unlock[R];
 broadcast chan free[R];
 urgent chan run[N];
 
@@ -21,8 +21,8 @@ typedef struct {
 
 res resList[2] = {
        //            req t    release t  using?  locked?   released?
-       /* Motors */  {{2,1,0}, {3,3,0}, {1,1,0}, {0,0,0}, {0,0,0} },
-       /* Buffer */  {{0,0,0}, {2,3,3}, {1,1,1}, {0,0,0}, {0,0,0} }
+       /* Motors */  {{15,2,0}, {19,19,0}, {1,1,0}, {0,0,0}, {0,0,0} },
+       /* Buffer */  {{1,2,1}, {15,19,29}, {1,1,1}, {0,0,0}, {0,0,0} }
 };
 
 
@@ -109,8 +109,8 @@ bool hasResource(){
 			<name x="-646" y="212">Requesting</name>
 		</location>
 		<location id="id4" x="-578" y="-76" color="#ffa500">
-			<name x="-654" y="-102">Blocked</name>
-			<label kind="invariant" x="-646" y="-85">c' == 0</label>
+			<name x="-603" y="-127">Blocked</name>
+			<label kind="invariant" x="-603" y="-110">c' == 0</label>
 		</location>
 		<location id="id5" x="170" y="229" color="#ff0000">
 			<name x="187" y="220">Error</name>
@@ -131,6 +131,14 @@ c &lt;= nextRelease</label>
 			<label kind="invariant" x="-85" y="-306">t&lt;=T</label>
 		</location>
 		<init ref="id7"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-773" y="178">t &gt; T</label>
+			<nail x="-714" y="-76"/>
+			<nail x="-714" y="442"/>
+			<nail x="170" y="442"/>
+		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id4"/>
@@ -154,6 +162,7 @@ c &lt;= nextRelease</label>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id6"/>
+			<label kind="synchronisation" x="-212" y="416">unlock[ridRequested]!</label>
 			<label kind="assignment" x="-221" y="399">setNextRelease()</label>
 			<nail x="-170" y="390"/>
 			<nail x="-170" y="390"/>
@@ -161,10 +170,10 @@ c &lt;= nextRelease</label>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id2"/>
-			<label kind="select" x="-603" y="331">r : id_r</label>
-			<label kind="guard" x="-603" y="314">shouldRelease(r) &amp;&amp; c == resList[r].rel[id]</label>
-			<label kind="synchronisation" x="-603" y="348">unlock[r]!</label>
-			<label kind="assignment" x="-603" y="297">resList[r].hasReleased[id] = true</label>
+			<label kind="select" x="-442" y="331">r : id_r</label>
+			<label kind="guard" x="-552" y="314">shouldRelease(r) &amp;&amp; c == resList[r].rel[id]</label>
+			<label kind="assignment" x="-603" y="357">resList[r].hasReleased[id] = true,
+ridRequested = r</label>
 		</transition>
 		<transition>
 			<source ref="id6"/>
@@ -206,12 +215,12 @@ setNextRequest()</label>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id8"/>
-			<label kind="guard" x="-875" y="-68">c==C &amp;&amp; !hasResource()</label>
-			<label kind="synchronisation" x="-875" y="-51">releaseCPU[id]!</label>
-			<label kind="assignment" x="-875" y="-34">resetRes()</label>
-			<nail x="-195" y="263"/>
-			<nail x="-689" y="270"/>
-			<nail x="-689" y="-273"/>
+			<label kind="guard" x="-968" y="-227">c==C &amp;&amp; !hasResource()</label>
+			<label kind="synchronisation" x="-917" y="-210">releaseCPU[id]!</label>
+			<label kind="assignment" x="-883" y="-193">resetRes()</label>
+			<nail x="-323" y="289"/>
+			<nail x="-816" y="289"/>
+			<nail x="-816" y="-271"/>
 		</transition>
 		<transition>
 			<source ref="id7"/>
@@ -346,6 +355,15 @@ id_t front(){
 		</location>
 		<init ref="id18"/>
 		<transition>
+			<source ref="id16"/>
+			<target ref="id16"/>
+			<label kind="select" x="-93" y="0">r : id_r</label>
+			<label kind="synchronisation" x="-93" y="17">unlock[r]?</label>
+			<label kind="assignment" x="-93" y="34">resetPriority()</label>
+			<nail x="-110" y="42"/>
+			<nail x="-93" y="8"/>
+		</transition>
+		<transition>
 			<source ref="id14"/>
 			<target ref="id16"/>
 			<label kind="synchronisation" x="-153" y="76">run[front()]!</label>
@@ -395,9 +413,9 @@ id_t front(){
 	</template>
 	<system>// Place template instantiations here.
 //TASK: id, period, cost and deadline
-SamplePlant = TASK(0, 63, 3, 150);
-SamplePath = TASK(1, 11, 3, 125);
-ColourSensorBG = TASK(2, 10, 9, 10);
+SamplePlant = TASK(0, 630, 20, 150);
+SamplePath = TASK(1, 520, 20, 125);
+ColourSensorBG = TASK(2, 100, 90, 10);
 DrivingMotors = RESOURCE(0);
 SensorBuffer = RESOURCE(1);
 Scheduler = SCHEDULER();
@@ -409,33 +427,26 @@ Scheduler = SCHEDULER();
 system SamplePlant, SamplePath, ColourSensorBG, Scheduler, DrivingMotors, SensorBuffer;
 
 gantt {
+    SamplePlant:
+
+        SamplePlant.Ready -&gt; 6,
+        SamplePlant.Running -&gt; 1,
+        SamplePlant.Blocked -&gt; 4;
     SamplePath:
-        SamplePath.Idle -&gt; 6,
-        SamplePath.Ready -&gt; 20,
+
+        SamplePath.Ready -&gt; 6,
         SamplePath.Running -&gt; 1,
-        SamplePath.Blocked -&gt; 3;
+        SamplePath.Blocked -&gt; 4;
     ColourSensorBG:
-        ColourSensorBG.Idle -&gt; 6,
-        ColourSensorBG.Ready -&gt; 20,
+
+        ColourSensorBG.Ready -&gt; 6,
         ColourSensorBG.Running -&gt; 1,
-        ColourSensorBG.Blocked -&gt; 3;
+        ColourSensorBG.Blocked -&gt; 4;
 }
 </system>
 	<queries>
 		<query>
-			<formula>A&lt;&gt; SensorBuffer.Free and DrivingMotors.Free and (SamplePath.Blocked or ColourSensorBG.Blocked)
-			</formula>
-			<comment>
-			</comment>
-		</query>
-		<query>
-			<formula>A&lt;&gt; SensorBuffer.Locked and DrivingMotors.Locked
-			</formula>
-			<comment>
-			</comment>
-		</query>
-		<query>
-			<formula>A&lt;&gt; SamplePath.Blocked and ColourSensorBG.Blocked
+			<formula>A&lt;&gt; (ColourSensorBG.Blocked)
 			</formula>
 			<comment>
 			</comment>
