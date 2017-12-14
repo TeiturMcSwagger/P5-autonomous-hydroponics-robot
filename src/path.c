@@ -54,20 +54,9 @@ void turn(double pd) {
         rightSpeed = baseSpeed + pd;
     }
 
-    // lots of guards to make sure we don't send too high values to the motor
-    if (leftSpeed > maxSpeed) {
-        leftSpeed = maxSpeed;
-    }
-    if (rightSpeed > maxSpeed) {
-        rightSpeed = maxSpeed;
-    }
-
-    if (leftSpeed < -maxSpeed) {
-        leftSpeed = -maxSpeed;
-    }
-    if (rightSpeed < -maxSpeed) {
-        rightSpeed = -maxSpeed;
-    }
+    // Guards to make sure we don't send too high values to the motor
+    rightSpeed = clampInt(rightSpeed, -maxSpeed, maxSpeed);
+    leftSpeed = clampInt(leftSpeed, -maxSpeed, maxSpeed);
 
     nxt_motor_set_speed(LEFT_MOTOR, leftSpeed, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, rightSpeed, 1);

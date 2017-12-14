@@ -35,3 +35,15 @@ void clearScreen() {
     display_clear(0);
     displayRow = 0;
 }
+
+int clampInt(int val, int min, int max)
+{
+    if (val > max) {
+        return max;
+    }
+    else if (val < min) {
+        return min;
+    }
+
+    return val;
+}
