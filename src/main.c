@@ -153,9 +153,9 @@ TASK(SamplePathTask) {
     ReleaseResource(ColourSensorResource);
 
     int taskTime = systick_get_ms - startTime;
-    if(taskTime > spcTaskWorst)
-        spcTaskWorst = taskTime;
-    spcTaskMean = (spcTaskMean + taskTime) / spcTaskItr;
+    if(taskTime > spTaskWorst)
+        spTaskWorst = taskTime;
+    spTaskMean = (spTaskMean + taskTime) / spTaskItr;
 
     TerminateTask();
 }
