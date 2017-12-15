@@ -35,7 +35,7 @@ int getPathLight() {
 // Assumes the robot is placed on the right side of the tape
 // Translates the pd input to two outputs for the left and right motor
 void turn(double pd) {
-    const int baseSpeed = 60;
+    const int baseSpeed = 10;
     const int maxSpeed = 85;
     int leftSpeed = 0;
     int rightSpeed = 0;

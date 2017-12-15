@@ -18,38 +18,26 @@ CPU ATMEL_AT91SAM7S256
     /* Definition of application mode */
     APPMODE appmode1{};
 
-    TASK SensorBackgroundTask {
-	    AUTOSTART = FALSE;
-        PRIORITY = 14;
-        RESOURCE = ColourSensorResource;
-        ACTIVATION = 1;
-        SCHEDULE = FULL;
-        STACKSIZE = 512;
+    /* Definition of the feeding event */
+    EVENT FeedEvent {
+        MASK = AUTO;
     };
 
-    /* Definition of Task2 execution timing */
-    ALARM SensorBackgroundAlarm
+    RESOURCE MotorResource
     {
-      COUNTER = SysTimerCnt;
-      ACTION = ACTIVATETASK
-      {
-          TASK = SensorBackgroundTask;
-      };
-      AUTOSTART = TRUE
-      {
-          ALARMTIME = 1;
-          CYCLETIME = 6; /* Task2 is executed every 500msec */
-          APPMODE = appmode1;
-      };
+        RESOURCEPROPERTY = STANDARD;
+    };
+
+    RESOURCE ColourSensorResource
+    {
+        RESOURCEPROPERTY = STANDARD;
     };
 
     TASK SamplePlantColourTask {
 	    AUTOSTART = FALSE;
-        PRIORITY = 10;
+        PRIORITY = 1;
         ACTIVATION = 1;
         SCHEDULE = FULL;
-        RESOURCE = MotorResource;
-        RESOURCE = ColourSensorResource;
         STACKSIZE = 512;
     };
 
@@ -64,7 +52,7 @@ CPU ATMEL_AT91SAM7S256
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 10; /* SamplePlantColourTask is executed every 207msec */
+          CYCLETIME = 63; /* SamplePlantColourTask is executed every 63msec */
           APPMODE = appmode1;
       };
     };
@@ -72,12 +60,12 @@ CPU ATMEL_AT91SAM7S256
     TASK SamplePathTask
     {
       AUTOSTART = FALSE;
-      PRIORITY = 12;
+      PRIORITY = 2;
       ACTIVATION = 1;
       SCHEDULE = FULL;
+      STACKSIZE = 512;
       RESOURCE = MotorResource;
       RESOURCE = ColourSensorResource;
-      STACKSIZE = 512;
     };
 
     /* Definition of SamplepathTask execution timing */
@@ -91,7 +79,7 @@ CPU ATMEL_AT91SAM7S256
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 6;
+          CYCLETIME = 52; /* SamplePathTask is executed every 52msec */
           APPMODE = appmode1;
       };
     };
@@ -102,20 +90,48 @@ CPU ATMEL_AT91SAM7S256
 	{
           APPMODE = appmode1;
         };
-        PRIORITY = 13;
+        PRIORITY = 3;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
     };
 
-    RESOURCE MotorResource
-    {
-        RESOURCEPROPERTY = STANDARD;
+    TASK SensorBackgroundTask {
+	    AUTOSTART = FALSE;
+        PRIORITY = 4;
+        ACTIVATION = 1;
+        SCHEDULE = FULL;
+        STACKSIZE = 512;
+        RESOURCE = ColourSensorResource;
     };
 
-    RESOURCE ColourSensorResource
+    /* Definition of SensorBackgroundTask execution timing */
+    ALARM SensorBackgroundAlarm
     {
-        RESOURCEPROPERTY = STANDARD;
+      COUNTER = SysTimerCnt;
+      ACTION = ACTIVATETASK
+      {
+          TASK = SensorBackgroundTask;
+      };
+      AUTOSTART = TRUE
+      {
+          ALARMTIME = 1;
+          CYCLETIME = 10; /* SensorBackgroundTask is executed every 10msec */
+          APPMODE = appmode1;
+      };
+    };
+
+    TASK FeedingTask {
+        AUTOSTART = TRUE
+        {
+            APPMODE = appmode1;
+        };
+        PRIORITY = 5;
+        ACTIVATION = 1;
+        SCHEDULE = NON;
+        STACKSIZE = 512;
+        RESOURCE = MotorResource;
+        EVENT = FeedEvent;
     };
 
     /* Definition of OSEK Alarm Counter */
