@@ -296,6 +296,18 @@ system
 			</comment>
 		</query>
 		<query>
+			<formula>E&lt;&gt; (Robot.Feeding and Environment.AtPlant)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Robot.Adjusting and Environment.InRoute)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
 			<formula>A[] not (Robot.Feeding and IsDriving)
 			</formula>
 			<comment>
