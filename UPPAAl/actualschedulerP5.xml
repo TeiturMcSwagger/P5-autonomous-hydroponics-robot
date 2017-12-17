@@ -191,6 +191,7 @@ ridRequested = r</label>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id6"/>
+			<label kind="guard" x="-773" y="561">true == true</label>
 			<label kind="synchronisation" x="-467" y="246">lock[ridRequested]?</label>
 			<label kind="assignment" x="-467" y="195">resList[ridRequested].hasLocked[id] = true,
 setNextRelease(),
@@ -346,15 +347,12 @@ id_t front(){
 }
 
 void updateQueue(){
-    int i = 0, j = 0;
+    int i = 0;
     while (i &lt; N-1) {
-        while(j &lt; N-1-i){
-            if(DP[list[i]] &lt; DP[list[i+1]]){
-                int tmp = list[i+1];
-                list[i+1] = list[i];
-                list[i] = tmp;
-            }
-            j++;
+        if(DP[list[i]] &lt; DP[list[i+1]]){
+            int tmp = list[i+1];
+            list[i+1] = list[i];
+            list[i] = tmp;
         }
         i++;
     }
