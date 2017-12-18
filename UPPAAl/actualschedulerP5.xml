@@ -170,43 +170,42 @@ c &lt;= nextRelease</label>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id2"/>
-			<label kind="select" x="-442" y="331">r : id_r</label>
-			<label kind="guard" x="-552" y="314">shouldRelease(r) &amp;&amp; c == resList[r].rel[id]</label>
+			<label kind="select" x="-603" y="340">r : id_r</label>
+			<label kind="guard" x="-603" y="323">shouldRelease(r) &amp;&amp; c == resList[r].rel[id]</label>
 			<label kind="assignment" x="-603" y="357">resList[r].hasReleased[id] = true,
 ridRequested = r</label>
 		</transition>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id7"/>
-			<label kind="synchronisation" x="-119" y="93">stop?</label>
-			<nail x="-136" y="93"/>
+			<label kind="synchronisation" x="-110" y="76">stop?</label>
+			<nail x="-119" y="93"/>
 		</transition>
 		<transition>
 			<source ref="id7"/>
 			<target ref="id6"/>
-			<label kind="synchronisation" x="17" y="93">run[id]?</label>
-			<label kind="assignment" x="17" y="77">setNextRequest()</label>
-			<nail x="8" y="102"/>
+			<label kind="synchronisation" x="-8" y="76">run[id]?</label>
+			<label kind="assignment" x="-17" y="59">setNextRequest()</label>
+			<nail x="-17" y="93"/>
 		</transition>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id6"/>
-			<label kind="guard" x="-773" y="561">true == true</label>
-			<label kind="synchronisation" x="-467" y="246">lock[ridRequested]?</label>
-			<label kind="assignment" x="-467" y="195">resList[ridRequested].hasLocked[id] = true,
+			<label kind="synchronisation" x="-544" y="246">lock[ridRequested]?</label>
+			<label kind="assignment" x="-544" y="195">resList[ridRequested].hasLocked[id] = true,
 setNextRelease(),
 setNextRequest()</label>
-			<nail x="-170" y="246"/>
-			<nail x="-170" y="246"/>
+			<nail x="-289" y="178"/>
+			<nail x="-195" y="204"/>
 		</transition>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id3"/>
-			<label kind="select" x="-416" y="93">r : id_r</label>
-			<label kind="guard" x="-433" y="59">shouldRequest(r) &amp;&amp; c == resList[r].req[id]</label>
-			<label kind="synchronisation" x="-416" y="76">request[r]!</label>
-			<label kind="assignment" x="-416" y="110">ridRequested = r</label>
-			<nail x="-357" y="135"/>
+			<label kind="select" x="-416" y="85">r : id_r</label>
+			<label kind="guard" x="-416" y="51">shouldRequest(r) &amp;&amp; c == resList[r].req[id]</label>
+			<label kind="synchronisation" x="-416" y="68">request[r]!</label>
+			<label kind="assignment" x="-416" y="102">ridRequested = r</label>
+			<nail x="-348" y="119"/>
 		</transition>
 		<transition>
 			<source ref="id6"/>
@@ -216,9 +215,9 @@ setNextRequest()</label>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id8"/>
-			<label kind="guard" x="-968" y="-227">c==C &amp;&amp; !hasResource()</label>
-			<label kind="synchronisation" x="-917" y="-210">releaseCPU[id]!</label>
-			<label kind="assignment" x="-883" y="-193">resetRes()</label>
+			<label kind="guard" x="-994" y="17">c==C &amp;&amp; !hasResource()</label>
+			<label kind="synchronisation" x="-994" y="-17">releaseCPU[id]!</label>
+			<label kind="assignment" x="-994" y="0">resetRes()</label>
 			<nail x="-323" y="289"/>
 			<nail x="-816" y="289"/>
 			<nail x="-816" y="-271"/>
@@ -262,26 +261,26 @@ c=0</label>
 		<transition>
 			<source ref="id12"/>
 			<target ref="id9"/>
-			<label kind="synchronisation" x="187" y="-119">unlock[id]?</label>
+			<label kind="synchronisation" x="221" y="-93">unlock[id]?</label>
 			<nail x="212" y="-93"/>
 			<nail x="212" y="-93"/>
 		</transition>
 		<transition>
 			<source ref="id9"/>
 			<target ref="id13"/>
-			<label kind="synchronisation" x="0" y="-119">free[id]!</label>
+			<label kind="synchronisation" x="-68" y="-93">free[id]!</label>
 			<nail x="0" y="-93"/>
 		</transition>
 		<transition>
 			<source ref="id10"/>
 			<target ref="id12"/>
-			<label kind="synchronisation" x="221" y="68">lock[id]!</label>
+			<label kind="synchronisation" x="221" y="93">lock[id]!</label>
 			<nail x="212" y="119"/>
 		</transition>
 		<transition>
 			<source ref="id13"/>
 			<target ref="id10"/>
-			<label kind="synchronisation" x="-85" y="68">request[id]?</label>
+			<label kind="synchronisation" x="-93" y="93">request[id]?</label>
 			<nail x="0" y="119"/>
 		</transition>
 		<transition>
