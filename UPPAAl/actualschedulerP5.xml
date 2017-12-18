@@ -21,7 +21,7 @@ typedef struct {
 
 res resList[R] = {
        //            req t    release t  using?  locked?   released?
-       /* Buffer */  {{1,2,1}, {7,9,29}, {1,1,1}, {0,0,0}, {0,0,0} }
+       /* SensorBuffer */  {{1,2,1}, {7,9,29}, {1,1,1}, {0,0,0}, {0,0,0} }
 };
 
 
@@ -477,8 +477,8 @@ void resetPriority(){
 		</transition>
 	</template>
 	<system>//TASK: id, period, and wcet.
-SamplePlant = TASK(0, 630, 10);
-SamplePath = TASK(1, 520, 10);
+SamplePlant = TASK(0, 180, 10);
+SamplePath = TASK(1, 100, 70);
 ColourSensorBG = TASK(2, 100, 30);
 
 SensorBuffer = RESOURCE(0);
@@ -506,6 +506,12 @@ gantt {
 	<queries>
 		<query>
 			<formula>A&lt;&gt; (ColourSensorBG.Blocked)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] not deadlock
 			</formula>
 			<comment>
 			</comment>
