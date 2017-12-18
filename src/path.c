@@ -17,16 +17,8 @@ int lastIntegralCount = 0;
 // Assumes the robot is placed on the right side of the tape
 void followLine() {
     int error = getPathLight() - optimalLight;
-    if(systick_get_ms() > lastIntegralCount + 50)
-    {
-        errorSum += error;
-        lastIntegralCount = systick_get_ms();
-    }
+    errorSum = sameSignInt(error, previousError) ? errorSum + error : 0;
     double proportional = error * PROPORTIONAL;
-    if(!sameSignInt(error, previousError))
-    {
-        errorSum = 0;
-    }
     double integral = errorSum * INTEGRAL;
     double derivative = (error - previousError) * DERIVATIVE;
     double pid = proportional + integral + derivative;
@@ -47,9 +39,6 @@ void turn(double pid) {
     const int maxSpeed = 85;
     int leftSpeed = 0;
     int rightSpeed = 0;
-
-    clearScreen();
-    printStringAndInt("PID: ", pid);
 
     // Guards to make sure we don't send too high values to the motor
     rightSpeed = clampInt(baseSpeed + pid, -maxSpeed, maxSpeed);
