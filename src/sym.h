@@ -18,8 +18,8 @@
 // PID
 #define CALIBRATE_MS 1000
 #define PROPORTIONAL 0.1
-#define INTEGRAL 0.2
-#define DERIVATIVE 0.1
+#define INTEGRAL 0.004
+#define DERIVATIVE 0.33
 extern int optimalLight;
 
 #endif

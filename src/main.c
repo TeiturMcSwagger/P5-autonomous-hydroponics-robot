@@ -11,14 +11,16 @@
 #include <stdlib.h>
 
 U32 armFireCounter = 0;
+U8 feedAmount = 0;
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
 DeclareAlarm(SamplePlantColourAlarm);
 DeclareAlarm(SamplePathAlarm);
 DeclareAlarm(SensorBackgroundAlarm);
-DeclareResource(MotorResource);
 DeclareResource(ColourSensorResource);
+DeclareEvent(FeedEvent);
+DeclareTask(FeedingTask);
 
 /* LEJOS OSEK hooks */
 void ecrobot_device_initialize() {
@@ -29,6 +31,9 @@ void ecrobot_device_initialize() {
 void ecrobot_device_terminate() {
     ecrobot_term_nxtcolorsensor(PATH_SENSOR_PORT);
     ecrobot_term_nxtcolorsensor(PLANT_SENSOR_PORT);
+    nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
+    nxt_motor_set_speed(ARM_MOTOR_PORT, 0, 1);
 }
 
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
@@ -53,29 +58,37 @@ TASK(SensorBackgroundTask) {
 TASK(SamplePlantColourTask) {
     // delays the scan after feeding
     // so we're not stuck in an infinite feeding loop
-    if (systick_get_ms() < armFireCounter + 3000) {
-         TerminateTask();
+    if (systick_get_ms() < armFireCounter + 1200 * feedAmount) {
+        TerminateTask();
     }
 
     GetResource(ColourSensorResource);
-    U8 feedAmount = getFeedAmount();
+    feedAmount = getFeedAmount();
     ReleaseResource(ColourSensorResource);
 
     if (feedAmount == 0) {
         TerminateTask();
     }
-    armFireCounter = systick_get_ms();
-    GetResource(MotorResource);
-    stopDriving();
-    feedPills(feedAmount);
-    ReleaseResource(MotorResource);
+
+    SetEvent(FeedingTask, FeedEvent);
+    TerminateTask();
+}
+
+TASK(FeedingTask){
+    while(1)
+    {
+        WaitEvent(FeedEvent); /* Task is in waiting status until the Event comes */ 
+        ClearEvent(FeedEvent);
+
+        armFireCounter = systick_get_ms();
+        stopDriving();
+        feedPills(feedAmount);
+    }
     TerminateTask();
 }
 
 TASK(SamplePathTask) {
-    GetResource(MotorResource);
     followLine();
-    ReleaseResource(MotorResource);
     TerminateTask();
 }
 
