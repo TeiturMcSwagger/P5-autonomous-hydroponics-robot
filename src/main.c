@@ -88,7 +88,9 @@ TASK(FeedingTask){
 }
 
 TASK(SamplePathTask) {
+    GetResource(ColourSensorResource);
     followLine();
+    ReleaseResource(ColourSensorResource);
     TerminateTask();
 }
 

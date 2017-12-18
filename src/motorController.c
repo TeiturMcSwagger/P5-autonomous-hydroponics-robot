@@ -6,6 +6,8 @@
 #include "util.h"
 #include <stdlib.h>
 
+#define MAX_SPEED_BRAKE_LENGTH 40
+
 void rotateMotor(int speedPercent, bool clockwise, U32 motorPort,
                  int targetAngle);
 int getBrakeLength(int speedPercent);

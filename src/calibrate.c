@@ -5,7 +5,9 @@
 #include "types.h"
 #include "util.h"
 #include "path.h"
+#include "calibrate.h"
 
+#define CALIBRATE_MS 1000
 int optimalLight;
 
 void calibrateOptimalLight() {

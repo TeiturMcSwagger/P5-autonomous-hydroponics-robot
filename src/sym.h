@@ -7,19 +7,4 @@
 #define LEFT_MOTOR NXT_PORT_B
 #define ARM_MOTOR_PORT NXT_PORT_C
 
-#define RED_AMOUNT 1
-#define GREEN_AMOUNT 2
-#define BLUE_AMOUNT 3
-
-#define MAX_SPEED_BRAKE_LENGTH 40
-#define MAX_STEERING_ANGLE 40
-#define DEFAULT_TURN_POSITION 180
-
-// PID
-#define CALIBRATE_MS 1000
-#define PROPORTIONAL 0.1
-#define INTEGRAL 0.004
-#define DERIVATIVE 0.33
-extern int optimalLight;
-
 #endif
