@@ -3,7 +3,7 @@
 <nta>
 	<declaration>// Place global declarations here.
 const int N=3;
-const int R=2;
+const int R=1;
 typedef int[0,N-1] id_t;
 typedef int[0,R-1] id_r;
 chan ready[N], stop, releaseCPU[N], request[R], block[R];
@@ -19,9 +19,8 @@ typedef struct {
     bool hasReleased[N];
 } res;
 
-res resList[2] = {
+res resList[R] = {
        //            req t    release t  using?  locked?   released?
-       /* Motors */  {{7,2,0}, {9,9,0}, {1,1,0}, {0,0,0}, {0,0,0} },
        /* Buffer */  {{1,2,1}, {7,9,29}, {1,1,1}, {0,0,0}, {0,0,0} }
 };
 
@@ -31,7 +30,7 @@ res resList[2] = {
 clock time;</declaration>
 	<template>
 		<name x="5" y="5">TASK</name>
-		<parameter>const id_t id, const int T, const int C, const int D</parameter>
+		<parameter>const id_t id, const int T, const int C</parameter>
 		<declaration>// Place local declarations here.
 clock t, c;
 
@@ -48,15 +47,14 @@ bool shouldRelease(id_r rid){
 }
 
 
-int nextRequest = 100;
-int nextRelease = 100;
-//int requestTime[N];
-//int releaseTime[N];
-//bool isTaskUsing[N];
+int nextRequest = 1000;
+int nextRelease = 1000;
+
+
 void setNextRequest(){
     int i;
     int current;
-    nextRequest = 100;
+    nextRequest = 1000;
     for(i = 0; i &lt; R; i++){
         res r = resList[i];
         if(r.isUsing[id] &amp;&amp; !r.hasLocked[id] &amp;&amp; !r.hasReleased[id]){
@@ -68,7 +66,7 @@ void setNextRequest(){
 void setNextRelease(){
     int i;
     int current;
-    nextRelease = 100;
+    nextRelease = 1000;
     for(i = 0; i &lt; R; i++){
         res r = resList[i];
         if(r.isUsing[id] &amp;&amp; !r.hasReleased[id] &amp;&amp; r.hasLocked[id]){
@@ -134,7 +132,7 @@ c &lt;= nextRelease</label>
 		<transition>
 			<source ref="id4"/>
 			<target ref="id5"/>
-			<label kind="guard" x="-705" y="119">t == T</label>
+			<label kind="guard" x="-705" y="119">t &gt;= T</label>
 			<nail x="-714" y="-76"/>
 			<nail x="-714" y="442"/>
 			<nail x="170" y="442"/>
@@ -191,6 +189,7 @@ ridRequested = r</label>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id6"/>
+			<label kind="guard" x="-705" y="476">true == true</label>
 			<label kind="synchronisation" x="-544" y="246">lock[ridRequested]?</label>
 			<label kind="assignment" x="-544" y="195">resList[ridRequested].hasLocked[id] = true,
 setNextRelease(),
@@ -210,7 +209,7 @@ setNextRequest()</label>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id5"/>
-			<label kind="guard" x="42" y="212">t == T</label>
+			<label kind="guard" x="42" y="212">t &gt;= T</label>
 		</transition>
 		<transition>
 			<source ref="id6"/>
@@ -225,7 +224,7 @@ setNextRequest()</label>
 		<transition>
 			<source ref="id7"/>
 			<target ref="id5"/>
-			<label kind="guard" x="178" y="-51">t == T</label>
+			<label kind="guard" x="178" y="-51">t &gt;= T</label>
 			<nail x="170" y="-76"/>
 		</transition>
 		<transition>
@@ -477,20 +476,17 @@ void resetPriority(){
 			<label kind="assignment" x="-204" y="-212">enqueue(e)</label>
 		</transition>
 	</template>
-	<system>// Place template instantiations here.
-//TASK: id, period, cost and deadline
-SamplePlant = TASK(0, 630, 10, 630);
-SamplePath = TASK(1, 520, 10, 520);
-ColourSensorBG = TASK(2, 100, 95, 100);
-DrivingMotors = RESOURCE(0);
-SensorBuffer = RESOURCE(1);
+	<system>//TASK: id, period, and wcet.
+SamplePlant = TASK(0, 630, 10);
+SamplePath = TASK(1, 520, 10);
+ColourSensorBG = TASK(2, 100, 30);
+
+SensorBuffer = RESOURCE(0);
+
 Scheduler = SCHEDULER();
 
-
-
-
 // List one or more processes to be composed into a system.
-system SamplePlant, SamplePath, ColourSensorBG, Scheduler, DrivingMotors, SensorBuffer;
+system SamplePlant, SamplePath, ColourSensorBG, Scheduler, SensorBuffer;
 
 gantt {
     SamplePlant:
