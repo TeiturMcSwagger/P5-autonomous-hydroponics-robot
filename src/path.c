@@ -10,20 +10,28 @@ void turn(double pid);
 
 // used for derivative
 int previousError = 0;
+// used for integral
+int errorSum = 0;
+int lastIntegralCount = 0;
 
 // Assumes the robot is placed on the right side of the tape
 void followLine() {
     int error = getPathLight() - optimalLight;
-    double proportional = error * PROPORTIONAL;
-    double derivative = (error - previousError) * DERIVATIVE;
-    double pd = proportional + derivative;
-    if (pd < 0) {
-        // multiply by a constant to make SARAH turn more right
-        // because the robot struggles with right turns
-        pd = pd * 1.4;
+    if(systick_get_ms() > lastIntegralCount + 50)
+    {
+        errorSum += error;
+        lastIntegralCount = systick_get_ms();
     }
+    double proportional = error * PROPORTIONAL;
+    if(!sameSignInt(error, previousError))
+    {
+        errorSum = 0;
+    }
+    double integral = errorSum * INTEGRAL;
+    double derivative = (error - previousError) * DERIVATIVE;
+    double pid = proportional + integral + derivative;
     previousError = error;
-    turn(pd);
+    turn(pid);
 }
 
 // Returns the light intensity of the path
@@ -33,35 +41,19 @@ int getPathLight() {
 }
 
 // Assumes the robot is placed on the right side of the tape
-// Translates the pd input to two outputs for the left and right motor
-void turn(double pd) {
-    const int baseSpeed = 40;
+// Translates the pid input to two outputs for the left and right motor
+void turn(double pid) {
+    const int baseSpeed = 60;
     const int maxSpeed = 85;
     int leftSpeed = 0;
     int rightSpeed = 0;
 
     clearScreen();
-    printStringAndInt("PD: ", pd);
-    printStringAndInt("OL*.0556: ", optimalLight * 0.0556);
-    printStringAndInt("OL*-.0556: ", -(optimalLight * 0.0556));
-
-    // turn 90 degrees left
-    if (pd >= optimalLight * 0.07) {
-        leftSpeed = -baseSpeed;
-        rightSpeed = baseSpeed;
-    }
-    // turn 90 degrees right
-    else if (pd <= -(optimalLight * 0.13)) {
-        leftSpeed = baseSpeed;
-        rightSpeed = -baseSpeed;
-    } else {
-        leftSpeed = baseSpeed - pd;
-        rightSpeed = baseSpeed + pd;
-    }
+    printStringAndInt("PID: ", pid);
 
     // Guards to make sure we don't send too high values to the motor
-    rightSpeed = clampInt(rightSpeed, -maxSpeed, maxSpeed);
-    leftSpeed = clampInt(leftSpeed, -maxSpeed, maxSpeed);
+    rightSpeed = clampInt(baseSpeed + pid, -maxSpeed, maxSpeed);
+    leftSpeed = clampInt(baseSpeed - pid, -maxSpeed, maxSpeed);
 
     nxt_motor_set_speed(LEFT_MOTOR, leftSpeed, 1);
     nxt_motor_set_speed(RIGHT_MOTOR, rightSpeed, 1);

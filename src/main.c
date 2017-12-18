@@ -66,7 +66,7 @@ void user_1ms_isr_type2(void) {
 // Keeps the color sensor alive / samples
 // is neccessary or the color sensor won't work
 TASK(SensorBackgroundTask) {
-    if(sbTaskItr >= 1000 && spcTaskItr >= 1000 && spTaskItr >= 1000) 
+    if(sbTaskItr >= 10000 && spcTaskItr >= 10000 && spTaskItr >= 10000) 
     { 
         //int sumWorst = sbTaskWorst + spcTaskWorst + spTaskWorst + calTaskWorst; 
         //int sumMean = sbTaskMean + spcTaskMean + spTaskMean + calTaskMean; 

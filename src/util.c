@@ -1,6 +1,7 @@
 #include "ecrobot_interface.h"
 #include "kernel.h"
 #include "kernel_id.h"
+#include "types.h"
 #include "util.h"
 #include <stdlib.h>
 
@@ -46,4 +47,9 @@ int clampInt(int val, int min, int max)
     }
 
     return val;
+}
+
+bool sameSignInt(int num1, int num2)
+{
+    return (num1 >= 0 && num2 >= 0) || (num1 < 0 && num2 < 0);
 }
