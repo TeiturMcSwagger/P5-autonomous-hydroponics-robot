@@ -34,7 +34,6 @@ DeclareCounter(SysTimerCnt);
 DeclareAlarm(SamplePlantColourAlarm);
 DeclareAlarm(SamplePathAlarm);
 DeclareAlarm(SensorBackgroundAlarm);
-DeclareResource(MotorResource);
 DeclareResource(ColourSensorResource);
 DeclareEvent(FeedEvent);
 
@@ -49,6 +48,9 @@ void ecrobot_device_initialize() {
 void ecrobot_device_terminate() {
     ecrobot_term_nxtcolorsensor(PATH_SENSOR_PORT);
     ecrobot_term_nxtcolorsensor(PLANT_SENSOR_PORT);
+    nxt_motor_set_speed(LEFT_MOTOR, 0, 1);
+    nxt_motor_set_speed(RIGHT_MOTOR, 0, 1);
+    nxt_motor_set_speed(ARM_MOTOR_PORT, 0, 1);
 }
 
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
@@ -64,28 +66,30 @@ void user_1ms_isr_type2(void) {
 // Keeps the color sensor alive / samples
 // is neccessary or the color sensor won't work
 TASK(SensorBackgroundTask) {
-    if(sbTaskItr > 10000 && spcTaskItr > 10000 && spTaskItr > 10000) 
+    if(sbTaskItr >= 1000 && spcTaskItr >= 1000 && spTaskItr >= 1000) 
     { 
-        int sumWorst = sbTaskWorst + spcTaskWorst + spTaskWorst + calTaskWorst; 
-        int sumMean = sbTaskMean + spcTaskMean + spTaskMean + calTaskMean; 
+        //int sumWorst = sbTaskWorst + spcTaskWorst + spTaskWorst + calTaskWorst; 
+        //int sumMean = sbTaskMean + spcTaskMean + spTaskMean + calTaskMean; 
  
         nxt_motor_set_speed(LEFT_MOTOR, 0, 1); 
         nxt_motor_set_speed(RIGHT_MOTOR, 0, 1); 
  
-        display_goto_xy(0, 1); 
-        display_int(sbTaskMean, 0); 
-        display_goto_xy(0, 2); 
-        display_int(spcTaskMean, 0); 
-        display_goto_xy(0, 3); 
-        display_int(spTaskMean, 0); 
-        display_goto_xy(0, 4); 
-        display_int(calTaskMean, 0); 
-        display_goto_xy(0, 5); 
-        display_string("Done!"); 
-        display_goto_xy(0, 6); 
-        display_int(sumWorst, 0); 
-        display_goto_xy(0, 7); 
-        display_int(sumMean, 0); 
+        display_goto_xy(0, 0);
+        display_int(sbTaskWorst, 0);
+        display_goto_xy(0, 1);
+        display_int(sbTaskMean, 0);
+        display_goto_xy(0, 2);
+        display_int(spcTaskWorst, 0);
+        display_goto_xy(0, 3);
+        display_int(spcTaskMean, 0);
+        display_goto_xy(0, 4);
+        display_int(spTaskWorst, 0);
+        display_goto_xy(0, 5);
+        display_int(spTaskMean, 0);
+        display_goto_xy(0, 6);
+        display_int(calTaskWorst, 0);
+        display_goto_xy(0, 7);
+        display_int(calTaskMean, 0);
         display_update(); 
         systick_wait_ms(100000000); 
     } 
@@ -109,7 +113,7 @@ TASK(SamplePlantColourTask) {
     int startTime = systick_get_ms(); 
     // delays the scan after feeding
     // so we're not stuck in an infinite feeding loop
-    if (systick_get_ms() < armFireCounter + 3000) {
+    if (systick_get_ms() < armFireCounter + 1200 * feedAmount) {
         int taskTime = systick_get_ms() - startTime; 
         if(taskTime > spcTaskWorst) 
             spcTaskWorst = taskTime; 
@@ -148,11 +152,8 @@ TASK(FeedingTask){
         ClearEvent(FeedEvent);
 
         armFireCounter = systick_get_ms();
-        GetResource(MotorResource);
         stopDriving();
         feedPills(feedAmount);
-        ReleaseResource(MotorResource);
-        feedAmount = 0;
     }
     TerminateTask();
 }
@@ -161,9 +162,7 @@ TASK(SamplePathTask) {
     spTaskItr++; 
     int startTime = systick_get_ms(); 
 
-    GetResource(MotorResource);
     followLine();
-    ReleaseResource(MotorResource);
 
     int taskTime = systick_get_ms() - startTime; 
     if(taskTime > spTaskWorst) 
