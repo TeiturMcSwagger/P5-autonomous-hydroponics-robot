@@ -58,9 +58,7 @@ U16 getColourFromRGB(S16 rgb[3], U8 intensityLowerBound, U8 deltaThreshold) {
 
 void feedPills(U8 amount) {
     while (amount > 0) {
-        int speedPct = 100;
-        int degrees = 90;
-        rotateMotorByDegrees(speedPct, degrees, TRUE, ARM_MOTOR_PORT);
+        rotateMotorByDegrees(100, 90, TRUE, ARM_MOTOR_PORT);
         amount--;
     }
 }

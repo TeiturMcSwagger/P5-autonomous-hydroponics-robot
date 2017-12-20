@@ -38,9 +38,7 @@ void ecrobot_device_terminate() {
 
 /* LEJOS OSEK hook to be invoked from an ISR in category 2 */
 void user_1ms_isr_type2(void) {
-    StatusType ercd;
-
-    ercd = SignalCounter(SysTimerCnt); /* Increment OSEK Alarm Counter */
+    StatusType ercd = SignalCounter(SysTimerCnt); /* Increment OSEK Alarm Counter */
     if (ercd != E_OK) {
         ShutdownOS(ercd);
     }
@@ -52,6 +50,7 @@ TASK(SensorBackgroundTask) {
     GetResource(ColourSensorResource);
     ecrobot_process_bg_nxtcolorsensor();
     ReleaseResource(ColourSensorResource);
+    
     TerminateTask();
 }
 
@@ -71,6 +70,7 @@ TASK(SamplePlantColourTask) {
     }
 
     SetEvent(FeedingTask, FeedEvent);
+
     TerminateTask();
 }
 
@@ -91,10 +91,12 @@ TASK(SamplePathTask) {
     GetResource(ColourSensorResource);
     followLine();
     ReleaseResource(ColourSensorResource);
+
     TerminateTask();
 }
 
 TASK(Calibrate) {
     calibrateOptimalLight();
+
     TerminateTask();
 }

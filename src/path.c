@@ -2,7 +2,6 @@
 #include "kernel.h"
 #include "kernel_id.h"
 #include "sym.h"
-#include "types.h"
 #include "util.h"
 #include "calibrate.h"
 #include "path.h"
@@ -35,8 +34,7 @@ void followLine() {
 
 // Returns the light intensity of the path
 int getPathLight() {
-    int lightValue = ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
-    return lightValue;
+    return ecrobot_get_nxtcolorsensor_light(PATH_SENSOR_PORT);
 }
 
 // Assumes the robot is placed on the right side of the tape
