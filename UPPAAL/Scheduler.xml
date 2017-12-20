@@ -504,12 +504,6 @@ gantt {
 </system>
 	<queries>
 		<query>
-			<formula>A&lt;&gt; (ColourSensorBG.Blocked)
-			</formula>
-			<comment>
-			</comment>
-		</query>
-		<query>
 			<formula>A[] not deadlock
 			</formula>
 			<comment>
