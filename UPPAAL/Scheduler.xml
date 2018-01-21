@@ -21,7 +21,7 @@ typedef struct {
 
 res resList[R] = {
        //            req t    release t  using?  locked?   released?
-       /* Buffer */  {{1,2,1}, {7,9,29}, {1,1,1}, {0,0,0}, {0,0,0} }
+       /* SensorBuffer */  {{1,2,1}, {7,9,29}, {1,1,1}, {0,0,0}, {0,0,0} }
 };
 
 
@@ -124,9 +124,9 @@ c &lt;= nextRelease</label>
 			<name x="-51" y="-119">Ready</name>
 			<label kind="invariant" x="-51" y="-102">t&lt;=T &amp;&amp; c'==0</label>
 		</location>
-		<location id="id8" x="-68" y="-272" color="#ffff00">
-			<name x="-85" y="-323">Idle</name>
-			<label kind="invariant" x="-85" y="-306">t&lt;=T</label>
+		<location id="id8" x="-68" y="-238" color="#ffff00">
+			<name x="-85" y="-289">Idle</name>
+			<label kind="invariant" x="-85" y="-272">t&lt;=T</label>
 		</location>
 		<init ref="id7"/>
 		<transition>
@@ -189,7 +189,6 @@ ridRequested = r</label>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id6"/>
-			<label kind="guard" x="-705" y="476">true == true</label>
 			<label kind="synchronisation" x="-544" y="246">lock[ridRequested]?</label>
 			<label kind="assignment" x="-544" y="195">resList[ridRequested].hasLocked[id] = true,
 setNextRelease(),
@@ -214,12 +213,12 @@ setNextRequest()</label>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id8"/>
-			<label kind="guard" x="-994" y="17">c==C &amp;&amp; !hasResource()</label>
-			<label kind="synchronisation" x="-994" y="-17">releaseCPU[id]!</label>
-			<label kind="assignment" x="-994" y="0">resetRes()</label>
-			<nail x="-323" y="289"/>
-			<nail x="-816" y="289"/>
-			<nail x="-816" y="-271"/>
+			<label kind="guard" x="-926" y="17">c==C &amp;&amp; !hasResource()</label>
+			<label kind="synchronisation" x="-926" y="-17">releaseCPU[id]!</label>
+			<label kind="assignment" x="-926" y="0">resetRes()</label>
+			<nail x="-263" y="288"/>
+			<nail x="-739" y="289"/>
+			<nail x="-739" y="-238"/>
 		</transition>
 		<transition>
 			<source ref="id7"/>
@@ -477,9 +476,9 @@ void resetPriority(){
 		</transition>
 	</template>
 	<system>//TASK: id, period, and wcet.
-SamplePlant = TASK(0, 630, 10);
-SamplePath = TASK(1, 520, 10);
-ColourSensorBG = TASK(2, 100, 30);
+SamplePlant = TASK(0, 150, 10);
+SamplePath = TASK(1, 60, 10);
+ColourSensorBG = TASK(2, 60, 30);
 
 SensorBuffer = RESOURCE(0);
 
@@ -505,7 +504,7 @@ gantt {
 </system>
 	<queries>
 		<query>
-			<formula>A&lt;&gt; (ColourSensorBG.Blocked)
+			<formula>A[] not deadlock
 			</formula>
 			<comment>
 			</comment>
