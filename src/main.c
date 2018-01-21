@@ -15,10 +15,10 @@ U8 feedAmount = 0;
 
 /* OSEK declarations */
 DeclareCounter(SysTimerCnt);
-DeclareAlarm(SamplePlantColourAlarm);
+DeclareAlarm(SamplePlantAlarm);
 DeclareAlarm(SamplePathAlarm);
-DeclareAlarm(SensorBackgroundAlarm);
-DeclareResource(ColourSensorResource);
+DeclareAlarm(ColourSensorBGAlarm);
+DeclareResource(SensorBuffer);
 DeclareEvent(FeedEvent);
 DeclareTask(FeedingTask);
 
@@ -46,24 +46,24 @@ void user_1ms_isr_type2(void) {
 
 // Keeps the color sensor alive / samples
 // is neccessary or the color sensor won't work
-TASK(SensorBackgroundTask) {
-    GetResource(ColourSensorResource);
+TASK(ColourSensorBG) {
+    GetResource(SensorBuffer);
     ecrobot_process_bg_nxtcolorsensor();
-    ReleaseResource(ColourSensorResource);
-    
+    ReleaseResource(SensorBuffer);
+
     TerminateTask();
 }
 
-TASK(SamplePlantColourTask) {
+TASK(SamplePlant) {
     // delays the scan after feeding
     // so we're not stuck in an infinite feeding loop
     if (systick_get_ms() < armFireCounter + 1200 * feedAmount) {
         TerminateTask();
     }
 
-    GetResource(ColourSensorResource);
+    GetResource(SensorBuffer);
     feedAmount = getFeedAmount();
-    ReleaseResource(ColourSensorResource);
+    ReleaseResource(SensorBuffer);
 
     if (feedAmount == 0) {
         TerminateTask();
@@ -87,10 +87,10 @@ TASK(FeedingTask){
     TerminateTask();
 }
 
-TASK(SamplePathTask) {
-    GetResource(ColourSensorResource);
+TASK(SamplePath) {
+    GetResource(SensorBuffer);
     followLine();
-    ReleaseResource(ColourSensorResource);
+    ReleaseResource(SensorBuffer);
 
     TerminateTask();
 }
