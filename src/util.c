@@ -37,19 +37,15 @@ void clearScreen() {
     displayRow = 0;
 }
 
-int clampInt(int val, int min, int max)
-{
+int clampInt(int val, int min, int max) {
     if (val > max) {
         return max;
-    }
-    else if (val < min) {
+    } else if (val < min) {
         return min;
     }
-
     return val;
 }
 
-bool sameSignInt(int num1, int num2)
-{
+bool sameSignInt(int num1, int num2) {
     return (num1 >= 0 && num2 >= 0) || (num1 < 0 && num2 < 0);
 }

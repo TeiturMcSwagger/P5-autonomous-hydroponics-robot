@@ -23,12 +23,12 @@ CPU ATMEL_AT91SAM7S256
         MASK = AUTO;
     };
 
-    RESOURCE ColourSensorResource
+    RESOURCE SensorBuffer
     {
         RESOURCEPROPERTY = STANDARD;
     };
 
-    TASK SamplePlantColourTask {
+    TASK SamplePlant {
 	    AUTOSTART = FALSE;
         PRIORITY = 1;
         ACTIVATION = 1;
@@ -36,44 +36,44 @@ CPU ATMEL_AT91SAM7S256
         STACKSIZE = 512;
     };
 
-    /* Definition of SamplePlantColourTask execution timing */
-    ALARM SamplePlantColourAlarm
+    /* Definition of SamplePlant execution timing */
+    ALARM SamplePlantAlarm
     {
       COUNTER = SysTimerCnt;
       ACTION = ACTIVATETASK
       {
-          TASK = SamplePlantColourTask;
+          TASK = SamplePlant;
       };
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 15; /* SamplePlantColourTask is executed every 63msec */
+          CYCLETIME = 15; /* SamplePlant is executed every 15msec */
           APPMODE = appmode1;
       };
     };
 
-    TASK SamplePathTask
+    TASK SamplePath
     {
       AUTOSTART = FALSE;
       PRIORITY = 2;
       ACTIVATION = 1;
       SCHEDULE = FULL;
       STACKSIZE = 512;
-      RESOURCE = ColourSensorResource;
+      RESOURCE = SensorBuffer;
     };
 
-    /* Definition of SamplepathTask execution timing */
+    /* Definition of SamplePath execution timing */
     ALARM SamplePathAlarm
     {
       COUNTER = SysTimerCnt;
       ACTION = ACTIVATETASK
       {
-          TASK = SamplePathTask;
+          TASK = SamplePath;
       };
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 6; /* SamplePathTask is executed every 52msec */
+          CYCLETIME = 6; /* SamplePath is executed every 6msec */
           APPMODE = appmode1;
       };
     };
@@ -90,27 +90,27 @@ CPU ATMEL_AT91SAM7S256
         STACKSIZE = 512;
     };
 
-    TASK SensorBackgroundTask {
+    TASK ColourSensorBG {
 	    AUTOSTART = FALSE;
         PRIORITY = 4;
         ACTIVATION = 1;
         SCHEDULE = FULL;
         STACKSIZE = 512;
-        RESOURCE = ColourSensorResource;
+        RESOURCE = SensorBuffer;
     };
-
-    /* Definition of SensorBackgroundTask execution timing */
-    ALARM SensorBackgroundAlarm
+    
+    /* Definition of ColourSensorBG execution timing */
+    ALARM ColourSensorBGAlarm
     {
       COUNTER = SysTimerCnt;
       ACTION = ACTIVATETASK
       {
-          TASK = SensorBackgroundTask;
+          TASK = ColourSensorBG;
       };
       AUTOSTART = TRUE
       {
           ALARMTIME = 1;
-          CYCLETIME = 6; /* SensorBackgroundTask is executed every 10msec */
+          CYCLETIME = 6; /* ColourSensorBG is executed every 6msec */
           APPMODE = appmode1;
       };
     };

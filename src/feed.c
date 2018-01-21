@@ -6,6 +6,10 @@
 #include "util.h"
 #include "motorController.h"
 
+#define RED_AMOUNT 1
+#define GREEN_AMOUNT 2
+#define BLUE_AMOUNT 3
+
 U16 getColourFromRGB(S16 rgb[3], U8 intensityLowerBound, U8 deltaThreshold);
 U8 getAmountFromSample(U16 colour);
 U16 sampleColour(U32 sensorPort);
@@ -54,9 +58,7 @@ U16 getColourFromRGB(S16 rgb[3], U8 intensityLowerBound, U8 deltaThreshold) {
 
 void feedPills(U8 amount) {
     while (amount > 0) {
-        int speedPct = 100;
-        int degrees = 90;
-        rotateMotorByDegrees(speedPct, degrees, TRUE, ARM_MOTOR_PORT);
+        rotateMotorByDegrees(100, 90, TRUE, ARM_MOTOR_PORT);
         amount--;
     }
 }

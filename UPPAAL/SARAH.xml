@@ -278,6 +278,12 @@ system
        Robot, Environment, U;</system>
 	<queries>
 		<query>
+			<formula>E&lt;&gt; (U.Relaxing and Environment.AtStart)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
 			<formula>A[] not (Robot.Calibrating and not Environment.AtStart)
 			</formula>
 			<comment>
@@ -291,6 +297,90 @@ system
 		</query>
 		<query>
 			<formula>A[] not (Robot.Feeding and not Environment.AtPlant)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (IsDriving)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (U.Relaxing)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (U.Stressing)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Robot.Feeding and Environment.AtPlant)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Robot.Feeding)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Robot.DrivingOnTrack)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Robot.Ready)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Robot.Adjusting)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Robot.Calibrating)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Robot.Adjusting and Environment.InRoute)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Environment.IdlingAtStart)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Environment.InRoute)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Environment.AtPlant)
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Environment.AtStart)
 			</formula>
 			<comment>
 			</comment>
